@@ -1,0 +1,22 @@
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Raw FlyWire downloads (hundreds of MB). Only preprocessed files in data/ are committed.
+data/raw/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+*.egg-info/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# NOTE: .kiro/ must NOT be ignored — it is part of the hackathon submission.

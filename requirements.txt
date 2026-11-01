@@ -1,0 +1,11 @@
+# Lower bounds only for now; pin exact versions with `pip freeze` once the
+# environment is installed and working (tasks.md 1.2).
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.7
+numpy>=1.26
+pyyaml>=6.0
+
+# Jev decision model SDK. Package name is from third-party docs and is
+# verified in tasks.md 2 before being enabled.
+# typesafe-sdk
