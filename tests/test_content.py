@@ -4,7 +4,8 @@ from pathlib import Path
 import pytest
 
 from app.content.loader import (
-    CONTENT_DIR, ContentError, check_content, coverage, load_content, main, validate_ui, validate_world,
+    CONTENT_DIR, MVP_PER_CELL, ContentError, check_content, coverage, load_content, main, mvp_coverage, mvp_met,
+    validate_ui, validate_world,
 )
 from app.content.schema import ENDINGS, HIJACK_KEYS
 
@@ -114,3 +115,81 @@ def test_yaml_parse_error_is_reported(scratch):
 
 def test_ui_boolean_keys_are_caught():
     assert any("not a string" in e for e in validate_ui({"brainlog": {True: {"zh": "a", "en": "b"}}}))
+
+
+# ------------------------------------------------------------- MVP coverage target
+
+
+def test_mvp_cells_cover_every_category_and_intensity(content):
+    cells = mvp_coverage(content.fragments, content.world)
+    labels = [c.label for c in cells]
+    assert len(labels) == len(set(labels))
+    for cat in ("monster", "anomaly"):
+        assert [f"{cat}@i{i}" for i in range(4)] == [l for l in labels if l.startswith(f"{cat}@")]
+    assert "silence" in labels and "ending" in labels
+    assert len(cells) == 11 + 2 * 4  # 11 single-cell categories + monster/anomaly x 4
+    assert all(c.want == MVP_PER_CELL == 2 for c in cells)
+
+
+def test_mvp_ignores_generic_fragments(content):
+    silence = next(c for c in mvp_coverage(content.fragments, content.world) if c.label == "silence")
+    assert silence.have == len(content.by_key("silence", "default"))
+
+
+def _monster(n: int, intensity: int) -> str:
+    return (f"- id: monster_approach_{n:02d}\n  category: monster\n  key: approach\n  intensity: {intensity}\n"
+            f"  effects: {{monster_near: true}}\n  zh: 嗡\n  en: hum\n")
+
+
+def test_mvp_cell_reaches_target_when_fragments_are_added(scratch):
+    _, _, frags, _, _ = check_content(scratch)
+    world = load_content(scratch).world
+    before = {c.label: c.have for c in mvp_coverage(frags, world)}
+    _write(scratch, _monster(90, 3) + _monster(91, 3))
+    _, _, frags, errors, _ = check_content(scratch)
+    assert errors == []
+    after = {c.label: c for c in mvp_coverage(frags, world)}
+    assert after["monster@i3"].have == before["monster@i3"] + 2
+    assert after["monster@i3"].ok
+    assert after["monster@i2"].have == before["monster@i2"]
+
+
+def test_mvp_flag_fails_cli_until_target_met(scratch, capsys):
+    _, _, frags, _, _ = check_content(scratch)
+    world = load_content(scratch).world
+    short = [c for c in mvp_coverage(frags, world) if not c.ok]
+    assert main([str(scratch)]) == 0  # MVP is informational without --mvp
+    out = capsys.readouterr().out
+    assert "MVP cells" in out
+    if short:
+        assert main(["--mvp", str(scratch)]) == 1
+        assert "MVP not met" in capsys.readouterr().out
+        assert not mvp_met(frags, world)
+
+
+def test_mvp_met_when_every_cell_has_two(scratch, capsys):
+    # Pad every short cell with valid fragments, then --mvp passes.
+    _, _, frags, _, _ = check_content(scratch)
+    world = load_content(scratch).world
+    keys = {"opening": "default", "verdict_partial": "default", "drift": "default", "silence": "default",
+            "scene_enter": world.playable_scenes[0], "action": "look", "verdict_fail": "missing_item",
+            "monster": "feed", "anomaly": "visual", "clue": "clue_9", "item_use": "light",
+            "hijack": "eat", "ending": "escaped"}
+    text, n = "", 0
+    for c in mvp_coverage(frags, world):
+        for _ in range(c.want - c.have if not c.ok else 0):
+            n += 1
+            extra = ""
+            if c.intensity is not None:
+                extra = f"  intensity: {c.intensity}\n"
+                if c.intensity >= 2:
+                    extra += "  effects: {sync: 2}\n"
+            text += (f"- id: {c.category}_{keys[c.category]}_9{n:02d}\n  category: {c.category}\n"
+                     f"  key: {keys[c.category]}\n{extra}  zh: 测\n  en: test\n")
+    _write(scratch, text)
+    _, _, frags, errors, _ = check_content(scratch)
+    assert errors == []
+    assert all(c.ok for c in mvp_coverage(frags, world))
+    assert mvp_met(frags, world)
+    assert main(["--mvp", "--quiet", str(scratch)]) == 0
+    assert "MVP met" in capsys.readouterr().out

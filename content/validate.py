@@ -2,6 +2,7 @@
 
     python -m content.validate            # errors fail, warnings are listed
     python -m content.validate --strict   # warnings fail too
+    python -m content.validate --mvp      # also fail below the MVP coverage target
 """
 
 import sys

@@ -580,6 +580,74 @@ def format_coverage(rows: list[CoverageRow]) -> str:
     return "\n".join(lines)
 
 
+# MVP target (fragment-guide.md "MVP 覆盖目标"): at least this many non-generic
+# fragments in every category x intensity cell. monster and anomaly have four
+# cells (intensity 0-3); every other category is a single cell. The full
+# per-key counts in category_specs() stay the stretch goal.
+MVP_PER_CELL = 2
+
+
+@dataclass
+class MvpCell:
+    category: str
+    intensity: int | None  # None: category is not split by intensity
+    have: int
+    want: int = MVP_PER_CELL
+
+    @property
+    def ok(self) -> bool:
+        return self.have >= self.want
+
+    @property
+    def label(self) -> str:
+        return self.category if self.intensity is None else f"{self.category}@i{self.intensity}"
+
+
+def mvp_coverage(frags: list[dict], world: World) -> list[MvpCell]:
+    """One cell per category x intensity tier, counting non-generic fragments."""
+    cells = []
+    for cat, spec in category_specs(world).items():
+        mine = [f for f in frags if f.get("category") == cat and f.get("key") in spec.keys]
+        if spec.by_intensity:
+            for i in range(4):
+                cells.append(MvpCell(cat, i, sum(1 for f in mine if f.get("intensity") == i)))
+        else:
+            cells.append(MvpCell(cat, None, len(mine)))
+    return cells
+
+
+def mvp_met(frags: list[dict], world: World) -> bool:
+    """MVP = every cell has MVP_PER_CELL fragments and every key has at least one."""
+    return (all(c.ok for c in mvp_coverage(frags, world))
+            and all(r.have > 0 for r in coverage(frags, world)))
+
+
+def format_mvp(cells: list[MvpCell], table: bool = True) -> str:
+    lines = []
+    if table:
+        lines.append(f"MVP target: >= {MVP_PER_CELL} non-generic fragments per category x intensity "
+                     "('!' = below target)")
+        lines.append(f"{'category':<16} {'i0':>4} {'i1':>4} {'i2':>4} {'i3':>4}   all")
+        lines.append("-" * 44)
+        by_cat: dict[str, list[MvpCell]] = {}
+        for c in cells:
+            by_cat.setdefault(c.category, []).append(c)
+        for cat, cs in by_cat.items():
+            def cell(c: MvpCell) -> str:
+                return f"{c.have}{'' if c.ok else '!'}"
+            if cs[0].intensity is None:
+                lines.append(f"{cat:<16} {'':>4} {'':>4} {'':>4} {'':>4}   {cell(cs[0]):>3}")
+            else:
+                lines.append(f"{cat:<16} " + " ".join(f"{cell(c):>4}" for c in cs))
+        lines.append("-" * 44)
+    short = [c for c in cells if not c.ok]
+    summary = f"MVP cells {len(cells) - len(short)}/{len(cells)} meet >= {MVP_PER_CELL}"
+    if short:
+        summary += "; below: " + ", ".join(f"{c.label} ({c.have})" for c in short)
+    lines.append(summary)
+    return "\n".join(lines)
+
+
 # --------------------------------------------------------------------- all together
 
 
@@ -629,9 +697,15 @@ def load_content(content_dir: Path | None = None) -> Content:
 
 
 def main(argv: list[str] | None = None) -> int:
-    """CLI for `python -m content.validate [--strict] [--quiet] [content_dir]`."""
+    """CLI for `python -m content.validate [--strict] [--mvp] [--quiet] [content_dir]`.
+
+    --strict  warnings fail too
+    --mvp     also fail when the MVP coverage target is not met
+    --quiet   skip the coverage tables (the MVP summary line is still printed)
+    """
     argv = list(sys.argv[1:] if argv is None else argv)
     strict = "--strict" in argv
+    mvp = "--mvp" in argv
     quiet = "--quiet" in argv
     rest = [a for a in argv if not a.startswith("--")]
     content_dir = Path(rest[0]) if rest else CONTENT_DIR
@@ -639,11 +713,17 @@ def main(argv: list[str] | None = None) -> int:
     if world is not None and not quiet:
         print(format_coverage(coverage(frags, world)))
         print()
+    if world is not None:
+        print(format_mvp(mvp_coverage(frags, world), table=not quiet))
+        if not quiet:
+            print()
     for w in warnings:
         print(f"WARN  {w}")
     for e in errors:
         print(f"ERROR {e}")
     n_err = len(errors) + (len(warnings) if strict else 0)
+    mvp_fail = mvp and (world is None or not mvp_met(frags, world))
     print(f"{len(frags)} fragments, {len(errors)} errors, {len(warnings)} warnings"
-          + (" (strict)" if strict else ""))
-    return 1 if n_err else 0
+          + (" (strict)" if strict else "")
+          + ((", MVP not met" if mvp_fail else ", MVP met") if mvp else ""))
+    return 1 if n_err or mvp_fail else 0
