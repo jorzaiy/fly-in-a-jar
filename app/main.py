@@ -3,17 +3,25 @@
 Run locally:  uvicorn app.main:app --reload
 """
 
-import os
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-app = FastAPI(title="Fly in a Jar")
+from app.content.loader import load_content
+from app.judge import judge_mode
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Refuse to start on bad content, listing every bad fragment id (design §14).
+    app.state.content = load_content()
+    yield
+
+
+app = FastAPI(title="Fly in a Jar", lifespan=lifespan)
 
 
 @app.get("/api/health")
 def health() -> dict:
-    """Liveness check. Reports which judge is configured, never the key itself."""
-    judge = os.environ.get("JUDGE", "mock")
-    if judge == "jev" and not os.environ.get("TYPESAFE_API_KEY"):
-        judge = "mock"  # no key available, fall back
-    return {"ok": True, "judge": judge, "queue": 0}
+    """Liveness check. Reports which judge is in use, never the key itself."""
+    return {"ok": True, "judge": judge_mode(), "queue": 0}
