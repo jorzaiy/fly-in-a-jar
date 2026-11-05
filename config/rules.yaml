@@ -1,0 +1,15 @@
+# rules.yaml: tunable game numbers (design §6.3, §6.4).
+
+verdict:
+  success_min: 0.65        # p >= this: success, effects run, sync unchanged
+  partial_min: 0.40        # partial_min <= p < success_min: effects run, sync += partial_sync
+  partial_sync: 3
+  fail_sync_base: 5        # p < partial_min: no effect, sync += base + danger * per_danger
+  fail_sync_per_danger: 3
+
+judge:
+  timeout_s: 6             # no retry
+  daily_limit: 5000        # then fall back to mock (tasks.md 10.4)
+
+hijack:
+  sync_min: 70
