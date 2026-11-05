@@ -1,0 +1,81 @@
+# scene_enter.yaml
+# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
+# end to end. Replace with the real set written from fragment-guide.md.
+
+- id: scene_enter_reception_01
+  category: scene_enter
+  key: reception
+  tiers:
+    human:
+      zh: |
+        红色应急灯下，登记簿摊在桌上，听筒垂在桌边。
+      en: |
+        Under the red emergency light the visitor log lies open and the phone receiver dangles off the desk.
+
+- id: scene_enter_corridor_01
+  category: scene_enter
+  key: corridor
+  tiers:
+    human:
+      zh: |
+        走廊很长，脚步声晚半拍才回来。
+      en: |
+        The corridor is long. Your footsteps come back half a beat late.
+
+- id: scene_enter_fly_room_01
+  category: scene_enter
+  key: fly_room
+  tiers:
+    human:
+      zh: |
+        培养基的酸甜味浓得发腻，管子全空了。
+      en: |
+        The sour-sweet reek of fly food is thick. Every vial is empty.
+
+- id: scene_enter_prep_room_01
+  category: scene_enter
+  key: prep_room
+  tiers:
+    human:
+      zh: |
+        乙醇味刺鼻，玻片盒排得很整齐。
+      en: |
+        Ethanol stings your nose. The slide boxes are lined up neatly.
+
+- id: scene_enter_em_room_01
+  category: scene_enter
+  key: em_room
+  tiers:
+    human:
+      zh: |
+        真空泵低鸣，像在呼吸。你不敢看她的后脑。
+      en: |
+        The vacuum pump hums like breathing. You do not look at the back of her head.
+
+- id: scene_enter_server_room_01
+  category: scene_enter
+  key: server_room
+  tiers:
+    human:
+      zh: |
+        太安静了，只有烧焦塑料的味道。
+      en: |
+        Too quiet. Only the smell of burnt plastic.
+
+- id: scene_enter_cold_storage_01
+  category: scene_enter
+  key: cold_storage
+  tiers:
+    human:
+      zh: |
+        冷得发疼，你呼出的气是白的。
+      en: |
+        The cold hurts. Your breath comes out white.
+
+- id: scene_enter_generic_01
+  category: scene_enter
+  key: generic
+  zh: |
+    你走进去。这里也一样安静。
+  en: |
+    You step in. It is just as quiet here.

@@ -1,0 +1,19 @@
+# silence.yaml
+# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
+# end to end. Replace with the real set written from fragment-guide.md.
+
+- id: silence_default_01
+  category: silence
+  key: default
+  zh: |
+    什么也没有发生。连嗡鸣都停了。
+  en: |
+    Nothing happens. Even the hum has stopped.
+
+- id: silence_generic_01
+  category: silence
+  key: generic
+  zh: |
+    安静。太安静了。
+  en: |
+    Quiet. Too quiet.

@@ -1,0 +1,35 @@
+# hijack.yaml
+# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
+# end to end. Replace with the real set written from fragment-guide.md.
+
+- id: hijack_eat_01
+  category: hijack
+  key: eat
+  zh: |
+    你本想去碰{target}，嘴唇却自己张开了。
+  en: |
+    You meant to reach for {target}, but your lips part on their own.
+
+- id: hijack_flinch_01
+  category: hijack
+  key: flinch
+  zh: |
+    你的身体猛地一缩，{target}从你的意图里滑走了。
+  en: |
+    Your body jerks back, and {target} slips out of your intent.
+
+- id: hijack_freeze_01
+  category: hijack
+  key: freeze
+  zh: |
+    你想动，可你的腿不再是你的。
+  en: |
+    You try to move. Your legs are no longer yours.
+
+- id: hijack_generic_01
+  category: hijack
+  key: generic
+  zh: |
+    有什么压住了你的运动皮层。
+  en: |
+    Something presses down on your motor cortex.
