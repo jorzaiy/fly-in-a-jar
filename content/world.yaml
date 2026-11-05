@@ -361,7 +361,7 @@ rules:
       - {actions: [use, attack], targets: [server_rack]}
       - {actions: [use], targets: [ethanol, lighter]}
     when: {scene: server_room, items: [ethanol, lighter], flags: [read_usb]}
-    effects: {set_flags: [server_burned], consume: [ethanol]}
+    effects: {set_flags: [server_burned], consume: [ethanol], monster_block: 3}
 
   - id: scare
     trigger:

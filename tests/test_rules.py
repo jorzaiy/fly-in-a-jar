@@ -104,6 +104,7 @@ def _burn_server_route(state, world):
     out = act(state, world, "use", "server_rack")
     assert out.rule_id == "burn_server" and state.has_flag("server_burned")
     assert "ethanol" not in state.items
+    assert state.monster_block == 3
     get_keycard(state, world)
     go(state, world, "prep_room", "corridor", "reception")
 

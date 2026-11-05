@@ -70,7 +70,7 @@ FastAPI（单进程，Docker 容器）
 | `open_box` | 用 sample_box | 线索 10，同化率 +5 |
 | `read_usb` | 机房用 usb_drive 且 power_on | 线索 11，设 read_usb |
 | `view_slide` | 电镜室用 slide_4096 且 power_on | 线索 12，设 saw_slide |
-| `burn_server` | 机房持 ethanol+lighter 用在机柜上，且 read_usb | 设 server_burned，蜂群进入乱码态 |
+| `burn_server` | 机房持 ethanol+lighter 用在机柜上，且 read_usb | 设 server_burned，蜂群进入乱码态，monster_block=3（蜂群被压制 3 回合） |
 | `absorbed` | 电镜室用显微镜，saw_slide 且同化率 ≥70 | 结局 absorbed |
 | `disconnected` | server_burned 且 ears_plugged 且 caught_fly=false，前台刷卡 | 结局 disconnected |
 
