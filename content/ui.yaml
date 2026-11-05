@@ -75,8 +75,8 @@ lang:
   usage: {zh: "用法：lang zh 或 lang en", en: "Usage: lang zh or lang en"}
 
 brainlog:
-  on: {zh: 大脑日志：显示, en: "Brain log: on"}
-  off: {zh: 大脑日志：隐藏, en: "Brain log: off"}
+  "on": {zh: 大脑日志：显示, en: "Brain log: on"}
+  "off": {zh: 大脑日志：隐藏, en: "Brain log: off"}
   usage: {zh: "用法：brainlog on 或 brainlog off", en: "Usage: brainlog on or brainlog off"}
   # Section titles; cell-type names are never translated (design §5.5).
   judge: {zh: "[裁判]", en: "[JUDGE]"}

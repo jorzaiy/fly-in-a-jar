@@ -266,8 +266,17 @@ def _ui_leaves(node: Any, path: str) -> Iterable[tuple[str, dict]]:
                 yield from _ui_leaves(v, f"{path}.{k}" if path else str(k))
 
 
+def _non_string_keys(node: Any, path: str) -> Iterable[str]:
+    """YAML 1.1 turns bare on/off/yes/no keys into booleans; catch that."""
+    if isinstance(node, dict):
+        for k, v in node.items():
+            if not isinstance(k, str):
+                yield f"ui: {path}: key {k!r} is not a string (quote it)"
+            yield from _non_string_keys(v, f"{path}.{k}" if path else str(k))
+
+
 def validate_ui(ui: dict) -> list[str]:
-    errs = []
+    errs = list(_non_string_keys(ui, ""))
     for path, leaf in _ui_leaves(ui, ""):
         for lang in LANGS:
             if not isinstance(leaf.get(lang), str) or not leaf[lang].strip():
