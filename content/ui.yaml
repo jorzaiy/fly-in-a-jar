@@ -1,0 +1,121 @@
+# ui.yaml: every system string the player can see, zh + en (requirements 2.3).
+# Placeholders in {braces} are filled by the engine with str.format.
+# Narrative text never lives here: it comes from content/fragments/.
+
+lang_select:
+  zh: "选择语言 / Choose a language：输入 lang zh 或 lang en（默认 English）"
+  en: "Choose a language / 选择语言: type lang en or lang zh (default English)"
+
+help:
+  zh: |
+    用自然语言写下你想做的事，例如"打开抽屉"、"去走廊"、"用打火机吓走它们"。
+    系统指令（不消耗回合）：
+      help            显示本帮助
+      look            查看当前场景、出口和物品
+      status          同化率、回合数、怪物状态
+      inventory       你身上带着的东西
+      notes           已发现的线索
+      lang zh|en      切换语言
+      brainlog on|off 显示或隐藏大脑日志
+      restart         重新开始一局
+  en: |
+    Type what you want to do in plain words, e.g. "open the drawer", "go to the corridor", "scare them off with the lighter".
+    System commands (no turn cost):
+      help            show this help
+      look            describe where you are, exits and items
+      status          synaptic sync, turn, swarm status
+      inventory       what you are carrying
+      notes           clues you have found
+      lang zh|en      switch language
+      brainlog on|off show or hide the brain log
+      restart         start a new game
+
+look:
+  header: {zh: "【{scene}】", en: "[{scene}]"}
+  exits: {zh: "出口：{exits}", en: "Exits: {exits}"}
+  exits_none: {zh: "出口：没有", en: "Exits: none"}
+  items: {zh: "你看见：{items}", en: "You see: {items}"}
+  items_none: {zh: "这里没有能拿走的东西。", en: "Nothing here you could take."}
+  fixtures: {zh: "这里有：{fixtures}", en: "Around you: {fixtures}"}
+  exit_locked: {zh: "出口（锁着）", en: "exit (locked)"}
+  list_sep: {zh: "、", en: ", "}
+
+status:
+  line: {zh: "回合 {turn} · 同化率 {sync}% · {tier} · 蜂群：{monster}", en: "Turn {turn} · Synaptic sync {sync}% · {tier} · Swarm: {monster}"}
+  tier:
+    human: {zh: 人类视角, en: human}
+    latent: {zh: JEV 潜伏期, en: JEV latency}
+    instinct: {zh: 本能接管, en: instinct}
+  monster:
+    near: {zh: 就在附近, en: close}
+    absent: {zh: 不在附近, en: not here}
+    blocked: {zh: "被挡住（{n} 回合）", en: "held back ({n} turns)"}
+    stunned: {zh: "昏迷（{n} 回合）", en: "stunned ({n} turns)"}
+  flags: {zh: "状态：{flags}", en: "Conditions: {flags}"}
+  flag:
+    power_on: {zh: 已供电, en: power on}
+    light_on: {zh: 手电开着, en: flashlight on}
+    ears_plugged: {zh: 戴着耳塞, en: ears plugged}
+    server_burned: {zh: 服务器已烧毁, en: server burned}
+    caught_fly: {zh: 抓过一只果蝇, en: caught a fly}
+    read_usb: {zh: 读过 U 盘, en: read the USB drive}
+    saw_slide: {zh: 看过第 4096 号切片, en: "saw slide #4096"}
+
+inventory:
+  header: {zh: "你带着：{items}", en: "You carry: {items}"}
+  empty: {zh: 你两手空空。, en: Your hands are empty.}
+
+notes:
+  header: {zh: 笔记, en: Notes}
+  line: {zh: "#{n} {text}", en: "#{n} {text}"}
+  empty: {zh: 你还什么都没弄明白。, en: You have not figured anything out yet.}
+
+lang:
+  switched: {zh: 已切换为中文。, en: Switched to English.}
+  usage: {zh: "用法：lang zh 或 lang en", en: "Usage: lang zh or lang en"}
+
+brainlog:
+  on: {zh: 大脑日志：显示, en: "Brain log: on"}
+  off: {zh: 大脑日志：隐藏, en: "Brain log: off"}
+  usage: {zh: "用法：brainlog on 或 brainlog off", en: "Usage: brainlog on or brainlog off"}
+  # Section titles; cell-type names are never translated (design §5.5).
+  judge: {zh: "[裁判]", en: "[JUDGE]"}
+  brain: {zh: "[大脑]", en: "[BRAIN]"}
+  host: {zh: "[宿主]", en: "[HOST]"}
+  stimulus: {zh: 刺激, en: stimulus}
+  spikes: {zh: 放电, en: spikes}
+  decided: {zh: 决定, en: decided}
+  judge_line: {zh: "可行 {p}% · 原因={reason} · 危险 {danger}/3 · 同化率 {sync}%", en: "feasible {p}% · reason={reason} · danger {danger}/3 · sync {sync}%"}
+
+restart:
+  done: {zh: 新的一局开始了。, en: A new night begins.}
+
+verdict:
+  success: {zh: 成功, en: success}
+  partial: {zh: 勉强成功, en: barely}
+  fail: {zh: 失败, en: failed}
+  sync_change: {zh: "同化率 {delta:+d}%（{old}% → {new}%）", en: "Synaptic sync {delta:+d}% ({old}% → {new}%)"}
+
+ending:
+  title:
+    escaped: {zh: 结局：逃脱, en: "Ending: Escaped"}
+    consumed: {zh: 结局：被吞噬, en: "Ending: Consumed"}
+    absorbed: {zh: 隐藏结局：成为神经元, en: "Hidden ending: Absorbed"}
+    disconnected: {zh: 第四结局：静默的标本, en: "Fourth ending: Disconnected"}
+  restart_hint: {zh: 输入 restart 再来一局。, en: Type restart to play again.}
+  already: {zh: 这一局已经结束了。输入 restart 再来一局。, en: This game is over. Type restart to play again.}
+
+hijack:
+  label: {zh: "[神经劫持]", en: "[NEURO-HIJACK]"}
+
+thinking: {zh: 神经元正在放电……, en: Neurons are firing…}
+
+errors:
+  judge_silent: {zh: 裁判沉默了。什么也没有发生。再试一次。, en: The judge is silent. Nothing happens. Try again.}
+  brain_overload: {zh: 大脑过载。请稍等片刻再试。, en: The brain is overloaded. Wait a moment and try again.}
+  bad_state: {zh: 存档损坏了。输入 restart 重新开始。, en: Your save is corrupted. Type restart to begin again.}
+  input_too_long: {zh: 太长了。一次只做一件事（不超过 200 字）。, en: Too long. One thing at a time (200 characters max).}
+  input_empty: {zh: 你什么也没做。, en: You do nothing.}
+  rate_limited: {zh: 你太急了。喘口气，过一会儿再试。, en: Too fast. Catch your breath and try again shortly.}
+  network: {zh: 信号断了。检查网络后再试。, en: The signal is lost. Check your connection and try again.}
+  server: {zh: 楼里某处出了故障。再试一次。, en: Something in the building failed. Try again.}
