@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Keep tasks.md checkboxes in sync",
+      "description": "After a spec task finishes, remind the agent to update .kiro/specs/fly-brain-horror/tasks.md honestly.",
+      "trigger": "PostTaskExec",
+      "action": {
+        "type": "agent",
+        "prompt": "A spec task just finished. Update .kiro/specs/fly-brain-horror/tasks.md so its checkboxes match reality: tick a sub-task only if it is implemented and verified (pytest passes and `python -m content.validate` reports 0 errors); tick a parent task only when all its sub-tasks are ticked. Never tick tasks marked 👤 (they need the user), and never tick deployment tasks (17.x) unless they were tested on the live server. If the work changed a requirement or the design, update requirements.md or design.md in the same Chinese style. Reply with the list of boxes you changed."
+      }
+    }
+  ]
+}

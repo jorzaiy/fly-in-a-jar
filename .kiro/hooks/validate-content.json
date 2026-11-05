@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Validate content on save",
+      "description": "When the agent saves a fragment, world.yaml or ui.yaml, run the content validator (requirements 5.3). Errors and warnings go to stderr so the agent sees them and fixes the fragment ids it reports.",
+      "trigger": "PostFileSave",
+      "matcher": "content/(fragments/[^/]+|world|ui)\\.yaml$",
+      "action": {
+        "type": "command",
+        "command": "sh -c 'P=python; [ -x .venv/bin/python ] && P=.venv/bin/python; $P -m content.validate --quiet 1>&2'"
+      },
+      "timeout": 60
+    }
+  ]
+}
