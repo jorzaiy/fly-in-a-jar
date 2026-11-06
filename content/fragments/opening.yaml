@@ -1,0 +1,31 @@
+# opening.yaml
+# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
+# end to end. Replace with the real set written from fragment-guide.md.
+
+- id: opening_default_01
+  category: opening
+  key: default
+  tiers:
+    human:
+      zh: |
+        灯灭了。应急灯亮起来，把前台染成红色。旋转门锁死了，楼里深处有一阵很轻的嗡鸣。
+      en: |
+        The lights die. Emergency lamps paint reception red. The revolving door is locked, and somewhere deep in the building something hums.
+    latent:
+      zh: |
+        红光碎成六边形。嗡鸣像是从你自己的头骨里传出来的。
+      en: |
+        The red light breaks into hexagons. The hum seems to come from inside your own skull.
+    instinct:
+      zh: |
+        红。暖。嗡鸣。你知道自己在哪里，也知道自己不该在这里。
+      en: |
+        Red. Warm. Humming. You know where you are, and that you should not be here.
+
+- id: opening_generic_01
+  category: opening
+  key: generic
+  zh: |
+    停电了。你被锁在楼里。有什么东西醒着。
+  en: |
+    The power is out. You are locked in. Something is awake.

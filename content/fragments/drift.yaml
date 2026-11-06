@@ -1,0 +1,19 @@
+# drift.yaml
+# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
+# end to end. Replace with the real set written from fragment-guide.md.
+
+- id: drift_default_01
+  category: drift
+  key: default
+  zh: |
+    你眨了一下眼，走廊的方向不对了。
+  en: |
+    You blink, and the hallway points the wrong way.
+
+- id: drift_generic_01
+  category: drift
+  key: generic
+  zh: |
+    你不记得自己是怎么走到这里的。
+  en: |
+    You do not remember walking here.

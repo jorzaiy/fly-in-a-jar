@@ -1,0 +1,35 @@
+# ending.yaml
+# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
+# end to end. Replace with the real set written from fragment-guide.md.
+
+- id: ending_escaped_01
+  category: ending
+  key: escaped
+  zh: |
+    旋转门开了，夜风灌进来。走到车边时，一只果蝇停在你衣领上，触角朝着你的脸。它跟出来了。
+  en: |
+    The revolving door turns and night air pours in. At the car, a single fly settles on your collar, antennae toward your face. It followed you out.
+
+- id: ending_consumed_01
+  category: ending
+  key: consumed
+  zh: |
+    嗡鸣不在外面了，它在你的颅骨里。你不再害怕，因为"你"这个词已经不太好用了。
+  en: |
+    The hum is no longer outside. It is inside your skull. You are not afraid, because the word "you" no longer quite works.
+
+- id: ending_absorbed_01
+  category: ending
+  key: absorbed
+  zh: |
+    你躺进样品舱。一片，又一片，薄得透光。你不痛，你在被读取。你成了连接组里新的一部分。
+  en: |
+    You lie down in the specimen chamber. Slice after slice, thin enough to let light through. It does not hurt. You are being read. You are part of the connectome now.
+
+- id: ending_disconnected_01
+  category: ending
+  key: disconnected
+  zh: |
+    果蝇像黑雪一样落下，再也不动。你走进夜风里，没有果蝇跟来。可你伸手去摸车钥匙时，忘了"拧动"该怎么做。
+  en: |
+    The flies fall like black snow and lie still. You walk into the night and nothing follows. At the car you reach for the key and cannot remember how turning works.

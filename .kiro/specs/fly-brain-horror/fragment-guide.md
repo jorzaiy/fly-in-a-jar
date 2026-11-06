@@ -9,6 +9,33 @@
 
 世界设定如果有改动，记得同时更新下面的提示词和 `design.md` 第 3 节。
 
+## 覆盖目标：先 MVP，再补完整
+
+片段总量约 247 个，一次写完不现实。分两步：
+
+- **MVP（先达到）：** 每个"类别 × 强度档"格子至少 **2 个**非 generic 片段，同时每个 key 至少 1 个，每个类别有 generic 兜底。`monster` 和 `anomaly` 按强度 0–3 分 4 格，其余类别各算 1 格，共 19 格。
+- **完整（stretch）：** 下面提示词里类别表的数量。MVP 达到后再按覆盖率表补写。
+
+MVP 下各类别的最少片段数（不含 generic）：
+
+| category | MVP 最少 | 怎么凑 |
+|----------|----------|--------|
+| `opening` | 2 | `default` × 2 |
+| `scene_enter` | 7 | 7 个场景各 1 |
+| `action` | 14 | 14 个行动类别各 1 |
+| `verdict_partial` | 2 | `default` × 2 |
+| `verdict_fail` | 5 | 5 个原因各 1 |
+| `monster` | 8 | 强度 0–3 各 2 个，4 个 key 至少各出现 1 次 |
+| `anomaly` | 8 | 强度 0–3 各 2 个，4 个 key 至少各出现 1 次 |
+| `clue` | 13 | 13 条线索各 1 |
+| `item_use` | 12 | 12 个物品使用 key 各 1 |
+| `hijack` | 3 | 3 个本能各 1 |
+| `drift` | 2 | `default` × 2 |
+| `silence` | 2 | `default` × 2 |
+| `ending` | 4 | 4 个结局各 1 |
+
+合计约 82 个，加 12 个 generic 约 94 个。`python -m content.validate` 末尾会打印 MVP 表，`!` 标出不足 2 个的格子；加 `--mvp` 时，没达到 MVP 会返回非零。
+
 ---
 
 ## 提示词（从这里开始复制）
@@ -144,7 +171,7 @@
 | `ending.yaml` | `ending` | `escaped` `consumed` `absorbed` `disconnected` | 否 | 2 | 8 | 四个结局，可以长一点（最多 6 句）。**建议写三档开场氛围**，但结局正文单档即可 |
 | 各文件末尾 | 同上 | `generic` | 否 | 1 | 12 | 每个类别一个通用兜底片段：`scene_enter` `action` `verdict_partial` `verdict_fail` `monster` `anomaly` `clue` `item_use` `hijack` `drift` `silence` `opening` |
 
-**总计约 247 个片段。**
+**总计约 247 个片段。** 这是完整目标。我会先请你写 MVP 量：`monster` 和 `anomaly` 的每个强度档先各写 2 个（4 个 key 都要出现），其余类别每个 key 先写 1 个、`default` 类先写 2 个，之后再逐步补齐。
 
 **强度含义：** 0 = 细微、几乎察觉不到；1 = 明显的不对劲；2 = 恐惧；3 = 极度恐慌。
 

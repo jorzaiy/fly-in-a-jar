@@ -6,12 +6,12 @@
 
 ## 阶段 0：项目骨架
 
-- [ ] 1. 创建仓库和项目骨架
-  - [ ] 1.1 新建 GitHub 公开仓库 `fly-in-a-jar`，按 design.md 第 13 节建立目录结构
-  - [ ] 1.2 添加 `pyproject.toml` 或 `requirements.txt`：fastapi、uvicorn、pydantic v2、numpy、pyyaml、typesafe-sdk，版本全部锁定
-  - [ ] 1.3 添加 `.gitignore`：忽略 `.env`、原始数据目录 `data/raw/`、`__pycache__`。确认 `.kiro/` **没有**被忽略
-  - [ ] 1.4 添加 `.env.example`（`TYPESAFE_API_KEY=`、`JUDGE=mock`、`SIM_WORKERS=2`）和开源许可证 `LICENSE`（建议 MIT）
-  - [ ] 1.5 写 FastAPI 入口 `app/main.py`，只有 `GET /api/health`，能用 `uvicorn` 在本地启动
+- [x] 1. 创建仓库和项目骨架
+  - [x] 1.1 新建 GitHub 公开仓库 `fly-in-a-jar`，按 design.md 第 13 节建立目录结构
+  - [x] 1.2 添加 `pyproject.toml` 或 `requirements.txt`：fastapi、uvicorn、pydantic v2、numpy、pyyaml、typesafe-sdk，版本全部锁定
+  - [x] 1.3 添加 `.gitignore`：忽略 `.env`、原始数据目录 `data/raw/`、`__pycache__`。确认 `.kiro/` **没有**被忽略
+  - [x] 1.4 添加 `.env.example`（`TYPESAFE_API_KEY=`、`JUDGE=mock`、`SIM_WORKERS=2`）和开源许可证 `LICENSE`（建议 MIT）
+  - [x] 1.5 写 FastAPI 入口 `app/main.py`，只有 `GET /api/health`，能用 `uvicorn` 在本地启动
   - _需求：9.6、10.1、10.2_
 
 ## 阶段 1：核实风险
@@ -56,17 +56,17 @@
 
 ## 阶段 3：游戏内容与规则
 
-- [ ] 8. 世界数据与内容加载
-  - [ ] 8.1 根据 story.md 写 `content/world.yaml`：场景、出口、设施、物品初始位置、中英文名称、物品使用规则（design.md 第 3 节的规则表，含 burn_server、absorbed、disconnected）和四种结局条件
-  - [ ] 8.2 写 `content/ui.yaml`：所有系统文本的中英文版本，包括帮助、状态、错误提示和大脑日志标题
-  - [ ] 8.3 实现 `app/content/loader.py` 和 `python -m content.validate`：按 design.md 第 8 节校验，输出出错的片段 ID 和覆盖率表
-  - [ ] 8.4 写一套**占位片段**（每个类别和 key 各 1 个，含 hijack 和四个结局，内容简短），让游戏在 Gemini 的片段到位之前就能完整跑通
+- [x] 8. 世界数据与内容加载
+  - [x] 8.1 根据 story.md 写 `content/world.yaml`：场景、出口、设施、物品初始位置、中英文名称、物品使用规则（design.md 第 3 节的规则表，含 burn_server、absorbed、disconnected）和四种结局条件
+  - [x] 8.2 写 `content/ui.yaml`：所有系统文本的中英文版本，包括帮助、状态、错误提示和大脑日志标题
+  - [x] 8.3 实现 `app/content/loader.py` 和 `python -m content.validate`：按 design.md 第 8 节校验，输出出错的片段 ID 和覆盖率表
+  - [x] 8.4 写一套**占位片段**（每个类别和 key 各 1 个，含 hijack 和四个结局，内容简短），让游戏在 Gemini 的片段到位之前就能完整跑通
   - _需求：5.1–5.5、2.3_
 
 - [ ] 9. 游戏状态与规则引擎
-  - [ ] 9.1 实现 `app/engine/state.py`：用 Pydantic 定义第 9 节的状态模型，带版本号，大小上限 16 KB
-  - [ ] 9.2 实现系统指令：`help` `look` `status` `inventory` `notes` `lang` `brainlog` `restart`。这些指令不消耗回合，不调用 Jev，也不跑模拟
-  - [ ] 9.3 实现 `app/engine/rules.py`：执行移动、拿取、使用的效果，以及物品使用规则、同化率变化、`monster_block` 和 `monster_stunned` 的倒计时、四种结局判定
+  - [x] 9.1 实现 `app/engine/state.py`：用 Pydantic 定义第 9 节的状态模型，带版本号，大小上限 16 KB
+  - [x] 9.2 实现系统指令：`help` `look` `status` `inventory` `notes` `lang` `brainlog` `restart`。这些指令不消耗回合，不调用 Jev，也不跑模拟
+  - [x] 9.3 实现 `app/engine/rules.py`：执行移动、拿取、使用的效果，以及物品使用规则、同化率变化、`monster_block` 和 `monster_stunned` 的倒计时、四种结局判定
   - [ ] 9.4 实现怪物行为修正（design.md 第 5.4 节的 4 条规则），并保留修正前后的结果，供大脑日志显示
   - [ ] 9.5 实现感官投喂和疲劳（design.md 第 5.3 节）：投喂动作抬高通路放电倾向，`stim_fatigue` 递减，换通路重置
   - [ ] 9.6 实现指令劫持（design.md 第 4 节第 3 步）：同化率 ≥70 时用 `last_spikes` 和同化率算概率，命中则替换行动为本能动作，产出 hijack 信息
@@ -74,11 +74,11 @@
   - _需求：8.1–8.5、6.4、6.5、11.1–11.7_
 
 - [ ] 10. Jev 判定器
-  - [ ] 10.1 实现 `app/judge/state_text.py`：把游戏状态转成第 6.2 节格式的英文描述
+  - [x] 10.1 实现 `app/judge/state_text.py`：把游戏状态转成第 6.2 节格式的英文描述
   - [ ] 10.2 实现 `app/judge/jev.py`：5 个问题、动态生成的 `target` 选项、超时 6 秒、阈值判定（`config/rules.yaml`）
-  - [ ] 10.3 实现 `app/judge/mock.py`：中英文关键词规则，返回结构和 Jev 完全相同的结果
+  - [x] 10.3 实现 `app/judge/mock.py`：中英文关键词规则，返回结构和 Jev 完全相同的结果
   - [ ] 10.4 实现每日调用上限，超出后自动切换到 mock 并在日志中告警
-  - [ ] 10.5 Jev 超时或报错时返回"裁判沉默了"，状态不变，也不增加同化率
+  - [x] 10.5 Jev 超时或报错时返回"裁判沉默了"，状态不变，也不增加同化率
   - _需求：6.1–6.8、9.10_
 
 - [ ] 11. 叙事模块
@@ -114,7 +114,8 @@
 - [ ] 15. 👤 接入 Gemini 写的片段
   - [ ] 15.1 👤 你把 Gemini 写好的 YAML 文件发给我
   - [ ] 15.2 放进 `content/fragments/`，替换占位片段，运行校验并修正格式问题（内容问题会先问你）
-  - [ ] 15.3 检查覆盖率表，列出缺少的类别、key 和强度，交给 Gemini 补写
+  - [ ] 15.3 检查覆盖率表，列出缺少的类别、key 和强度，交给 Gemini 补写。先达到 MVP：每个"类别 × 强度档"至少 2 个片段（`python -m content.validate --mvp` 通过，见 fragment-guide.md"覆盖目标"）；完整数量（约 247 个）作为 stretch 目标
+  - [ ] 15.4 达到 MVP 后，按覆盖率表继续补写到完整目标（可在提交前视时间取舍）
   - _需求：5.1–5.5_
 
 - [ ] 16. 👤 用真实 Jev 试玩调优
@@ -133,8 +134,8 @@
   - _需求：9.1–9.12_
 
 - [ ] 18. 👤 比赛提交
-  - [ ] 18.1 对照 Kiroween 2026 的正式规则，核实提交要求（`.kiro` 目录、视频时长、许可证等）
+  - [x] 18.1 对照 Kiroween 2026 的正式规则，核实提交要求（`.kiro` 目录、视频时长、许可证等），结果见 [kiroween-rules.md](./kiroween-rules.md)
   - [ ] 18.2 写 README：玩法、架构图、果蝇脑和 Jev 的分工、本地运行方法、数据来源与论文引用
-  - [ ] 18.3 👤 录制 3 分钟以内的演示视频，重点展示大脑日志和"果蝇脑决定故事"的过程
-  - [ ] 18.4 👤 在 2026-12-04 14:00（太平洋时间）之前，在 Devpost 上提交
-  - _需求：10.1–10.4_
+  - [ ] 18.3 👤 录制少于 3 分钟的演示视频，重点展示大脑日志和"果蝇脑决定故事"的过程；公开上传到 YouTube，不用未授权的音乐
+  - [ ] 18.4 👤 在 2026-12-04 14:00（太平洋时间）之前，在 Devpost 上提交：类别选 Frankenstein，填游戏网址、YouTube 链接、GitHub 链接和英文的 Kiro 使用说明
+  - _需求：10.1–10.7_

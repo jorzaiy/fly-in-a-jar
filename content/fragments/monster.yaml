@@ -1,0 +1,55 @@
+# monster.yaml
+# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
+# end to end. Replace with the real set written from fragment-guide.md.
+
+- id: monster_attack_01
+  category: monster
+  key: attack
+  intensity: 1
+  effects:
+    sync: 8
+  zh: |
+    黑云扑到你脸上，翅膀擦过你的眼皮。
+  en: |
+    The black cloud hits your face. Wings brush your eyelids.
+
+- id: monster_approach_01
+  category: monster
+  key: approach
+  intensity: 1
+  effects:
+    monster_near: true
+  zh: |
+    嗡鸣近了一点。
+  en: |
+    The hum comes a little closer.
+
+- id: monster_retreat_01
+  category: monster
+  key: retreat
+  intensity: 1
+  effects:
+    monster_near: false
+  zh: |
+    嗡鸣退回墙缝里。
+  en: |
+    The hum withdraws into the walls.
+
+- id: monster_feed_01
+  category: monster
+  key: feed
+  intensity: 1
+  effects:
+    sync: 4
+  zh: |
+    几只果蝇落在你手背上，口器轻轻地尝。
+  en: |
+    A few flies land on the back of your hand and taste, gently.
+
+- id: monster_generic_01
+  category: monster
+  key: generic
+  zh: |
+    蜂群在某处动了一下。
+  en: |
+    Somewhere, the swarm shifts.

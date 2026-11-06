@@ -1,0 +1,187 @@
+# verdict.yaml
+# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
+# end to end. Replace with the real set written from fragment-guide.md.
+
+- id: action_look_01
+  category: action
+  key: look
+  zh: |
+    你仔细看{target}。
+  en: |
+    You look closely at {target}.
+
+- id: action_move_01
+  category: action
+  key: move
+  zh: |
+    你朝{target}走去。
+  en: |
+    You make your way toward {target}.
+
+- id: action_take_01
+  category: action
+  key: take
+  zh: |
+    你拿起{target}。
+  en: |
+    You pick up {target}.
+
+- id: action_use_01
+  category: action
+  key: use
+  zh: |
+    你用了{target}。
+  en: |
+    You use {target}.
+
+- id: action_eat_01
+  category: action
+  key: eat
+  zh: |
+    你把{target}放进嘴里。
+  en: |
+    You put {target} in your mouth.
+
+- id: action_smell_01
+  category: action
+  key: smell
+  zh: |
+    你闻了闻{target}。
+  en: |
+    You smell {target}.
+
+- id: action_listen_01
+  category: action
+  key: listen
+  zh: |
+    你屏住呼吸听。
+  en: |
+    You hold your breath and listen.
+
+- id: action_touch_01
+  category: action
+  key: touch
+  zh: |
+    你伸手碰了碰{target}。
+  en: |
+    You reach out and touch {target}.
+
+- id: action_light_01
+  category: action
+  key: light
+  zh: |
+    光圈抖了一下，稳住了。
+  en: |
+    The beam trembles, then holds.
+
+- id: action_attack_01
+  category: action
+  key: attack
+  zh: |
+    你朝{target}挥过去。
+  en: |
+    You lash out at {target}.
+
+- id: action_hide_01
+  category: action
+  key: hide
+  zh: |
+    你缩进{target}的阴影里。
+  en: |
+    You fold yourself into the shadow of {target}.
+
+- id: action_wait_01
+  category: action
+  key: wait
+  zh: |
+    你等着。什么也没有来，暂时。
+  en: |
+    You wait. Nothing comes. For now.
+
+- id: action_talk_01
+  category: action
+  key: talk
+  zh: |
+    你的声音在空房间里显得很小。
+  en: |
+    Your voice sounds very small in the empty room.
+
+- id: action_other_01
+  category: action
+  key: other
+  zh: |
+    你照做了。
+  en: |
+    You do it.
+
+- id: action_generic_01
+  category: action
+  key: generic
+  zh: |
+    你做了。
+  en: |
+    You do it.
+
+- id: verdict_partial_default_01
+  category: verdict_partial
+  key: default
+  zh: |
+    做到了，但你的手在抖，声音比你想的大。
+  en: |
+    You manage it, but your hands shake and it is louder than you wanted.
+
+- id: verdict_partial_generic_01
+  category: verdict_partial
+  key: generic
+  zh: |
+    勉强做到了。代价还没显现。
+  en: |
+    You barely manage. The cost has not shown itself yet.
+
+- id: verdict_fail_physically_impossible_01
+  category: verdict_fail
+  key: physically_impossible
+  zh: |
+    你的身体做不到。有什么在看着你尝试。
+  en: |
+    Your body cannot do that. Something watches you try.
+
+- id: verdict_fail_missing_item_01
+  category: verdict_fail
+  key: missing_item
+  zh: |
+    你没有能用来对付{target}的东西。
+  en: |
+    You have nothing to do that to {target} with.
+
+- id: verdict_fail_no_such_target_01
+  category: verdict_fail
+  key: no_such_target
+  zh: |
+    这里没有那样东西。
+  en: |
+    There is nothing like that here.
+
+- id: verdict_fail_against_world_rules_01
+  category: verdict_fail
+  key: against_world_rules
+  zh: |
+    {target}不允许你这么做。
+  en: |
+    {target} will not let you do that.
+
+- id: verdict_fail_not_an_action_01
+  category: verdict_fail
+  key: not_an_action
+  zh: |
+    你只是站在原地。
+  en: |
+    You only stand there.
+
+- id: verdict_fail_generic_01
+  category: verdict_fail
+  key: generic
+  zh: |
+    不行。冷漠的判决落下来。
+  en: |
+    No. The verdict falls, cold.

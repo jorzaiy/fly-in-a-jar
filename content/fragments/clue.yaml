@@ -1,0 +1,119 @@
+# clue.yaml
+# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
+# end to end. Replace with the real set written from fragment-guide.md.
+
+- id: clue_1_01
+  category: clue
+  key: clue_1
+  effects:
+    give_item: notebook_page
+  zh: |
+    门缝里飘出一张纸，Weiss 的字迹："我烧断了机房的保险丝。它必须停下来。"
+  en: |
+    A page slides under the door in Weiss's hand: "I blew the server-room fuse. It has to stop."
+
+- id: clue_2_01
+  category: clue
+  key: clue_2
+  zh: |
+    冰冷的气流里，有人在你耳边念出一个冰柜编号。
+  en: |
+    In a draft of freezing air, someone whispers a freezer number into your ear.
+
+- id: clue_3_01
+  category: clue
+  key: clue_3
+  zh: |
+    你的手指突然像被冻伤一样刺痛。你想起走廊那件白大褂。
+  en: |
+    Your fingers sting as if frostbitten. You think of the lab coat in the corridor.
+
+- id: clue_4_01
+  category: clue
+  key: clue_4
+  zh: |
+    23:02，Weiss 签到。签退栏空着。
+  en: |
+    23:02, Weiss signs in. The sign-out column is empty.
+
+- id: clue_5_01
+  category: clue
+  key: clue_5
+  zh: |
+    复眼里的画面：一个人倒下，一根带子被机械臂卷进去。
+  en: |
+    A compound-eye memory: a woman falls, a lanyard is pulled into a robotic arm.
+
+- id: clue_6_01
+  category: clue
+  key: clue_6
+  zh: |
+    墙上有一圈焦痕，周围一只果蝇都没有。
+  en: |
+    A scorch mark on the wall. Not a single fly near it.
+
+- id: clue_7_01
+  category: clue
+  key: clue_7
+  zh: |
+    海报上的字一个个亮起来：果蝇麻醉请使用 CO₂。
+  en: |
+    The poster's letters light up one by one: ANESTHETISE FLIES WITH CO₂.
+
+- id: clue_8_01
+  category: clue
+  key: clue_8
+  zh: |
+    录音笔里是 Weiss 的声音："带上一只。别让它觉得你是外面的东西。"
+  en: |
+    Weiss's voice from the recorder: "Take one with you. Don't let it think you're from outside."
+
+- id: clue_9_01
+  category: clue
+  key: clue_9
+  zh: |
+    你突然满嘴甜味，嗡鸣转向了你。
+  en: |
+    Your mouth floods with sweetness, and the hum turns toward you.
+
+- id: clue_10_01
+  category: clue
+  key: clue_10
+  zh: |
+    盒子是空的。标签上是你的名字。
+  en: |
+    The box is empty. The label has your name on it.
+
+- id: clue_11_01
+  category: clue
+  key: clue_11
+  zh: |
+    日志第一行：23:00:00 simulation started by: specimen_F
+  en: |
+    The first log line: 23:00:00 simulation started by: specimen_F
+
+- id: clue_12_01
+  category: clue
+  key: clue_12
+  zh: |
+    显微镜下的神经元排成一张脸。控制台亮起：NEXT SPECIMEN: READY
+  en: |
+    Under the beam, neurons arrange themselves into a face. The console reads NEXT SPECIMEN: READY.
+
+- id: clue_13_01
+  category: clue
+  key: clue_13
+  requires:
+    sync_min: 70
+  zh: |
+    你终于看懂登记簿上那行小点了。它们一直在动。
+  en: |
+    You finally understand the dotted line in the visitor log. The dots have always been moving.
+
+- id: clue_generic_01
+  category: clue
+  key: generic
+  zh: |
+    你想起了一件刚才忽略的事，但它很快又沉下去了。
+  en: |
+    You remember something you missed, and it sinks again just as fast.

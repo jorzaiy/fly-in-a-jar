@@ -1,0 +1,16 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Run tests on Python save",
+      "description": "When the agent saves Python under app/, content/ or tests/, run the pytest suite and stop at the first failure. Output goes to stderr so a failure is reported back to the agent.",
+      "trigger": "PostFileSave",
+      "matcher": "(app|content|tests)/.*\\.py$",
+      "action": {
+        "type": "command",
+        "command": "sh -c 'P=python; [ -x .venv/bin/python ] && P=.venv/bin/python; $P -m pytest -q -x 1>&2'"
+      },
+      "timeout": 180
+    }
+  ]
+}

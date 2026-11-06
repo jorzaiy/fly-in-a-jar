@@ -1,0 +1,107 @@
+# item_use.yaml
+# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
+# end to end. Replace with the real set written from fragment-guide.md.
+
+- id: item_use_fuse_frostbite_01
+  category: item_use
+  key: fuse_frostbite
+  zh: |
+    你的手指一碰到保险丝就粘住了，你猛地抽回手，指尖发白。
+  en: |
+    Your fingertips stick to the fuse. You tear them away, white and numb.
+
+- id: item_use_keycard_tangled_01
+  category: item_use
+  key: keycard_tangled
+  zh: |
+    挂绳死死缠在机械臂上，你扯不下来。
+  en: |
+    The lanyard is wound tight around the arm. It will not come free.
+
+- id: item_use_restore_power_01
+  category: item_use
+  key: restore_power
+  zh: |
+    保险丝咔哒一声卡进去。你合上电闸，整栋楼长长吸了一口气。
+  en: |
+    The fuse clicks home. You throw the breaker and the building draws a long breath.
+
+- id: item_use_light_01
+  category: item_use
+  key: light
+  zh: |
+    手电亮了，一圈白光。
+  en: |
+    The flashlight comes on, a clean white circle.
+
+- id: item_use_plug_ears_01
+  category: item_use
+  key: plug_ears
+  zh: |
+    你塞上耳塞，世界退远了一点。
+  en: |
+    You push in the earplugs. The world steps back a little.
+
+- id: item_use_bait_01
+  category: item_use
+  key: bait
+  zh: |
+    你把方糖扔向远处，嗡鸣跟着它去了。
+  en: |
+    You toss the sugar away. The hum follows it.
+
+- id: item_use_catch_fly_01
+  category: item_use
+  key: catch_fly
+  zh: |
+    你扣上管口。一只果蝇在里面撞壁。
+  en: |
+    You cap the vial. One fly beats against the glass.
+
+- id: item_use_stun_01
+  category: item_use
+  key: stun
+  zh: |
+    CO₂ 嘶嘶散开，黑云一片片落下来。
+  en: |
+    CO₂ hisses out and the cloud drops in sheets.
+
+- id: item_use_scare_01
+  category: item_use
+  key: scare
+  zh: |
+    火苗一跳，蜂群退开。
+  en: |
+    The flame jumps and the swarm pulls back.
+
+- id: item_use_firewall_01
+  category: item_use
+  key: firewall
+  zh: |
+    乙醇泼在地上，火墙腾起来。
+  en: |
+    Ethanol splashes the floor and a wall of fire rises.
+
+- id: item_use_burn_server_01
+  category: item_use
+  key: burn_server
+  zh: |
+    那台硬盘灯还在闪的机柜烧起来了。整栋楼的嗡鸣变成乱码。
+  en: |
+    The rack with the blinking drive light goes up in flames. The building's hum turns to static.
+
+- id: item_use_dissect_scope_01
+  category: item_use
+  key: dissect_scope
+  zh: |
+    目镜里一只被钉住的果蝇，用和你手指一样的弧度弯了右前足。
+  en: |
+    In the eyepiece a pinned fly bends its right foreleg at exactly the angle of your finger.
+
+- id: item_use_generic_01
+  category: item_use
+  key: generic
+  zh: |
+    什么也没发生。至少你没看到。
+  en: |
+    Nothing happens. Nothing you can see.

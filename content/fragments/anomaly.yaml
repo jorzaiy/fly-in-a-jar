@@ -1,0 +1,59 @@
+# anomaly.yaml
+# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
+# end to end. Replace with the real set written from fragment-guide.md.
+
+- id: anomaly_visual_01
+  category: anomaly
+  key: visual
+  intensity: 1
+  zh: |
+    视野边缘多了几个黑点，眨眼也不散。
+  en: |
+    Black specks gather at the edge of your vision. Blinking does not clear them.
+
+- id: anomaly_sound_01
+  category: anomaly
+  key: sound
+  intensity: 1
+  zh: |
+    嗡鸣里好像有人在念一串编号。
+  en: |
+    Inside the hum, someone seems to be reading out numbers.
+
+- id: anomaly_smell_01
+  category: anomaly
+  key: smell
+  intensity: 1
+  zh: |
+    空气里突然全是发酵的甜味。
+  en: |
+    The air is suddenly thick with fermented sweetness.
+
+- id: anomaly_memory_01
+  category: anomaly
+  key: memory
+  intensity: 1
+  tiers:
+    human:
+      zh: |
+        你想起一片香蕉皮。你从没见过那片香蕉皮。
+      en: |
+        You remember a banana peel. You have never seen that banana peel.
+    latent:
+      zh: |
+        一片香蕉皮，被六千个小镜面同时看见。
+      en: |
+        A banana peel, seen at once through six thousand tiny mirrors.
+    instinct:
+      zh: |
+        甜。软。家。
+      en: |
+        Sweet. Soft. Home.
+
+- id: anomaly_generic_01
+  category: anomaly
+  key: generic
+  zh: |
+    有什么不太对，但你说不出是什么。
+  en: |
+    Something is wrong, and you cannot say what.

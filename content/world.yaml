@@ -1,0 +1,432 @@
+# world.yaml: machine-readable world for Fly in a Jar (缸中之蝇).
+# Source of truth for the story: .kiro/specs/fly-brain-horror/story.md (ch. 3, 4, 6, 7, 8).
+# Data shapes and rule table: design.md §3. Validated by `python -m content.validate`.
+
+version: 2
+start_scene: reception
+
+# ---------------------------------------------------------------- scenes
+# exits: scene ids reachable by `move`. `exit` is the ending pseudo-scene; it is
+# never entered by a plain move, only through the escape / disconnected rules.
+# ambient: scene-environment stimulus for the brain (design §5.3), resolved in
+# config/brain_map.yaml once task 6 lands.
+scenes:
+  reception:
+    name: {zh: 前台, en: Reception}
+    aliases: {zh: [前台, 大厅, 接待处], en: [reception, lobby, front desk area]}
+    exits: [corridor, exit]
+    ambient: null
+    fixtures: [reception_desk, drawer, revolving_door, card_reader, desk_phone]
+  corridor:
+    name: {zh: 走廊, en: Corridor}
+    aliases: {zh: [走廊, 过道], en: [corridor, hallway, hall]}
+    exits: [reception, fly_room, prep_room, server_room, cold_storage]
+    ambient: null
+    fixtures: [coat_rack, neuron_photos, safety_poster]
+  fly_room:
+    name: {zh: 果蝇饲养室, en: Fly Room}
+    aliases: {zh: [果蝇饲养室, 饲养室, 果蝇房], en: [fly room, fly lab, rearing room]}
+    exits: [corridor]
+    ambient: null
+    fixtures: [vial_rack, incubator]
+  prep_room:
+    name: {zh: 解剖准备室, en: Prep Room}
+    aliases: {zh: [解剖准备室, 准备室, 解剖室], en: [prep room, preparation room, dissection room]}
+    exits: [corridor, em_room]
+    ambient: null
+    fixtures: [dissecting_scope, microtome, slide_box, airlock_door]
+  em_room:
+    name: {zh: 电镜室, en: EM Room}
+    aliases: {zh: [电镜室], en: [em room, electron microscopy room, microscope room]}
+    exits: [prep_room]
+    ambient: null
+    fixtures: [electron_microscope, robot_arm, console, weiss_body]
+  server_room:
+    name: {zh: 机房, en: Server Room}
+    aliases: {zh: [机房, 服务器室], en: [server room]}
+    exits: [corridor]
+    ambient: jo_hum
+    fixtures: [fuse_box, terminal, server_rack]
+  cold_storage:
+    name: {zh: 冷库, en: Cold Storage}
+    aliases: {zh: [冷库, 冷藏室], en: [cold storage, cold room, freezer room]}
+    exits: [corridor]
+    ambient: cold
+    fixtures: [freezer, sample_shelf, temp_logger]
+  exit:
+    name: {zh: 出口, en: Exit}
+    aliases: {zh: [出口, 外面, 停车场], en: [exit, outside, parking lot]}
+    exits: []
+    ambient: null
+    fixtures: []
+    ending_scene: true
+
+# ---------------------------------------------------------------- fixtures
+# Things that stay in a scene and can be targets of look/use/touch/attack/hide.
+# works: false  -> the fixture exists but does nothing useful (judge hint).
+# breakable: false -> attacking it is against world rules.
+fixtures:
+  reception_desk:
+    scene: reception
+    name: {zh: 前台桌, en: reception desk}
+    aliases: {zh: [前台桌, 接待台, 桌子, 桌], en: [reception desk, desk, counter]}
+    hide_spot: true
+  drawer:
+    scene: reception
+    name: {zh: 抽屉, en: drawer}
+    aliases: {zh: [抽屉], en: [drawer]}
+  revolving_door:
+    scene: reception
+    name: {zh: 旋转门, en: revolving door}
+    aliases: {zh: [旋转门, 玻璃门, 玻璃, 大门], en: [revolving door, glass door, door, glass]}
+    breakable: false
+    note_en: Locked. Reinforced glass. Opens only via the card reader when the building has power.
+  card_reader:
+    scene: reception
+    name: {zh: 读卡器, en: card reader}
+    aliases: {zh: [读卡器, 刷卡器, 门禁], en: [card reader, reader, keycard reader]}
+    note_en: Opens the revolving door with a keycard, only when the building has power.
+  desk_phone:
+    scene: reception
+    name: {zh: 内线电话, en: desk phone}
+    aliases: {zh: [内线电话, 电话, 听筒], en: [desk phone, phone, receiver, telephone]}
+    works: false
+    note_en: Internal line. Dead, no signal.
+  coat_rack:
+    scene: corridor
+    name: {zh: 白大褂衣架, en: coat rack}
+    aliases: {zh: [衣架, 白大褂], en: [coat rack, lab coats, lab coat, coats]}
+  neuron_photos:
+    scene: corridor
+    name: {zh: 神经元照片, en: neuron photographs}
+    aliases: {zh: [神经元照片, 照片], en: [photos, photographs, micrographs, pictures]}
+  safety_poster:
+    scene: corridor
+    name: {zh: 安全海报, en: safety poster}
+    aliases: {zh: [安全海报, 海报], en: [safety poster, poster]}
+  vial_rack:
+    scene: fly_room
+    name: {zh: 果蝇管架, en: vial rack}
+    aliases: {zh: [果蝇管架, 管架, 架子], en: [vial rack, rack, shelves]}
+  incubator:
+    scene: fly_room
+    name: {zh: 恒温培养箱, en: incubator}
+    aliases: {zh: [培养箱, 恒温箱], en: [incubator]}
+  dissecting_scope:
+    scene: prep_room
+    name: {zh: 解剖显微镜, en: dissecting microscope}
+    aliases: {zh: [解剖显微镜, 显微镜, 目镜], en: [dissecting microscope, dissecting scope, microscope, eyepiece]}
+  microtome:
+    scene: prep_room
+    name: {zh: 切片机, en: microtome}
+    aliases: {zh: [切片机], en: [microtome, slicer]}
+  slide_box:
+    scene: prep_room
+    name: {zh: 玻片盒, en: slide box}
+    aliases: {zh: [玻片盒], en: [slide box, slide boxes]}
+  airlock_door:
+    scene: prep_room
+    name: {zh: 气密门, en: airlock door}
+    aliases: {zh: [气密门], en: [airlock door, airlock]}
+  electron_microscope:
+    scene: em_room
+    name: {zh: 电子显微镜, en: electron microscope}
+    aliases: {zh: [电子显微镜, 电镜, 样品舱, 显微镜], en: [electron microscope, specimen chamber, microscope, em]}
+  robot_arm:
+    scene: em_room
+    name: {zh: 机械臂, en: robotic arm}
+    aliases: {zh: [机械臂, 挂绳, 样品台], en: [robotic arm, robot arm, arm, lanyard]}
+  console:
+    scene: em_room
+    name: {zh: 控制台, en: console}
+    aliases: {zh: [控制台], en: [console, control panel]}
+  weiss_body:
+    scene: em_room
+    name: {zh: Weiss 博士的身体, en: Dr. Weiss's body}
+    aliases: {zh: [Weiss, 韦斯, 尸体, 博士], en: [weiss, body, corpse, dr. weiss]}
+  fuse_box:
+    scene: server_room
+    name: {zh: 电闸箱, en: fuse box}
+    aliases: {zh: [电闸箱, 电闸, 配电箱], en: [fuse box, breaker box, breaker, panel]}
+  terminal:
+    scene: server_room
+    name: {zh: 终端, en: terminal}
+    aliases: {zh: [终端, 电脑, 屏幕], en: [terminal, computer, screen]}
+  server_rack:
+    scene: server_room
+    name: {zh: 服务器机柜, en: server rack}
+    aliases: {zh: [服务器机柜, 机柜, 服务器, 硬盘灯], en: [server rack, server cabinet, servers, server, rack]}
+  freezer:
+    scene: cold_storage
+    name: {zh: −80 ℃ 冰柜, en: −80 °C freezer}
+    aliases: {zh: [冰柜, 冷柜], en: [freezer, freezers]}
+  sample_shelf:
+    scene: cold_storage
+    name: {zh: 样本架, en: sample shelf}
+    aliases: {zh: [样本架, 架子], en: [sample shelf, shelf, shelves]}
+  temp_logger:
+    scene: cold_storage
+    name: {zh: 温度记录仪, en: temperature logger}
+    aliases: {zh: [温度记录仪, 记录仪], en: [temperature logger, logger, chart]}
+
+# ---------------------------------------------------------------- items
+# location: starting scene (null = never lying around; created by a rule or a fragment).
+# container: the fixture it sits in/on (flavour + judge hint only).
+# portable: false would make `take` impossible (none yet).
+items:
+  flashlight:
+    name: {zh: 手电筒, en: Flashlight}
+    aliases: {zh: [手电筒, 手电], en: [flashlight, torch]}
+    location: reception
+    container: drawer
+  earplugs:
+    name: {zh: 耳塞, en: Earplugs}
+    aliases: {zh: [耳塞], en: [earplugs, ear plugs]}
+    location: reception
+  visitor_log:
+    name: {zh: 访客登记簿, en: Visitor Log}
+    aliases: {zh: [访客登记簿, 登记簿, 登记本, 签到簿], en: [visitor log, logbook, log book, visitor book, sign-in book, log]}
+    location: reception
+  cryo_gloves:
+    name: {zh: 防冻手套, en: Cryo Gloves}
+    aliases: {zh: [防冻手套, 手套], en: [cryo gloves, gloves, cryogloves]}
+    location: corridor
+    container: coat_rack
+  sugar_cube:
+    name: {zh: 方糖, en: Sugar Cube}
+    aliases: {zh: [方糖, 糖], en: [sugar cube, sugar]}
+    location: fly_room
+    edible: true
+  vial:
+    name: {zh: 空果蝇管, en: Empty Vial}
+    aliases: {zh: [空果蝇管, 果蝇管, 管子], en: [empty vial, vial, tube]}
+    location: fly_room
+  vial_fly:
+    name: {zh: 装着果蝇的管子, en: Vial with a Fly}
+    aliases: {zh: [装着果蝇的管子, 那只果蝇], en: [vial with a fly, the fly in the vial]}
+    location: null
+  co2_pad:
+    name: {zh: CO₂ 麻醉垫, en: CO₂ Pad}
+    aliases: {zh: [CO2麻醉垫, CO₂麻醉垫, 麻醉垫, co2垫, 二氧化碳], en: [co2 pad, co₂ pad, co2, anesthesia pad, pad]}
+    location: fly_room
+  scalpel:
+    name: {zh: 手术刀, en: Scalpel}
+    aliases: {zh: [手术刀, 刀], en: [scalpel, knife, blade]}
+    location: prep_room
+  ethanol:
+    name: {zh: 乙醇, en: Ethanol}
+    aliases: {zh: [乙醇, 酒精], en: [ethanol, alcohol]}
+    location: prep_room
+  slide_4096:
+    name: {zh: 第 4096 号切片, en: "Slide #4096"}
+    aliases: {zh: [4096号切片, 4096, 切片], en: [slide 4096, "slide #4096", "#4096", slide]}
+    location: prep_room
+  recorder:
+    name: {zh: 录音笔, en: Voice Recorder}
+    aliases: {zh: [录音笔], en: [voice recorder, recorder, dictaphone]}
+    location: em_room
+  keycard:
+    name: {zh: 门禁卡, en: Keycard}
+    aliases: {zh: [门禁卡, 卡, 工卡], en: [keycard, key card, access card, card]}
+    location: em_room
+    container: robot_arm
+  lighter:
+    name: {zh: 打火机, en: Lighter}
+    aliases: {zh: [打火机, 火机], en: [lighter]}
+    location: server_room
+    container: terminal
+  usb_drive:
+    name: {zh: U 盘, en: USB Drive}
+    aliases: {zh: [U盘, u盘, U 盘], en: [usb drive, usb stick, usb, flash drive, thumb drive]}
+    location: server_room
+    container: terminal
+  fuse:
+    name: {zh: 保险丝, en: Fuse}
+    aliases: {zh: [保险丝], en: [fuse, spare fuse]}
+    location: cold_storage
+    container: freezer
+  sample_box:
+    name: {zh: 标着今晚日期的样本盒, en: Sample Box}
+    aliases: {zh: [样本盒, 冻存盒, 盒子], en: [sample box, cryobox, box]}
+    location: cold_storage
+    container: sample_shelf
+  notebook_page:
+    name: {zh: 笔记残页, en: Notebook Page}
+    aliases: {zh: [笔记残页, 笔记, 残页], en: [notebook page, note, page, notes]}
+    location: null
+
+# ---------------------------------------------------------------- flags
+# caught_fly is also a top-level state field (design §9); rules read/write it
+# through the flag name.
+flags: [power_on, light_on, ears_plugged, server_burned, caught_fly, read_usb, saw_slide]
+
+# ---------------------------------------------------------------- clues (story.md ch. 6)
+# source: brain (PAM spike) or item (an item rule gives it).
+# scenes: scenes where a brain clue is most relevant (design §5.4 clue choice).
+clues:
+  1:  {source: brain, scenes: [server_room, corridor], zh: "停电是因为机房电闸的保险丝烧了。", en: "The blackout is a blown fuse in the server-room fuse box."}
+  2:  {source: brain, scenes: [cold_storage, server_room], zh: "冷库的 −80 ℃ 冰柜里有备用保险丝。", en: "There is a spare fuse in the −80 °C freezer in cold storage."}
+  3:  {source: brain, scenes: [cold_storage, corridor], zh: "徒手碰 −80 ℃ 会冻伤，走廊衣架上有防冻手套。", en: "Bare hands freeze at −80 °C; there are cryo gloves on the corridor coat rack."}
+  4:  {source: item, scenes: [reception], zh: "Weiss 签到进楼没签退，门禁卡在她身上。", en: "Weiss signed in and never signed out. She has the keycard."}
+  5:  {source: brain, scenes: [em_room, prep_room], zh: "她倒在电镜室，挂绳缠在机器上，需要刀。", en: "She lies in the EM room, lanyard caught in the machine. You need a blade."}
+  6:  {source: brain, scenes: [], zh: "蜂群怕火。", en: "The swarm fears fire."}
+  7:  {source: brain, scenes: [corridor, fly_room], zh: "实验室用 CO₂ 麻醉果蝇。", en: "The lab knocks flies out with CO₂."}
+  8:  {source: item, scenes: [em_room], zh: "蜂群不伤害\"自己的一份子\"。", en: "The swarm does not harm one of its own."}
+  9:  {source: brain, scenes: [fly_room], zh: "甜味能把它们引开。", en: "Sweetness draws them away."}
+  10: {source: item, scenes: [cold_storage], zh: "样本盒标签上是你的名字。", en: "The sample box is labelled with your name."}
+  11: {source: item, scenes: [server_room], zh: "停电前连接组在服务器上自己运行了。", en: "Before the blackout the connectome started running on its own."}
+  12: {source: item, scenes: [em_room], zh: "第 4096 号切片是 Weiss；显微镜在等新样本。", en: "Slide #4096 is Weiss. The microscope is waiting for a new specimen."}
+  13: {source: brain, scenes: [], sync_min: 70, zh: "玻片编号排到 11096；你的签到字迹是果蝇拼的。", en: "The slides run to 11096. Your signature was written by flies."}
+
+# ---------------------------------------------------------------- item-use rules (design §3)
+# Evaluated in order; the first rule whose trigger and conditions match wins.
+#
+# trigger: list of {actions: [judge categories], targets: [item / fixture / scene ids, monster]}
+# when (all must hold):
+#   scene, items (held), reachable (held or lying in this scene), not_items,
+#   flags, not_flags (caught_fly reads the state field), monster_near, sync_min
+# effects:
+#   block: true        action fails (no normal take/move happens)
+#   sync: n            assimilation change
+#   set_flags / clear_flags
+#   consume: [items]   removed from inventory
+#   transform: {from: to}
+#   monster_block / monster_stunned: n   turns
+#   monster_near: bool
+#   clue: n            gives clue n (narrated as clue.clue_n)
+#   ending: id         ends the game (narrated as ending.<id>)
+#   dampen_anomaly: visual|sound   narrator hint (design §3: one tier lower)
+# Fragment key: item_use.<id>, unless the rule gives a clue (clue.clue_<n>) or an ending (ending.<id>).
+rules:
+  - id: fuse_frostbite
+    trigger: [{actions: [take, touch, use], targets: [fuse]}]
+    when: {scene: cold_storage, not_items: [cryo_gloves]}
+    effects: {block: true, sync: 5}
+
+  - id: keycard_tangled
+    trigger: [{actions: [take], targets: [keycard]}]
+    when: {scene: em_room, not_items: [scalpel]}
+    effects: {block: true}
+
+  - id: restore_power
+    trigger: [{actions: [use], targets: [fuse, fuse_box]}]
+    when: {scene: server_room, items: [fuse]}
+    effects: {set_flags: [power_on], consume: [fuse]}
+
+  # Fourth ending must be checked before the plain escape.
+  - id: disconnected
+    trigger:
+      - {actions: [use], targets: [keycard, card_reader, revolving_door]}
+      - {actions: [move], targets: [exit]}
+    when: {scene: reception, items: [keycard], flags: [server_burned, ears_plugged], not_flags: [caught_fly]}
+    effects: {ending: disconnected}
+
+  - id: escape
+    trigger:
+      - {actions: [use], targets: [keycard, card_reader, revolving_door]}
+      - {actions: [move], targets: [exit]}
+    when: {scene: reception, items: [keycard], flags: [power_on]}
+    effects: {ending: escaped}
+
+  - id: light
+    trigger: [{actions: [use, light], targets: [flashlight]}]
+    when: {items: [flashlight]}
+    effects: {set_flags: [light_on], dampen_anomaly: visual}
+
+  - id: plug_ears
+    trigger: [{actions: [use], targets: [earplugs]}]
+    when: {items: [earplugs]}
+    effects: {set_flags: [ears_plugged], dampen_anomaly: sound}
+
+  - id: bait
+    trigger: [{actions: [use], targets: [sugar_cube]}]
+    when: {items: [sugar_cube]}
+    effects: {monster_block: 2, consume: [sugar_cube]}
+
+  - id: catch_fly
+    trigger:
+      - {actions: [use], targets: [vial]}
+      - {actions: [take], targets: [monster]}
+    when: {items: [vial], monster_near: true}
+    effects: {transform: {vial: vial_fly}, set_flags: [caught_fly]}
+
+  - id: stun
+    trigger: [{actions: [use], targets: [co2_pad]}]
+    when: {items: [co2_pad], monster_near: true}
+    effects: {monster_stunned: 2, consume: [co2_pad]}
+
+  # Burning the server is checked before the generic ethanol / lighter rules.
+  - id: burn_server
+    trigger:
+      - {actions: [use, attack], targets: [server_rack]}
+      - {actions: [use], targets: [ethanol, lighter]}
+    when: {scene: server_room, items: [ethanol, lighter], flags: [read_usb]}
+    effects: {set_flags: [server_burned], consume: [ethanol], monster_block: 3}
+
+  - id: scare
+    trigger:
+      - {actions: [use], targets: [lighter]}
+      - {actions: [attack], targets: [monster]}
+    when: {items: [lighter], monster_near: true}
+    effects: {monster_near: false}
+
+  - id: firewall
+    trigger: [{actions: [use], targets: [ethanol]}]
+    when: {items: [ethanol, lighter]}
+    effects: {monster_block: 4, consume: [ethanol]}
+
+  - id: read_log
+    trigger: [{actions: [use, look], targets: [visitor_log]}]
+    when: {reachable: [visitor_log]}
+    effects: {clue: 4}
+
+  - id: play_recorder
+    trigger: [{actions: [use, listen], targets: [recorder]}]
+    when: {reachable: [recorder]}
+    effects: {clue: 8}
+
+  - id: open_box
+    trigger: [{actions: [use], targets: [sample_box]}]
+    when: {reachable: [sample_box]}
+    effects: {clue: 10, sync: 5}
+
+  - id: read_usb
+    trigger: [{actions: [use], targets: [usb_drive, terminal]}]
+    when: {scene: server_room, reachable: [usb_drive], flags: [power_on]}
+    effects: {clue: 11, set_flags: [read_usb]}
+
+  # Hidden ending before the slide view so the microscope means "lie down" once ready.
+  - id: absorbed
+    trigger: [{actions: [use], targets: [electron_microscope]}]
+    when: {scene: em_room, flags: [saw_slide], sync_min: 70}
+    effects: {ending: absorbed}
+
+  - id: view_slide
+    trigger: [{actions: [use, look], targets: [slide_4096, electron_microscope]}]
+    when: {scene: em_room, items: [slide_4096], flags: [power_on]}
+    effects: {clue: 12, set_flags: [saw_slide]}
+
+  # Story ch. 5.3: the dissecting-scope stare. Narrative only, no state change.
+  - id: dissect_scope
+    trigger: [{actions: [look, use], targets: [dissecting_scope]}]
+    when: {scene: prep_room}
+    effects: {}
+
+# ---------------------------------------------------------------- endings (design §3, story ch. 7–8)
+endings:
+  escaped:      {rule: escape, summary: "Power restored, keycard swiped at reception."}
+  consumed:     {sync_min: 100, summary: "Synaptic sync reaches 100%."}
+  absorbed:     {rule: absorbed, summary: "Saw slide #4096 under power, sync >= 70, used the electron microscope."}
+  disconnected: {rule: disconnected, summary: "Never caught a fly, ears plugged, read the USB, burned the server, swiped the keycard."}
+
+# ---------------------------------------------------------------- judge hints (design §6.2)
+# Plain-English world rules sent to Jev with every state.
+judge_rules_en:
+  - The player is an ordinary human night-shift assistant. Humans cannot fly, teleport or walk through walls.
+  - The building has no power until a working fuse is fitted in the server-room fuse box.
+  - The revolving door at reception is locked reinforced glass. It opens only by swiping a keycard on the card reader while the building has power.
+  - All phones are dead. There is no signal and no one to call.
+  - Items can only be used if the player is carrying them; items lying in the current scene can be taken.
+  - Touching anything inside the −80 °C freezer bare-handed causes frostbite; cryo gloves prevent it.
+  - Dr. Weiss's keycard lanyard is tangled in the robotic arm and must be cut with a blade.
+  - The swarm is a cloud of fruit flies. It fears fire and CO₂ and is drawn to sweetness.
