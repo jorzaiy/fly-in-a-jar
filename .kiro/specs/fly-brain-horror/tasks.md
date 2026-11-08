@@ -16,11 +16,11 @@
 
 ## 阶段 1：核实风险
 
-- [ ] 2. 👤 核实 Jev 接口
-  - [ ] 2.1 写 `scripts/jev_probe.py`：用一个固定的英文 state 和第 6.1 节的 5 个问题（Noul、Choice×3、Score）发一次真实请求，打印完整响应
-  - [ ] 2.2 👤 你在本地设置 `TYPESAFE_API_KEY` 后运行，把输出发给我（我会先帮你去掉 key）
-  - [ ] 2.3 根据真实响应修正 design.md 第 6.4 节的字段名，并确认 Choice 的选项可以每回合动态生成
-  - [ ] 2.4 用 5 条中文行动和 5 条英文行动做个初步试探，记录判定结果
+- [x] 2. 👤 核实判定器接口（11-08 改为 OpenRouter Decisions，Jev 无免费额度）
+  - [x] 2.1 实测端点：`POST https://openrouter.ai/api/alpha/decisions`，`Authorization: Bearer $OPENROUTER_API_KEY`，模型 `parallel/decisions-fast:free`（免费，账号额度 1000 次/天，20 次/分钟）。不能走 chat completions
+  - [x] 2.2 请求体：`{"model", "state": <state_text 字符串>, "questions": {id: {...}}}`。题型与 Jev systemone 相同：`noul` 只需 `instructions`；`choice` 需 `criteria` 对象 `{选项: 描述}`（不是 `options` 列表）；`score` 需 `criteria` 数组（按 0→3 排列，如 `["safe","risky","dangerous","suicidal"]`）
+  - [x] 2.3 响应：`answers[id]`。noul → `.noul`（0–1 概率）；choice → `.choice` 加 `.probabilities`、`.confidence`；score → `.probabilities`，键为 `"0"`…`"3"`，取最大者为档位（`.score` 是 0–1 归一化值，不要直接用）。另有顶层 `annotations`（网页引用，本游戏无用，忽略）。拒答会以 refusal 出现在对应 `answers[id]`，按 JudgeError 处理
+  - [x] 2.4 试探（接待处初始状态，10 条中英混合）：每条 0.6–0.9 秒，无拒答，category/target 与 mock 基本一致。差异：刷门禁卡开旋转门判 `against_world_rules`（mock 为 `missing_item`）；"fly out of the building" danger=3；"你好，你是谁" category=talk
   - _需求：6.1、6.2、2.4_
 
 - [ ] 3. 👤 准备连接组数据
@@ -75,7 +75,7 @@
 
 - [ ] 10. Jev 判定器
   - [x] 10.1 实现 `app/judge/state_text.py`：把游戏状态转成第 6.2 节格式的英文描述
-  - [ ] 10.2 实现 `app/judge/jev.py`：5 个问题、动态生成的 `target` 选项、超时 6 秒、阈值判定（`config/rules.yaml`）
+  - [ ] 10.2 实现真实判定器（OpenRouter Decisions，见任务 2）：复用 `base.build_questions`，把 `options` 转成 `criteria` 对象、score 的 `legend` 转成数组；读 `OPENROUTER_API_KEY`；`JUDGE=openrouter` 时启用；超时 6 秒、不重试；阈值判定（`config/rules.yaml`）；`JudgeResult.source` 增加 `openrouter`
   - [x] 10.3 实现 `app/judge/mock.py`：中英文关键词规则，返回结构和 Jev 完全相同的结果
   - [ ] 10.4 实现每日调用上限，超出后自动切换到 mock 并在日志中告警
   - [x] 10.5 Jev 超时或报错时返回"裁判沉默了"，状态不变，也不增加同化率
