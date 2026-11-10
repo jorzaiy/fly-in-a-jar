@@ -1,0 +1,206 @@
+/* CRT Terminal styling for Fly in a Jar (design §10). */
+
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Noto+Sans+SC:wght@400;500&display=swap');
+
+:root {
+  --bg-color: #080a08;
+  --text-amber: #f59e0b;
+  --text-amber-bright: #fbbf24;
+  --text-green: #10b981;
+  --text-purple: #c084fc;
+  --text-red: #ef4444;
+  --text-cyan: #38bdf8;
+  --text-muted: #64748b;
+  --text-system: #94a3b8;
+  --glow-amber: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-amber);
+  font-family: 'Fira Code', 'Noto Sans SC', Consolas, Menlo, monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  overflow: hidden;
+}
+
+/* CRT Scanline and Vignette Effect */
+body.crt::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+              linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  background-size: 100% 3px, 6px 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.terminal-screen {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 32px;
+  max-width: 1100px;
+  margin: 0 auto;
+  overflow: hidden;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.85);
+  transition: box-shadow 0.5s ease;
+}
+
+/* High Sync Visual Effect (sync >= 70%) */
+.terminal-screen.high-sync {
+  box-shadow: inset 0 0 100px rgba(239, 68, 68, 0.25);
+  animation: jitter 4s infinite;
+}
+
+@keyframes jitter {
+  0%, 100% { transform: translate(0, 0); }
+  92% { transform: translate(0, 0); }
+  93% { transform: translate(-1px, 1px); }
+  94% { transform: translate(1px, -1px); }
+  95% { transform: translate(-1px, 0); }
+  96% { transform: translate(0, 0); }
+}
+
+.terminal-output {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #27272a transparent;
+}
+
+.terminal-output::-webkit-scrollbar {
+  width: 6px;
+}
+.terminal-output::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 3px;
+}
+
+.terminal-output .line {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Line kinds */
+.kind-user {
+  color: var(--text-amber-bright);
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.kind-narrative, .kind-scene {
+  color: var(--text-amber);
+  text-shadow: var(--glow-amber);
+}
+
+.kind-action, .kind-verdict {
+  color: #fbbf24;
+}
+
+.kind-clue {
+  color: var(--text-cyan);
+  border-left: 2px solid var(--text-cyan);
+  padding-left: 8px;
+}
+
+.kind-monster {
+  color: #f87171;
+  font-weight: 500;
+}
+
+.kind-anomaly {
+  color: #a78bfa;
+  font-style: italic;
+}
+
+.kind-silence {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.kind-hijack {
+  color: var(--text-purple);
+  font-weight: 600;
+  background-color: rgba(192, 132, 252, 0.08);
+  padding: 4px 8px;
+  border-left: 3px solid var(--text-purple);
+  margin: 6px 0;
+}
+
+.kind-brainlog {
+  color: var(--text-green);
+  font-size: 13px;
+  font-family: Consolas, monospace;
+  opacity: 0.88;
+}
+
+.kind-system {
+  color: var(--text-system);
+  font-size: 13.5px;
+}
+
+.kind-error {
+  color: var(--text-red);
+}
+
+.kind-ending {
+  color: #fef08a;
+  font-size: 17px;
+  font-weight: bold;
+  border: 1px dashed #facc15;
+  padding: 12px;
+  margin-top: 12px;
+}
+
+/* Input Row */
+.terminal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(245, 158, 11, 0.2);
+  margin-top: 8px;
+}
+
+.prompt-symbol {
+  color: var(--text-amber-bright);
+  font-weight: bold;
+}
+
+.cli-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-amber-bright);
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.spinner {
+  color: var(--text-green);
+  font-size: 13px;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from { opacity: 0.5; }
+  to { opacity: 1.0; }
+}

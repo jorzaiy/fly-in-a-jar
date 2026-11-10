@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fly in a Jar · 缸中之蝇</title>
+  <link rel="stylesheet" href="terminal.css">
+</head>
+<body class="crt">
+  <div id="screen" class="terminal-screen">
+    <div id="output" class="terminal-output" role="log" aria-live="polite"></div>
+    <div id="status-line" class="terminal-status-bar" style="display: none;"></div>
+    <div class="terminal-input-row">
+      <span class="prompt-symbol">&gt;</span>
+      <input type="text" id="cli-input" class="cli-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus />
+      <span id="loading-spinner" class="spinner" style="display: none;">⚡ Neurons firing in connectome...</span>
+    </div>
+  </div>
+  <script src="terminal.js"></script>
+</body>
+</html>

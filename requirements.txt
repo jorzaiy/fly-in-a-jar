@@ -5,6 +5,5 @@ pydantic==2.14.3
 numpy==2.5.4
 pyyaml==6.0.3
 
-# Jev decision model SDK. Package name is from third-party docs and is
-# verified in tasks.md 2 before being enabled.
-# typesafe-sdk
+# Jev decision model SDK (verified in tasks.md 2).
+typesafe-sdk==0.7.5

@@ -1,0 +1,145 @@
+model:
+  t_run_s: 0.25
+  dt_s: 0.0001
+  v_0_mv: -52.0
+  v_rst_mv: -52.0
+  v_th_mv: -45.0
+  t_mbr_s: 0.02
+  tau_s: 0.005
+  t_rfc_s: 0.0022
+  t_dly_s: 0.0018
+  w_syn_mv: 0.275
+  r_poi_hz: 150.0
+  f_poi: 250.0
+stimulus_groups:
+  eat:
+  - LB3c
+  - LB4b
+  - LB3d
+  smell:
+  - ORN_DA1
+  - ORN_DM1
+  - ORN_VA1d
+  listen:
+  - JO-B1_a
+  - JO-EV1
+  - JO-A5
+  talk:
+  - JO-B1_a
+  - JO-FV
+  - JO-EV1
+  look:
+  - R7
+  - R8
+  - LC11
+  - LC12
+  light:
+  - R1-6
+  - R7
+  - R8
+  touch:
+  - BM_InOm
+  - BM_vOcci_vPoOr
+  take:
+  - BM_InOm
+  use:
+  - BM_InOm
+  attack:
+  - LPLC2
+  - LC4
+  move:
+  - PFL2
+  - EPG
+  hide: []
+  wait: []
+  other: []
+feeding:
+  tap:
+    pathway: touch
+    multiplier: 2.0
+  sugar:
+    pathway: eat
+    multiplier: 2.5
+  sweet:
+    pathway: eat
+    multiplier: 2.5
+  strobe:
+    pathway: light
+    multiplier: 2.0
+  flash:
+    pathway: light
+    multiplier: 2.0
+  spin:
+    pathway: listen
+    multiplier: 1.8
+scene_ambience:
+  cold_storage:
+    pathway: touch
+    rate_boost_hz: 50.0
+  server_room:
+    pathway: listen
+    rate_boost_hz: 40.0
+readout_groups:
+  monster:
+    attack:
+    - DNp01
+    retreat:
+    - MDN
+    approach:
+    - P6-8P9
+    feed:
+    - CB0701
+  anomaly:
+    visual:
+    - LC4
+    - LPLC2
+    - LC11
+    - LC12
+    sound:
+    - JO-B1_a
+    - JO-EV1
+    smell:
+    - ORN_DA1
+    - ORN_DM1
+    memory:
+    - MBON01
+    - MBON02
+    - MBON03
+    - MBON04
+    - MBON05
+    - MBON10
+    - MBON23
+  clue:
+    clue:
+    - PAM01
+    - PAM02
+    - PAM03
+    - PAM04
+    - PAM05
+    - PAM08
+    - PAM11
+    - PAM12
+    - PAM13
+  drift:
+    drift:
+    - EPG
+    - EPGt
+baselines:
+  anomaly:
+    memory: 210.0
+    smell: 6195.0
+    sound: 190.0
+    visual: 4436.2
+  clue:
+    clue: 24.0
+  drift:
+    drift: 2907.0
+  monster:
+    approach: 11.0
+    attack: 27.0
+    feed: 56.0
+    retreat: 7.8
+intensity_thresholds:
+- 0.0
+- 210.0
+- 4019.0

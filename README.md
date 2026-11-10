@@ -4,7 +4,12 @@
 
 A browser-playable, bilingual (English / 中文) text horror game. **Entry for [Kiroween 2026](https://kiroween.devpost.com/), category: Frankenstein.**
 
-🚧 Work in progress. The content pipeline, game state, rules engine and judge layer are in place; the brain simulator, narrator, turn API and terminal front end are still being built (see [`tasks.md`](.kiro/specs/fly-brain-horror/tasks.md)).
+The core engine is fully implemented: FlyWire v783 connectome preprocessing and numpy LIF simulation, TypeSafe Jev decision layer, narrative fragment composer, turn orchestrator with neuro-hijack, and a retro CRT web terminal.
+
+## Live Demo (Instabox)
+
+- **Live URL**: https://8000-agqzpsr2b42drmmctnzcofxxqi.instabox.tech
+- Hosted on an **Instabox** high-performance cloud sandbox (`kiroween-test`, 4 vCPUs AMD EPYC, 8 GB RAM, 20 GB persistent `/data` disk).
 
 ## Why Frankenstein
 
@@ -108,6 +113,33 @@ python -m content.validate --mvp      # also fail below the MVP fragment coverag
 ```
 
 The server refuses to start if the content does not validate, and it lists every bad fragment id.
+
+## Cloud Sandbox (Instabox)
+
+The heavy whole-brain connectome simulations and calibrations run on an [Instabox](https://instabox.sh) cloud sandbox:
+
+- **Sandbox Name**: `kiroween-test`
+- **Hardware Spec**: 4 vCPUs (AMD EPYC), 8 GB RAM, 20 GB persistent NVMe storage mounted at `/data`
+- **Remote Workspace**: `/data/workspace/fly-in-a-jar`
+- **Published Port**: `8000` $\to$ `https://8000-agqzpsr2b42drmmctnzcofxxqi.instabox.tech`
+
+### Sandbox CLI Operations
+
+```bash
+# Wake / inspect sandbox status
+npx instabox@latest wake kiroween-test
+
+# Run tests or benchmark remotely
+npx instabox@latest exec kiroween-test --cwd /data/workspace/fly-in-a-jar -- .venv/bin/pytest -v
+npx instabox@latest exec kiroween-test --cwd /data/workspace/fly-in-a-jar -- .venv/bin/python3 scripts/bench.py
+
+# Sync files
+npx instabox@latest push kiroween-test ./local-path /data/workspace/fly-in-a-jar/remote-path
+npx instabox@latest pull kiroween-test /data/workspace/fly-in-a-jar/remote-path ./local-path
+
+# Background game server
+npx instabox@latest exec --background kiroween-test --cwd /data/workspace/fly-in-a-jar -- .venv/bin/uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
 
 ## Data & credits
 

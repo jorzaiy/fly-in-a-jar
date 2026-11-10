@@ -3,7 +3,7 @@ import asyncio
 import pytest
 
 from app.content.schema import CATEGORIES, REASONS
-from app.judge import MockJudge, build_questions, get_judge, judge_mode, safe_judge, target_options
+from app.judge import JevJudge, MockJudge, build_questions, get_judge, judge_mode, safe_judge, target_options
 from app.judge.base import Judge, JudgeError, JudgeResult
 from app.judge.mock import mock_judgement
 from app.judge.state_text import state_text
@@ -137,5 +137,32 @@ def test_judge_mode_falls_back_to_mock(monkeypatch):
     monkeypatch.delenv("TYPESAFE_API_KEY", raising=False)
     assert judge_mode() == "mock"
     monkeypatch.setenv("TYPESAFE_API_KEY", "x")
-    assert judge_mode() == "mock"  # Jev judge not implemented yet
-    assert isinstance(get_judge(), MockJudge)
+    assert judge_mode() == "jev"
+    assert isinstance(get_judge(), JevJudge)
+
+
+def test_jev_judge_mapping(world, state):
+    from unittest.mock import AsyncMock
+    from typesafe_sdk import ChoiceAnswer, NoulAnswer, ScoreAnswer, SystemOneResponse, Usage
+
+    judge = JevJudge(api_key="mock_key")
+    mock_resp = SystemOneResponse(
+        answers={
+            "feasible": NoulAnswer(type="noul", noul=0.85),
+            "reason": ChoiceAnswer(type="choice", choice="feasible", confidence=0.9, probabilities={"feasible": 0.9}),
+            "category": ChoiceAnswer(type="choice", choice="take", confidence=0.95, probabilities={"take": 0.95}),
+            "target": ChoiceAnswer(type="choice", choice="flashlight", confidence=0.98, probabilities={"flashlight": 0.98}),
+            "danger": ScoreAnswer(type="score", score=1.2, confidence=0.85, legend={0: "safe", 1: "risky", 2: "dangerous", 3: "suicidal"}, probabilities={0: 0.1, 1: 0.7, 2: 0.2, 3: 0.0}),
+        },
+        model="jev-v1",
+        usage=Usage(input_tokens=10, output_tokens=10, total_tokens=20),
+    )
+    judge._client.system_one = AsyncMock(return_value=mock_resp)
+
+    res = asyncio.run(judge.judge(state, world, "open drawer and take flashlight"))
+    assert res.feasible == 0.85
+    assert res.reason == "feasible"
+    assert res.category == "take"
+    assert res.target == "flashlight"
+    assert res.danger == 1
+    assert res.source == "jev"
