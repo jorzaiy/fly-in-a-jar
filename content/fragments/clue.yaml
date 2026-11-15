@@ -96,9 +96,9 @@
   category: clue
   key: clue_12
   zh: |
-    电子显微镜的屏幕上，第 4096 号切片竟是一块人类前额叶皮层，被强行桥接进果蝇的蘑菇体。控制台随即弹出冰冷的提示：等待第 7001 号新样本。
+    电镜屏幕上，第 4096 号切片的神经元慢慢排成了一张脸——是 Weiss，眼睛半睁着。控制台无声地亮起一行字：NEXT SPECIMEN: READY。
   en: |
-    On the EM monitor, Slide #4096 reveals human prefrontal cortex grafted directly into a fly's mushroom body. Below it, the console blinks: AWAITING NEW SPECIMEN #7001.
+    On the EM monitor, the neurons of Slide #4096 drift into the shape of a face. It is Weiss, eyes half open. Beneath her, the console lights without a sound: NEXT SPECIMEN: READY.
 
 - id: clue_13_01
   category: clue

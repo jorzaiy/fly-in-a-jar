@@ -158,7 +158,7 @@
   category: verdict_fail
   key: missing_item
   zh: |
-    你空着能派上用场的那只手，无法对{target}下手。缺失的工具让你的意图停在半空，被干脆地驳回。
+    你手里没有能对付{target}的东西。念头悬在半空，被干脆地驳回。
   en: |
     You lack the tool needed to act on {target}. Without it, your intent stalls mid-motion and is summarily overruled.
 
@@ -174,9 +174,9 @@
   category: verdict_fail
   key: against_world_rules
   zh: |
-    {target}不站在允许的规则之内。你的念头刚成型，就被一道更冷的判决按了回去。
+    这里不允许你对{target}这么做。念头刚成形，就被一道更冷的判决按了回去。
   en: |
-    {target} falls outside what is permitted here. The impulse is pushed back down by a colder verdict before your hands can even rise.
+    What you want with {target} is not permitted here. The impulse is pushed back down by a colder verdict before your hands can even rise.
 
 - id: verdict_fail_not_an_action_01
   category: verdict_fail
