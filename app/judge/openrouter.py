@@ -1,4 +1,4 @@
-"""OpenRouter Decisions judge (tasks.md 2, 10.2).
+"""Decisions judges: OpenRouter Decisions and Command Code System One (tasks.md 2, 10.2).
 
 Jev (TypeSafe / Experiential) has no free quota for this project, so the real
 judge is Parallel's `parallel/decisions-fast` model, served through
@@ -62,7 +62,7 @@ def _score_level(ans: dict[str, Any]) -> int:
     raise JudgeError("danger: no probabilities in answer")
 
 
-def parse_answers(answers: dict[str, Any], targets: list[str]) -> JudgeResult:
+def parse_answers(answers: dict[str, Any], targets: list[str], source: str = "openrouter") -> JudgeResult:
     """Turn raw `answers` into a JudgeResult. Missing or refused answers raise JudgeError
     (the game then says the judge is silent, design §14)."""
     try:
@@ -86,20 +86,24 @@ def parse_answers(answers: dict[str, Any], targets: list[str]) -> JudgeResult:
         category=category,
         target=target,
         danger=danger,
-        source="openrouter",
+        source=source,
     )
 
 
 class OpenRouterJudge(Judge):
     name = "openrouter"
     implemented = True
+    url = API_URL
+    key_env = "OPENROUTER_API_KEY"
+    model_env = "OPENROUTER_MODEL"
+    default_model = DEFAULT_MODEL
 
     def __init__(self, api_key: str | None = None, model: str | None = None,
                  client: httpx.AsyncClient | None = None) -> None:
-        self.api_key = api_key or os.environ.get("OPENROUTER_API_KEY")
+        self.api_key = api_key or os.environ.get(self.key_env)
         if not self.api_key:
-            raise JudgeError("OPENROUTER_API_KEY environment variable is not set")
-        self.model = model or os.environ.get("OPENROUTER_MODEL", DEFAULT_MODEL)
+            raise JudgeError(f"{self.key_env} environment variable is not set")
+        self.model = model or os.environ.get(self.model_env, self.default_model)
         # safe_judge() enforces the 6 s game timeout; this is only a backstop.
         self._client = client or httpx.AsyncClient(timeout=10.0)
 
@@ -113,7 +117,7 @@ class OpenRouterJudge(Judge):
         }
         try:
             r = await self._client.post(
-                API_URL, json=body,
+                self.url, json=body,
                 headers={
                     "Authorization": f"Bearer {self.api_key}",
                     "HTTP-Referer": "https://github.com/jorzaiy/fly-in-a-jar",
@@ -125,4 +129,16 @@ class OpenRouterJudge(Judge):
         if r.status_code != 200:
             raise JudgeError(f"HTTP {r.status_code}")
         data = r.json()
-        return parse_answers(data.get("answers") or {}, targets)
+        return parse_answers(data.get("answers") or {}, targets, source=self.name)
+
+
+class CommandCodeJudge(OpenRouterJudge):
+    """TypeSafe Jev through Command Code's Provider API (System One shape, same
+    questions and answers as above). Needs a Command Code plan with API access
+    (every plan except Go)."""
+
+    name = "commandcode"
+    url = "https://api.commandcode.ai/provider/v1/systemone"
+    key_env = "COMMANDCODE_API_KEY"
+    model_env = "COMMANDCODE_MODEL"
+    default_model = "typesafe/jev"

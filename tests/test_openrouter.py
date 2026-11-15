@@ -78,3 +78,22 @@ def test_judge_mode_openrouter(monkeypatch):
     monkeypatch.setenv("OPENROUTER_API_KEY", "k")
     assert judge_mode() == "openrouter"
     assert isinstance(get_judge(), OpenRouterJudge)
+
+
+def test_commandcode_judge(world, state, monkeypatch):
+    from app.judge import CommandCodeJudge
+    seen = {}
+
+    def handler(req):
+        import json
+        seen["url"] = str(req.url)
+        seen["model"] = json.loads(req.content)["model"]
+        return httpx.Response(200, json={"answers": _answers()})
+
+    j = CommandCodeJudge(api_key="k", client=httpx.AsyncClient(transport=httpx.MockTransport(handler)))
+    call = asyncio.run(safe_judge(j, state, world, "take the flashlight"))
+    assert call.ok and call.result.source == "commandcode"
+    assert seen == {"url": "https://api.commandcode.ai/provider/v1/systemone", "model": "typesafe/jev"}
+    monkeypatch.setenv("JUDGE", "commandcode")
+    monkeypatch.setenv("COMMANDCODE_API_KEY", "k")
+    assert judge_mode() == "commandcode"
