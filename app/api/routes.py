@@ -23,6 +23,7 @@ from pydantic import BaseModel, Field
 from app.brain.groups import BrainGroups
 from app.brain.lif import LIFSimulator
 from app.content.loader import Content
+from app.engine.rules import items_here
 from app.engine.state import GameState, Lang, MAX_INPUT_CHARS, new_state
 from app.engine.turn import execute_turn
 from app.judge import get_judge, judge_mode
@@ -70,6 +71,16 @@ class TurnRequest(BaseModel):
     input: str = Field(max_length=MAX_INPUT_CHARS)
 
 
+def hud(state: GameState, world: Any, lang: str) -> dict[str, Any]:
+    """Always-visible status: scene, sync, turn and what the player carries."""
+    return {
+        "scene": world.scenes.get(state.scene, {}).get("name", {}).get(lang, state.scene),
+        "sync": state.sync,
+        "turn": state.turn,
+        "items": [world.items[i]["name"][lang] for i in state.items if i in world.items],
+    }
+
+
 @router.get("/health")
 def health() -> dict[str, Any]:
     """Liveness check reporting judge mode and simulation queue size."""
@@ -100,7 +111,7 @@ def new_game(req: NewGameRequest, request: Request) -> dict[str, Any]:
     sc_info = content.world.scenes.get(state.scene, {})
     exits = sc_info.get("exits", [])
     exit_names = [content.world.scenes[e]["name"][req.lang] for e in exits if e in content.world.scenes]
-    items_names = [content.world.items[it]["name"][req.lang] for it in state.items if it in content.world.items]
+    items_names = [content.world.items[it]["name"][req.lang] for it in items_here(state, content.world) if it in content.world.items]
 
     listing_parts = []
     if exit_names:
@@ -121,6 +132,7 @@ def new_game(req: NewGameRequest, request: Request) -> dict[str, Any]:
         "state": state.model_dump(),
         "output": output,
         "ended": None,
+        "hud": hud(state, content.world, req.lang),
     }
 
 
@@ -177,4 +189,5 @@ async def turn_endpoint(req: TurnRequest, request: Request) -> dict[str, Any]:
         "state": turn_res.state.model_dump(),
         "output": turn_res.output,
         "ended": turn_res.ended,
+        "hud": hud(turn_res.state, content.world, turn_res.state.lang),
     }

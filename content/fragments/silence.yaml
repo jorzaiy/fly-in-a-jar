@@ -5,9 +5,9 @@
   category: silence
   key: default
   zh: |
-    什么也没有发生。连墙里那点细碎的嗡鸣都突然停了，静得你能听见自己眼球转动的摩擦声。
+    墙里那点细碎的嗡鸣突然停了，静得你能听见自己眼球转动的摩擦声。
   en: |
-    Nothing happens. Even the faint hum inside the walls cuts out, leaving a silence so tight you can hear your own eyes shift in their sockets.
+    The faint hum inside the walls cuts out, leaving a silence so tight you can hear your own eyes shift in their sockets.
 
 - id: silence_default_02
   category: silence

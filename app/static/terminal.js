@@ -6,6 +6,7 @@
   const inputEl = document.getElementById("cli-input");
   const spinnerEl = document.getElementById("loading-spinner");
   const screenEl = document.getElementById("screen");
+  const statusEl = document.getElementById("status-line");
 
   let gameState = null;
   let isTyping = false;
@@ -94,6 +95,18 @@
     }
   }
 
+  // Always-visible status bar: scene, sync, turn, inventory.
+  function renderHud(hud) {
+    if (!hud) return;
+    const zh = (gameState && gameState.lang) === "zh";
+    const items = hud.items.length ? hud.items.join(zh ? "、" : ", ") : (zh ? "空" : "empty");
+    statusEl.textContent = zh
+      ? `【${hud.scene}】 同化率 ${hud.sync}% · 回合 ${hud.turn} · 背包：${items}`
+      : `[${hud.scene}] sync ${hud.sync}% · turn ${hud.turn} · carrying: ${items}`;
+    statusEl.style.display = "";
+    localStorage.setItem(STORAGE_KEY + "_hud", JSON.stringify(hud));
+  }
+
   function saveState(state) {
     if (!state) return;
     gameState = state;
@@ -137,6 +150,7 @@
     try {
       const data = await apiCall("/api/new", { lang });
       saveState(data.state);
+      renderHud(data.hud);
       enqueueLines(data.output);
     } catch (e) {
       appendLine("error", `Failed to initialize session: ${e.message}`);
@@ -150,6 +164,8 @@
     // Handle restart
     if (["restart", "重新开始", "重开"].includes(text.toLowerCase())) {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(STORAGE_KEY + "_hud");
+      statusEl.style.display = "none";
       outputEl.innerHTML = "";
       askLanguage();
       return;
@@ -170,6 +186,7 @@
     try {
       const data = await apiCall("/api/turn", { state: gameState, input: text });
       saveState(data.state);
+      renderHud(data.hud);
       enqueueLines(data.output);
     } catch (e) {
       appendLine("error", `[ERROR] ${e.message}`);
@@ -223,6 +240,7 @@
         const parsed = JSON.parse(saved);
         gameState = parsed;
         updateVisualSync(gameState.sync);
+        try { renderHud(JSON.parse(localStorage.getItem(STORAGE_KEY + "_hud"))); } catch (e) {}
         appendLine("system", gameState.lang === "zh" ? "已恢复上次会话进度。输入 'restart' 可重开。" : "Restored existing session. Type 'restart' to start over.");
         inputEl.focus();
         return;

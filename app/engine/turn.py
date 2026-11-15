@@ -256,6 +256,7 @@ async def execute_turn(
         rule_clue_id=action_outcome.clue,
         hijacked_action=hijacked_instinct,
         moved_scene=action_outcome.moved_to,
+        took=action_outcome.took,
         target=j_res.target,
         lang=lang,
     )

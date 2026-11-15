@@ -146,6 +146,7 @@ def compose_turn(
     rule_clue_id: int | None = None,
     hijacked_action: str | None = None,
     moved_scene: str | None = None,
+    took: str | None = None,
     target: str | None = None,
     lang: str | None = None,
 ) -> list[dict[str, str]]:
@@ -176,7 +177,10 @@ def compose_turn(
             output.append({"kind": "verdict", "text": txt})
         else:
             # Feasible >= 0.65
-            if rule_triggered:
+            if rule_triggered and (rule_clue_id or state.ended):
+                # The clue or ending text narrates this action; no second line.
+                pass
+            elif rule_triggered:
                 frag = select_fragment("item_use", rule_triggered, intensity, state, content, total_spikes)
                 txt = resolve_fragment_text(frag, state, lang, target or res.target, world, content)
                 output.append({"kind": "action", "text": txt})
@@ -184,6 +188,11 @@ def compose_turn(
                 frag = select_fragment("action", res.category, intensity, state, content, total_spikes)
                 txt = resolve_fragment_text(frag, state, lang, target or res.target, world, content)
                 output.append({"kind": "action", "text": txt})
+
+    # 2b. Picked-up item, stated plainly so the player knows it worked.
+    if took and took in world.items:
+        name = world.items[took].get("name", {}).get(lang, took)
+        output.append({"kind": "system", "text": f"（获得：{name}）" if lang == "zh" else f"(Taken: {name})"})
 
     # 3. [物品线索] (clue from item use rule)
     if rule_clue_id:
