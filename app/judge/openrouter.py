@@ -142,3 +142,34 @@ class CommandCodeJudge(OpenRouterJudge):
     key_env = "COMMANDCODE_API_KEY"
     model_env = "COMMANDCODE_MODEL"
     default_model = "typesafe/jev"
+
+
+class GeminiJudge(OpenRouterJudge):
+    """Google Gemini Decision 1 via the Gemini Decisions API (v1beta, launched
+    2026-11-11). Same noul/choice/score questions; the shared text goes in
+    `input` instead of `state`, and the key in `x-goog-api-key`. Free tier:
+    200 rpm, 10,000 requests/day per project, no billing needed. A request
+    blocked by Google's safety filter returns 400 and the judge goes silent."""
+
+    name = "gemini"
+    url = "https://generativelanguage.googleapis.com/v1beta/decisions"
+    key_env = "GEMINI_API_KEY"
+    model_env = "GEMINI_DECISION_MODEL"
+    default_model = "gemini-decision-1"
+
+    async def judge(self, state: GameState, world: World, text: str) -> JudgeResult:
+        questions = build_questions(state, world)
+        targets = questions["target"]["options"]
+        body = {
+            "model": self.model,
+            "input": state_text(state, world, text),
+            "questions": to_wire(questions),
+        }
+        try:
+            r = await self._client.post(self.url, json=body,
+                                        headers={"x-goog-api-key": self.api_key})
+        except httpx.HTTPError as exc:
+            raise JudgeError(f"network: {type(exc).__name__}") from exc
+        if r.status_code != 200:
+            raise JudgeError(f"HTTP {r.status_code}")
+        return parse_answers(r.json().get("answers") or {}, targets, source=self.name)

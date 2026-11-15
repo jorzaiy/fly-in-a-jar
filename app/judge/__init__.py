@@ -10,16 +10,16 @@ import os
 from .base import Judge, JudgeCall, JudgeResult, build_questions, safe_judge, target_options
 from .jev import JevJudge
 from .mock import MockJudge
-from .openrouter import CommandCodeJudge, OpenRouterJudge
+from .openrouter import CommandCodeJudge, GeminiJudge, OpenRouterJudge
 
 log = logging.getLogger("fly.judge")
 
-_KEYS = {"commandcode": "COMMANDCODE_API_KEY", "openrouter": "OPENROUTER_API_KEY",
+_KEYS = {"gemini": "GEMINI_API_KEY", "commandcode": "COMMANDCODE_API_KEY", "openrouter": "OPENROUTER_API_KEY",
          "jev": "TYPESAFE_API_KEY"}
 
 
 def judge_mode() -> str:
-    """'commandcode', 'openrouter' or 'jev' only when asked for and its key is set; else 'mock'."""
+    """a real judge only when asked for and its key is set; else 'mock'."""
     want = os.environ.get("JUDGE", "mock").strip().lower()
     if want in _KEYS:
         if not os.environ.get(_KEYS[want]):
@@ -34,6 +34,8 @@ def judge_mode() -> str:
 
 def get_judge() -> Judge:
     mode = judge_mode()
+    if mode == "gemini":
+        return GeminiJudge()
     if mode == "commandcode":
         return CommandCodeJudge()
     if mode == "openrouter":
@@ -43,5 +45,5 @@ def get_judge() -> Judge:
     return MockJudge()
 
 
-__all__ = ["Judge", "JudgeCall", "JudgeResult", "MockJudge", "JevJudge", "OpenRouterJudge", "CommandCodeJudge",
+__all__ = ["Judge", "JudgeCall", "JudgeResult", "MockJudge", "JevJudge", "OpenRouterJudge", "CommandCodeJudge", "GeminiJudge",
            "build_questions", "get_judge", "judge_mode", "safe_judge", "target_options"]

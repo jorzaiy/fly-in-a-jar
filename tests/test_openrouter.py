@@ -97,3 +97,24 @@ def test_commandcode_judge(world, state, monkeypatch):
     monkeypatch.setenv("JUDGE", "commandcode")
     monkeypatch.setenv("COMMANDCODE_API_KEY", "k")
     assert judge_mode() == "commandcode"
+
+
+def test_gemini_judge(world, state, monkeypatch):
+    import json
+    from app.judge import GeminiJudge
+    seen = {}
+
+    def handler(req):
+        b = json.loads(req.content)
+        seen.update(url=str(req.url), key=req.headers.get("x-goog-api-key"),
+                    model=b["model"], has_input="input" in b and "state" not in b)
+        return httpx.Response(200, json={"answers": _answers()})
+
+    j = GeminiJudge(api_key="g", client=httpx.AsyncClient(transport=httpx.MockTransport(handler)))
+    call = asyncio.run(safe_judge(j, state, world, "take the flashlight"))
+    assert call.ok and call.result.source == "gemini"
+    assert seen == {"url": "https://generativelanguage.googleapis.com/v1beta/decisions", "key": "g",
+                    "model": "gemini-decision-1", "has_input": True}
+    monkeypatch.setenv("JUDGE", "gemini")
+    monkeypatch.setenv("GEMINI_API_KEY", "g")
+    assert judge_mode() == "gemini"
