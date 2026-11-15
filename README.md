@@ -16,7 +16,7 @@ The core engine is fully implemented: FlyWire v783 connectome preprocessing and 
 The Frankenstein category asks for *"a chimera of technologies… seemingly incompatible elements"* stitched into one app. Fly in a Jar stitches together three parts that were never meant to meet:
 
 1. **A real connectome simulation.** A leaky integrate-and-fire model runs on the FlyWire v783 adult fruit fly brain (~139k neurons), with parameters from Shiu et al. 2024. Spikes in real, named neuron groups decide what the swarm does, which anomaly appears, and when a clue surfaces.
-2. **A decision model that never writes.** [Jev](https://typesafe.ai), TypeSafe AI's structured decision model, judges whether your free-text action is possible: feasibility probability, failure reason, action category, target and danger. It returns typed answers, never prose.
+2. **A decision model that never writes.** A System One decision model ([Gemini Decision 1](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/) on the live build; [Jev](https://typesafe.ai) and Jev-compatible endpoints are drop-in via `JUDGE`) judges whether your free-text action is possible: feasibility probability, failure reason, action category, target and danger. It returns typed answers, never prose.
 3. **A pre-written fragment library.** Every word of the story comes from hand-curated bilingual fragments. No language model generates text at runtime.
 
 A neuroscience dataset, a typed AI judge and a hand-written horror script. The fly brain is the storyteller, Jev is the referee, and the fragments are the stitches.
@@ -98,7 +98,7 @@ The specs are written in Chinese; code, comments and this README are in English.
 ```bash
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env        # optional: add TYPESAFE_API_KEY, otherwise JUDGE=mock
+cp .env.example .env        # optional: add GEMINI_API_KEY and set JUDGE=gemini, otherwise JUDGE=mock
 uvicorn app.main:app --reload
 # open http://127.0.0.1:8000/api/health
 ```

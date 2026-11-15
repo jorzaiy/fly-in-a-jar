@@ -4,6 +4,7 @@ uvicorn[standard]==0.54.0
 pydantic==2.14.3
 numpy==2.5.4
 pyyaml==6.0.3
+httpx==0.28.1
 
 # Jev decision model SDK (verified in tasks.md 2).
 typesafe-sdk==0.7.5
