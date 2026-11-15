@@ -1,6 +1,6 @@
 # clue.yaml
-# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
-# end to end. Replace with the real set written from fragment-guide.md.
+# MVP set: 13 clues (clue_1..clue_13) + 1 generic fallback.
+# Note: brain-triggered clues must make sense in any scene.
 
 - id: clue_1_01
   category: clue
@@ -8,97 +8,97 @@
   effects:
     give_item: notebook_page
   zh: |
-    门缝里飘出一张纸，Weiss 的字迹："我烧断了机房的保险丝。它必须停下来。"
+    一张揉皱的便签纸不知何时贴在了你的袖口上。上面是 Weiss 急促的字迹：“我烧断了机房电闸的保险丝——在它接管整栋楼之前，不能让终端再通电。”
   en: |
-    A page slides under the door in Weiss's hand: "I blew the server-room fuse. It has to stop."
+    A crumpled note clings to your cuff in Weiss's hurried hand: "I blew the server-room breaker fuse. Do not let that terminal power back on before it takes the whole building."
 
 - id: clue_2_01
   category: clue
   key: clue_2
   zh: |
-    冰冷的气流里，有人在你耳边念出一个冰柜编号。
+    一股刺骨的寒意突然掠过你的太阳穴。脑海里浮现出一串冰冷的标签数字：零下八十度，备用保险丝，第三排冷柜。
   en: |
-    In a draft of freezing air, someone whispers a freezer number into your ear.
+    An icy chill flashes across your temples. A string of cold inventory digits surfaces in your mind: minus eighty, spare fuse, third freezer row.
 
 - id: clue_3_01
   category: clue
   key: clue_3
   zh: |
-    你的手指突然像被冻伤一样刺痛。你想起走廊那件白大褂。
+    你的十指毫无征兆地泛起针扎般的冻痛。一段不属于此刻的画面闪过眼前——走廊尽头那排挂着的白大褂口袋里，正塞着一双厚实的防冻手套。
   en: |
-    Your fingers sting as if frostbitten. You think of the lab coat in the corridor.
+    Your fingertips sting with sudden frostbite out of nowhere. A stray image flashes behind your eyes: thick cryo gloves tucked inside the pocket of a lab coat on the corridor rack.
 
 - id: clue_4_01
   category: clue
   key: clue_4
   zh: |
-    23:02，Weiss 签到。签退栏空着。
+    你翻开摊在台面上的访客登记簿。最后一页写着：23:02，Dr. H. Weiss 签到入楼，签退栏至今空着——她一定还把门禁卡带在身上。
   en: |
-    23:02, Weiss signs in. The sign-out column is empty.
+    You flip through the open visitor log. Near the bottom: 23:02, Dr. H. Weiss signed in, sign-out blank—she must still have her keycard on her.
 
 - id: clue_5_01
   category: clue
   key: clue_5
   zh: |
-    复眼里的画面：一个人倒下，一根带子被机械臂卷进去。
+    你的视线猛地黑了一瞬，脑海里闪过电镜室冰冷的画面：一个人面朝下倒在机器旁，颈间的门禁卡挂绳死死缠在样品台机械臂上，徒手根本扯不断。
   en: |
-    A compound-eye memory: a woman falls, a lanyard is pulled into a robotic arm.
+    Your vision blacks out for a beat, flashing an image of the EM room: someone face down by the column, her lanyard twisted tight around the robotic stage arm—impossible to tear free by hand.
 
 - id: clue_6_01
   category: clue
   key: clue_6
   zh: |
-    墙上有一圈焦痕，周围一只果蝇都没有。
+    空气里忽然飘过一丝焦糊的硝烟味。你猛地记起那些实验室事故记录——无论这群东西进化成什么样，它们本能地畏惧明火与高温。
   en: |
-    A scorch mark on the wall. Not a single fly near it.
+    A phantom whiff of scorched air crosses your nose. You recall the lab safety logs: whatever this swarm has become, it still recoils violently from open flame.
 
 - id: clue_7_01
   category: clue
   key: clue_7
   zh: |
-    海报上的字一个个亮起来：果蝇麻醉请使用 CO₂。
+    你的脑海里突然亮起一张贴在墙上的实验安全海报，红字一行行浮现：果蝇麻醉操作规程——请使用标准 CO₂ 麻醉垫。
   en: |
-    The poster's letters light up one by one: ANESTHETISE FLIES WITH CO₂.
+    A lab safety poster lights up inside your mind, red print sharpening line by line: Drosophila Anesthesia Protocol — Use Standard CO₂ Pad.
 
 - id: clue_8_01
   category: clue
   key: clue_8
   zh: |
-    录音笔里是 Weiss 的声音："带上一只。别让它觉得你是外面的东西。"
+    录音笔沙沙地转了起来，Weiss 沙哑得几乎失控的声音从喇叭里挤出：“它不会伤害自己的一份子……带上一只活的在身上，别让它觉得你是外面的东西。”
   en: |
-    Weiss's voice from the recorder: "Take one with you. Don't let it think you're from outside."
+    The recorder hisses to life, and Weiss's ragged voice spills from the speaker: "It won't harm one of its own. Keep a live one on you—don't let it think you're from outside."
 
 - id: clue_9_01
   category: clue
   key: clue_9
   zh: |
-    你突然满嘴甜味，嗡鸣转向了你。
+    舌根突然涌上一股浓得发腻的糖浆味，耳畔的嗡鸣瞬间朝着你的方向齐齐偏转——哪怕只是一点甜味，也足以把整片蜂群的注意力拽过去。
   en: |
-    Your mouth floods with sweetness, and the hum turns toward you.
+    Your tongue floods with phantom syrup, and the distant hum swings toward you in unison. Even a trace of pure sugar is enough to pull the entire swarm off course.
 
 - id: clue_10_01
   category: clue
   key: clue_10
   zh: |
-    盒子是空的。标签上是你的名字。
+    你撬开结满白霜的样本盒，里面却空无一物。盒盖内侧贴着一张今晚日期的打印标签，上面清清楚楚印着你的名字。
   en: |
-    The box is empty. The label has your name on it.
+    You pry open the frost-crusted sample box, only to find it completely empty. Inside the lid, a freshly printed label bearing tonight's date carries your name.
 
 - id: clue_11_01
   category: clue
   key: clue_11
   zh: |
-    日志第一行：23:00:00 simulation started by: specimen_F
+    屏幕亮起一串密密麻麻的系统日志：23:00:00，连接组在无人指令的情况下自行启动，进程所有者显示为 specimen_F，气溶胶扩散阀门已开启。
   en: |
-    The first log line: 23:00:00 simulation started by: specimen_F
+    Lines of system logs scroll across the screen: 23:00:00, connectome booted without operator input; process owner: specimen_F; aerosol dispersion valves open.
 
 - id: clue_12_01
   category: clue
   key: clue_12
   zh: |
-    显微镜下的神经元排成一张脸。控制台亮起：NEXT SPECIMEN: READY
+    电子显微镜的屏幕上，第 4096 号切片竟是一块人类前额叶皮层，被强行桥接进果蝇的蘑菇体。控制台随即弹出冰冷的提示：等待第 7001 号新样本。
   en: |
-    Under the beam, neurons arrange themselves into a face. The console reads NEXT SPECIMEN: READY.
+    On the EM monitor, Slide #4096 reveals human prefrontal cortex grafted directly into a fly's mushroom body. Below it, the console blinks: AWAITING NEW SPECIMEN #7001.
 
 - id: clue_13_01
   category: clue
@@ -106,14 +106,14 @@
   requires:
     sync_min: 70
   zh: |
-    你终于看懂登记簿上那行小点了。它们一直在动。
+    所有碎片在你的脑海里悄然合拢：玻片盒从 7001 一直排到 11096，而登记簿上你零点整的签名，放大看全是由细小的黑点拼成的——你早已泡在固定液里了。
   en: |
-    You finally understand the dotted line in the visitor log. The dots have always been moving.
+    Everything clicks into quiet place: the slide trays run from 7001 to 11096, and your midnight signature in the logbook is made of tiny dots. You have been soaking in fixative all along.
 
 - id: clue_generic_01
   category: clue
   key: generic
   zh: |
-    你想起了一件刚才忽略的事，但它很快又沉下去了。
+    脑海里闪过一段残缺的实验记录，还没等你抓住字眼，它就重新沉进了嗡鸣声里。
   en: |
-    You remember something you missed, and it sinks again just as fast.
+    A scrap of lab notes surfaces in your mind, then sinks back beneath the hum before you can read the rest.

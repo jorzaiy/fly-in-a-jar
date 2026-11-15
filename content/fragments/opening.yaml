@@ -1,6 +1,5 @@
 # opening.yaml
-# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
-# end to end. Replace with the real set written from fragment-guide.md.
+# MVP set: 2 default openings (3 tiers each) + 1 generic fallback.
 
 - id: opening_default_01
   category: opening
@@ -8,24 +7,44 @@
   tiers:
     human:
       zh: |
-        灯灭了。应急灯亮起来，把前台染成红色。旋转门锁死了，楼里深处有一阵很轻的嗡鸣。
+        头顶的日光灯齐声熄灭，应急灯把前台染成一片暗红。旋转门锁死了，玻璃外是空无一人的黑夜，而楼里深处传来一阵极轻、几乎像电流的嗡鸣。
       en: |
-        The lights die. Emergency lamps paint reception red. The revolving door is locked, and somewhere deep in the building something hums.
+        The overhead fluorescents die in unison, leaving reception drenched in emergency red. The revolving door is locked against an empty parking lot, and somewhere deep in the building something hums like a live wire.
     latent:
       zh: |
-        红光碎成六边形。嗡鸣像是从你自己的头骨里传出来的。
+        红光在你眼底裂成细密的六边形网格。那阵嗡鸣不像来自走廊尽头，倒像是从你的颅骨内侧震出来的。
       en: |
-        The red light breaks into hexagons. The hum seems to come from inside your own skull.
+        The red glare fractures into a tight hexagonal grid across your sight. The hum does not seem to travel down the hall—it vibrates from inside your own skull.
     instinct:
       zh: |
-        红。暖。嗡鸣。你知道自己在哪里，也知道自己不该在这里。
+        红。暖。持续的低频振颤。你清楚地知道门打不开，也隐约觉得，你本来就不是从外面进来的。
       en: |
-        Red. Warm. Humming. You know where you are, and that you should not be here.
+        Red. Warm. A steady, low-frequency thrum. You know the door will not open, and some quiet part of you knows you never came in from outside.
+
+- id: opening_default_02
+  category: opening
+  key: default
+  tiers:
+    human:
+      zh: |
+        整栋研究所突然断电，只剩前台角落的应急灯发出微弱红光。门禁卡读卡器黑着屏，通风口里吹出一丝带着发酵甜味的冷风。
+      en: |
+        Power drops across the entire institute, leaving only the corner emergency lamp glowing dull red. The keycard reader is dead, and a draft smelling faintly of fermented sugar slips from the vent.
+    latent:
+      zh: |
+        黑暗落下来的瞬间，你的瞳孔还没适应，视野边缘却先一步亮起了细碎的格栅。空气里的甜味像一条细线，轻轻扯着你的鼻尖。
+      en: |
+        The instant the lights go out, tiny facets flare along the edges of your vision before your pupils even adjust. The sweetness in the air tugs gently at your nostrils like a thread.
+    instinct:
+      zh: |
+        断电只是表象，真正的回路刚刚接通。你站在前台的红光里，听见楼里成千上万个微小的节律同时醒来。
+      en: |
+        The blackout is only on the surface; the real circuit just closed. Standing in the red glow of reception, you hear thousands of tiny rhythms wake up in unison.
 
 - id: opening_generic_01
   category: opening
   key: generic
   zh: |
-    停电了。你被锁在楼里。有什么东西醒着。
+    灯灭了，门锁着，应急灯的红光在墙上摇晃。整栋楼看似空无一人，却有什么东西在黑暗深处醒着。
   en: |
-    The power is out. You are locked in. Something is awake.
+    The lights are out, the doors are locked, and emergency red trembles on the walls. The building looks empty, yet something deep in the dark is awake.

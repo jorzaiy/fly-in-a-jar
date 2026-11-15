@@ -1,55 +1,99 @@
 # monster.yaml
-# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
-# end to end. Replace with the real set written from fragment-guide.md.
-
-- id: monster_attack_01
-  category: monster
-  key: attack
-  intensity: 1
-  effects:
-    sync: 8
-  zh: |
-    黑云扑到你脸上，翅膀擦过你的眼皮。
-  en: |
-    The black cloud hits your face. Wings brush your eyelids.
+# MVP set: 2 fragments per intensity (0-3), covering attack, approach, retreat, feed,
+# plus 1 generic fallback.
 
 - id: monster_approach_01
+  category: monster
+  key: approach
+  intensity: 0
+  effects:
+    monster_near: true
+  zh: |
+    墙缝里漏出一声极细的振翅，轻得像耳鸣。等你屏住呼吸去听，那声音已经贴在门框边上了。
+  en: |
+    A thread of wingbeat leaks from the wall crack, faint as tinnitus. By the time you hold your breath to listen, it is already waiting at the doorframe.
+
+- id: monster_retreat_01
+  category: monster
+  key: retreat
+  intensity: 0
+  effects:
+    monster_near: false
+  zh: |
+    耳畔那点若有若无的痒意突然散了，像一粒尘埃被风吹远。走廊深处却似乎多了一道极轻的回响。
+  en: |
+    The faint tickle near your ear drifts away, light as dust in a draft. Somewhere deeper in the dark, a tiny echo settles in.
+
+- id: monster_approach_02
   category: monster
   key: approach
   intensity: 1
   effects:
     monster_near: true
   zh: |
-    嗡鸣近了一点。
+    视野边缘闪过几十个黑点，聚拢又散开。低沉的嗡鸣顺着墙角爬过来，离你的脚踝只有几步。
   en: |
-    The hum comes a little closer.
-
-- id: monster_retreat_01
-  category: monster
-  key: retreat
-  intensity: 1
-  effects:
-    monster_near: false
-  zh: |
-    嗡鸣退回墙缝里。
-  en: |
-    The hum withdraws into the walls.
+    Dozens of black specks flicker at the edge of your sight, gathering and breaking apart. A low hum creeps along the baseboard, stopping just paces from your ankles.
 
 - id: monster_feed_01
   category: monster
   key: feed
   intensity: 1
   effects:
-    sync: 4
+    sync: 3
   zh: |
-    几只果蝇落在你手背上，口器轻轻地尝。
+    几只果蝇悄无声息地落在你手背上。细小的口器试探着轻触你的皮肤，像在辨认一道熟悉的甜味。
   en: |
-    A few flies land on the back of your hand and taste, gently.
+    A few flies settle silently on the back of your hand. Tiny mouthparts tap your skin, testing it as if checking a familiar trace of sugar.
+
+- id: monster_attack_01
+  category: monster
+  key: attack
+  intensity: 2
+  effects:
+    sync: 7
+  zh: |
+    黑云猛地扑进你的视野，无数翅膀疯狂拍打你的眼皮与鼻翼。你呛进一口带着发酵甜味的冷气，太阳穴突突地跳。
+  en: |
+    A black cloud lunges at your face, hundreds of wings battering your eyelids and nostrils. You inhale a lungful of cold air laced with fermented sweetness, and your temples throb.
+
+- id: monster_retreat_02
+  category: monster
+  key: retreat
+  intensity: 2
+  effects:
+    monster_near: false
+  zh: |
+    扑面而来的黑雾骤然抽身，哗啦一声缩回黑暗深处。空气里还留着甜腻的腥气，仿佛它们只是换了个地方盯着你。
+  en: |
+    The surging black mass snaps backward, spilling into the dark with a dry rustle. The cloying, sweet tang lingers—as if it only stepped back to watch you from a new angle.
+
+- id: monster_attack_02
+  category: monster
+  key: attack
+  intensity: 3
+  effects:
+    sync: 12
+  zh: |
+    成千上万只果蝇在半空聚成一道高挑的人形，几乎贴上你的鼻尖。那轮廓猛地溃散成暴雨般的黑潮将你吞没，耳膜里只剩震耳的复眼嗡鸣——有那么一瞬间，你分不清是谁在尖叫。
+  en: |
+    Thousands of flies knit together into a tall, human silhouette inches from your face. It breaks apart like a black downpour and engulfs you, filling your skull with a deafening roar—for one terrified second, you cannot tell whose throat the scream is coming from.
+
+- id: monster_feed_02
+  category: monster
+  key: feed
+  intensity: 3
+  effects:
+    sync: 6
+  zh: |
+    密密麻麻的复眼停在你的脖颈与手腕上，几乎盖住皮肤。无数口器同时轻点着你的脉搏，每一次吞咽都顺着神经直接传进你的脑海，令你浑身发僵。
+  en: |
+    A carpet of compound eyes settles over your neck and wrists, blotting out the skin. Hundreds of proboscises probe your pulse in unison, sending every tiny sip straight up your nerves until your limbs lock in panic.
 
 - id: monster_generic_01
   category: monster
   key: generic
   zh: |
-    蜂群在某处动了一下。
+    黑暗里的嗡鸣换了一个频率，仿佛有什么庞大的东西刚刚调整了呼吸。
   en: |
-    Somewhere, the swarm shifts.
+    The hum in the dark shifts pitch, as if something vast just adjusted its breathing.

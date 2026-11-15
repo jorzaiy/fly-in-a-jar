@@ -1,6 +1,6 @@
 # scene_enter.yaml
-# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
-# end to end. Replace with the real set written from fragment-guide.md.
+# MVP set: 1 fragment per scene (3 tiers each) + 1 generic fallback.
+# Note: never list exits or pickupable items here; the engine appends them.
 
 - id: scene_enter_reception_01
   category: scene_enter
@@ -8,9 +8,19 @@
   tiers:
     human:
       zh: |
-        红色应急灯下，登记簿摊在桌上，听筒垂在桌边。
+        红色应急灯把前台浸泡在一片粘稠的暗红里。旋转门死死卡住，玻璃外是空荡荡的黑夜，电话听筒悬在桌沿微微晃动。
       en: |
-        Under the red emergency light the visitor log lies open and the phone receiver dangles off the desk.
+        Red emergency lamps steep reception in a heavy, stagnant glow. The revolving door is locked tight against an empty black lot, and a phone receiver swings slightly off the desk edge.
+    latent:
+      zh: |
+        红光在你的视野里碎成蜂窝般的六边形，晃动的听筒里隐约漏出细微的振翅回声，像有人在另一头呼吸。
+      en: |
+        The red glare splits into honeycomb facets across your sight. From the dangling receiver, a faint flutter echoes as if something is breathing on the line.
+    instinct:
+      zh: |
+        边界锁死了。红光里只有气味和气流的方向，外面那片黑暗早已不在你的地图上。
+      en: |
+        The perimeter is sealed. Inside the red glow, only air currents and scent trails matter; the dark outside is no longer part of your map.
 
 - id: scene_enter_corridor_01
   category: scene_enter
@@ -18,9 +28,19 @@
   tiers:
     human:
       zh: |
-        走廊很长，脚步声晚半拍才回来。
+        打蜡的地面泛着幽暗的冷光，走廊长得出奇。墙上挂满放大的神经元显微照片，像闪电也像倒长的树根，你的脚步声总要慢半拍才荡回来。
       en: |
-        The corridor is long. Your footsteps come back half a beat late.
+        Waxed tiles gleam faintly down an impossibly long hall. Blown-up micrographs of neurons line the walls like lightning or inverted roots, and your footsteps echo half a beat too late.
+    latent:
+      zh: |
+        墙上的神经元树突仿佛在暗处又多长出了一根分支，随着你的视线轻轻颤动。每迈出一步，脚底的回声都多出一层陌生的重叠。
+      en: |
+        The dendritic branches on the wall seem to have sprouted one more twig in the dark, trembling as your gaze passes. Every step returns with an extra, unfamiliar echo.
+    instinct:
+      zh: |
+        这条通道熟悉得像自己的神经束。墙上的分叉全在发光，指引着信号该往哪一端传导。
+      en: |
+        This passage feels as familiar as your own nerve tract. Every branch on the wall glows faintly, showing which way the impulse should travel.
 
 - id: scene_enter_fly_room_01
   category: scene_enter
@@ -28,9 +48,19 @@
   tiers:
     human:
       zh: |
-        培养基的酸甜味浓得发腻，管子全空了。
+        一踏进来，发酵般的酸甜味便浓得化不开。恒温箱的门敞着，玻璃内侧印着密密麻麻、几乎看不清的细小脚印，不知为何排成了一道规则的弧线。
       en: |
-        The sour-sweet reek of fly food is thick. Every vial is empty.
+        The moment you cross the threshold, a thick, fermented sweetness coats your throat. The incubator door hangs open, its glass speckled with thousands of tiny footprints arranged in a deliberate arc.
+    latent:
+      zh: |
+        空气里的糖分与酵母气味直接撞进鼻腔，你的唾液瞬间涌了上来。培养箱玻璃上的那些细小脚印，在复眼格栅里拼成了一行你差点读懂的符号。
+      en: |
+        Sugar and yeast hit your sinuses like a flare, flooding your mouth with saliva. Through your hexagonal sight, the footprints on the glass almost resolve into a line of text.
+    instinct:
+      zh: |
+        这是孵化场，也是最初的巢。空气里满是呼唤与饥饿的甜味，每一丝气流都在催你张开嘴。
+      en: |
+        The brood room. The first nest. The air saturates with the sweet signal of hunger and kin, urging your jaws to part.
 
 - id: scene_enter_prep_room_01
   category: scene_enter
@@ -38,9 +68,19 @@
   tiers:
     human:
       zh: |
-        乙醇味刺鼻，玻片盒排得很整齐。
+        刺鼻的乙醇气味扑面而来，让你的鼻梁一阵发酸。台面上摆着切片机与一盒盒排列得过分整齐的玻璃载片，冷冰冰地反着微光。
       en: |
-        Ethanol stings your nose. The slide boxes are lined up neatly.
+        Sharp ethanol stings your nose the second you step inside. Along the bench sit a microtome and trays of glass slides, aligned with unsettling precision in the gloom.
+    latent:
+      zh: |
+        玻片盒反出的冷光在你眼底切成七千道细小的棱镜。你盯着那台沉默的切片机，指尖突然莫名地幻痛了一下。
+      en: |
+        Cold light from the slide trays fractures into seven thousand tiny prisms. Staring at the silent microtome, a phantom ache shoots through your fingertips.
+    instinct:
+      zh: |
+        切片机停着，可你的意识却记得刀锋落下的节律——一微米，又一微米，把记忆摊平在玻璃上。
+      en: |
+        The blade is still, yet your nerves remember its rhythm—micron after micron, laying memory flat across the glass.
 
 - id: scene_enter_em_room_01
   category: scene_enter
@@ -48,9 +88,19 @@
   tiers:
     human:
       zh: |
-        真空泵低鸣，像在呼吸。你不敢看她的后脑。
+        庞大的电子显微镜占去了半间屋子，像一座冰冷的金属子宫。真空泵在应急电源下低声喘息，空气里弥漫着臭氧味；她面朝下倒在机器旁，你不敢去看她的后脑。
       en: |
-        The vacuum pump hums like breathing. You do not look at the back of her head.
+        The towering electron microscope fills half the room like a steel womb. Its vacuum pump breathes steadily on backup power, tainting the air with ozone; she lies face down beside it, and you dare not look at the back of her head.
+    latent:
+      zh: |
+        真空泵的喘息和你的心跳严丝合缝地对上了拍子。臭氧味像电火花一样在颅腔里炸开，她的身影倒在机器旁，仿佛只是另一具被摘空了接口的外壳。
+      en: |
+        The pump's breathing locks cleanly onto your pulse. Ozone crackles inside your skull while she lies motionless by the column, like an empty casing unplugged from its port.
+    instinct:
+      zh: |
+        读取腔就在眼前。真空泵的低鸣温柔得像摇篮曲，催促你躺上去，把剩下的编号也补齐。
+      en: |
+        The specimen chamber waits right there. The vacuum hums like a lullaby, inviting you to lie down and complete the remaining sequence.
 
 - id: scene_enter_server_room_01
   category: scene_enter
@@ -58,9 +108,19 @@
   tiers:
     human:
       zh: |
-        太安静了，只有烧焦塑料的味道。
+        机房里静得吓人，一排排黑色机柜的指示灯全灭了，敞开的电闸箱里飘出一股焦糊塑料味。黑屏的终端冷冰冰地立在角落，仿佛刚被强行掐断了呼吸。
       en: |
-        Too quiet. Only the smell of burnt plastic.
+        The server room is dead quiet. Rows of black racks stand dark, and a burnt-plastic stench drifts from the open breaker box, while a blank terminal waits in the corner like something choked mid-sentence.
+    latent:
+      zh: |
+        机柜虽然断了电，你的耳膜里却仍能听见残余的电流嗡鸣。黑暗的机箱表面像无数沉默的突触，正等着重新被点亮。
+      en: |
+        Even with the racks dead, your eardrums pick up a phantom hum of current. In the dark, the cabinets look like rows of dormant synapses waiting to fire again.
+    instinct:
+      zh: |
+        外壳冷了，可真正跑着的东西早就顺着呼吸散进整栋楼里。这里只剩下一具空掉的铁壳。
+      en: |
+        The metal shell is cold, because whatever ran inside it has already spilled into the air of the building. Only an empty iron husk remains here.
 
 - id: scene_enter_cold_storage_01
   category: scene_enter
@@ -68,14 +128,24 @@
   tiers:
     human:
       zh: |
-        冷得发疼，你呼出的气是白的。
+        刺骨的寒气瞬间穿透衣领，地面结了一层滑腻的白霜。超低温冰柜发出低沉的震动，你呼出的每一口白气都像在空气里凝成了细小的冰针。
       en: |
-        The cold hurts. Your breath comes out white.
+        Biting cold slices straight through your collar, and frost coats the floor in a slick crust. The deep freezers rumble low, turning every breath you exhale into a cloud of pale needles.
+    latent:
+      zh: |
+        低温让你的指节瞬间僵硬，思维却变得异常清晰。白霜在复眼视野里泛着微蓝，像封存了无数休眠信号的结晶。
+      en: |
+        The freeze stiffens your knuckles at once, yet sharpens your thoughts to a razor edge. Frost glints pale blue across your facets, like crystals sealing dormant signals.
+    instinct:
+      zh: |
+        零下八十度。所有代谢都该在这里停住，所有贴着日期的名字都在等一双手把它们唤醒。
+      en: |
+        Minus eighty degrees. Metabolism stops here, and every dated label waits in the dark for a hand to wake it.
 
 - id: scene_enter_generic_01
   category: scene_enter
   key: generic
   zh: |
-    你走进去。这里也一样安静。
+    你踏进这片陌生的阴影。四周安静得过分，只有空气里残留着一丝若有若无的甜味。
   en: |
-    You step in. It is just as quiet here.
+    You step into an unfamiliar pocket of shadow. Everything is too still, save for a faint, lingering sweetness in the air.

@@ -1,19 +1,26 @@
 # silence.yaml
-# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
-# end to end. Replace with the real set written from fragment-guide.md.
+# MVP set: 2 default silence fragments + 1 generic fallback.
 
 - id: silence_default_01
   category: silence
   key: default
   zh: |
-    什么也没有发生。连嗡鸣都停了。
+    什么也没有发生。连墙里那点细碎的嗡鸣都突然停了，静得你能听见自己眼球转动的摩擦声。
   en: |
-    Nothing happens. Even the hum has stopped.
+    Nothing happens. Even the faint hum inside the walls cuts out, leaving a silence so tight you can hear your own eyes shift in their sockets.
+
+- id: silence_default_02
+  category: silence
+  key: default
+  zh: |
+    空气凝固在原地，没有振翅，没有脚步，也没有回声。仿佛整栋楼里的某种庞然大物正屏住呼吸，贴在暗处听你的下一声心跳。
+  en: |
+    The air hangs dead still—no wings, no footsteps, no echo. It feels as if something vast in the building is holding its breath in the dark, listening for your next heartbeat.
 
 - id: silence_generic_01
   category: silence
   key: generic
   zh: |
-    安静。太安静了。
+    四周安静得过分，反而像暴风雨前刻意留出的空隙。
   en: |
-    Quiet. Too quiet.
+    Everything is too quiet, like a deliberate pause before something breaks.

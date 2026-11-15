@@ -1,107 +1,106 @@
 # item_use.yaml
-# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
-# end to end. Replace with the real set written from fragment-guide.md.
+# MVP set: 12 item_use keys + 1 generic fallback (no effects allowed here).
 
 - id: item_use_fuse_frostbite_01
   category: item_use
   key: fuse_frostbite
   zh: |
-    你的手指一碰到保险丝就粘住了，你猛地抽回手，指尖发白。
+    裸露的指尖刚碰上冰柜里的陶瓷保险丝，皮肤就像被冰铁咬住一样粘在上面。你猛地扯回手，指腹瞬间冻得惨白麻木，什么也没能拿出来。
   en: |
-    Your fingertips stick to the fuse. You tear them away, white and numb.
+    The moment your bare fingers touch the ceramic fuse inside the freezer, skin sticks fast to the frost. You yank your hand back white and numb, leaving the fuse behind.
 
 - id: item_use_keycard_tangled_01
   category: item_use
   key: keycard_tangled
   zh: |
-    挂绳死死缠在机械臂上，你扯不下来。
+    门禁卡的挂绳死死绞在机械臂的金属关节里。你使劲拽了两下，卡带纹丝不动，反倒扯得她的肩膀微微一晃。
   en: |
-    The lanyard is wound tight around the arm. It will not come free.
+    The keycard lanyard is wound tight around the steel joint of the robotic arm. You tug twice, but the strap refuses to budge, only rocking her motionless shoulder slightly.
 
 - id: item_use_restore_power_01
   category: item_use
   key: restore_power
   zh: |
-    保险丝咔哒一声卡进去。你合上电闸，整栋楼长长吸了一口气。
+    新保险丝严丝合缝地卡进槽位。你推上电闸，一阵沉闷的电流声沿着墙壁贯通整栋大楼，仿佛有什么沉睡的巨兽长长吸了一口气。
   en: |
-    The fuse clicks home. You throw the breaker and the building draws a long breath.
+    The new fuse snaps home. You throw the breaker, and a low surge of current runs through the walls like something vast drawing a long, waking breath.
 
 - id: item_use_light_01
   category: item_use
   key: light
   zh: |
-    手电亮了，一圈白光。
+    你按下开关，手电筒吐出一圈惨白的光束。黑暗被迫退开几步，却把光圈之外的影子衬得更浓。
   en: |
-    The flashlight comes on, a clean white circle.
+    You thumb the switch and the flashlight throws a clean white circle. The dark retreats a few paces, making the shadows beyond the beam look twice as thick.
 
 - id: item_use_plug_ears_01
   category: item_use
   key: plug_ears
   zh: |
-    你塞上耳塞，世界退远了一点。
+    你把泡棉耳塞用力摁进耳道。外界的嗡鸣瞬间退远了一层，取而代之的是自己颅腔里愈发清晰的血液搏动声。
   en: |
-    You push in the earplugs. The world steps back a little.
+    You press the foam earplugs deep into your ears. The building's hum drops back a layer, leaving the pulse inside your own skull louder than before.
 
 - id: item_use_bait_01
   category: item_use
   key: bait
   zh: |
-    你把方糖扔向远处，嗡鸣跟着它去了。
+    你把方糖远远抛向暗处。碎糖落地的瞬间，半空中的嗡鸣像被无形的线扯住，哗地一声朝那个方向涌了过去。
   en: |
-    You toss the sugar away. The hum follows it.
+    You toss the sugar cube far into the dark. The instant it skitters across the floor, the hum snaps toward it like iron filings to a magnet.
 
 - id: item_use_catch_fly_01
   category: item_use
   key: catch_fly
   zh: |
-    你扣上管口。一只果蝇在里面撞壁。
+    你手腕一翻扣上管口，把其中一只果蝇封进了玻璃管。它在管壁内侧疯狂撞击，细小的振翅声透过玻璃传到你的掌心。
   en: |
-    You cap the vial. One fly beats against the glass.
+    You flick the cap shut and seal a single fly inside the glass vial. It throws itself against the wall again and again, buzzing straight into your palm.
 
 - id: item_use_stun_01
   category: item_use
   key: stun
   zh: |
-    CO₂ 嘶嘶散开，黑云一片片落下来。
+    CO₂ 麻醉垫嘶嘶地喷出白雾，甜腥的冷气迅速弥漫开来。翻滚的黑云骤然失重，像一阵黑雨般纷纷跌落在地。
   en: |
-    CO₂ hisses out and the cloud drops in sheets.
+    The CO₂ pad hisses out a pale mist of cold gas. The swirling black cloud loses its lift at once, dropping to the floor in silent sheets.
 
 - id: item_use_scare_01
   category: item_use
   key: scare
   zh: |
-    火苗一跳，蜂群退开。
+    打火机啪地窜起一簇橙黄的火苗。刺眼的火光跳动了一下，蜂群像被烫到似的猛然退散进阴影里。
   en: |
-    The flame jumps and the swarm pulls back.
+    The lighter sparks and throws up a bright orange tongue of flame. Flinching from the heat, the swarm recoils abruptly into the dark.
 
 - id: item_use_firewall_01
   category: item_use
   key: firewall
   zh: |
-    乙醇泼在地上，火墙腾起来。
+    乙醇泼在地面上瞬间化作一堵摇曳的火墙，热浪扑面而来。蜂群在火光另一侧焦躁地盘旋，始终不敢越过那道炽热的边界。
   en: |
-    Ethanol splashes the floor and a wall of fire rises.
+    Ethanol splashes across the floor and leaps into a trembling wall of fire. On the far side, the swarm churns frantically, refusing to cross the heat.
 
 - id: item_use_burn_server_01
   category: item_use
   key: burn_server
   zh: |
-    那台硬盘灯还在闪的机柜烧起来了。整栋楼的嗡鸣变成乱码。
+    火焰吞没那台硬盘灯还在闪烁的机柜时，整栋楼的嗡鸣骤然扭曲成一阵刺耳的乱码震颤。焦糊味里，仿佛有什么庞大的东西在火中剧烈抽搐。
   en: |
-    The rack with the blinking drive light goes up in flames. The building's hum turns to static.
+    As fire swallows the rack with the blinking drive light, the building's hum warps into a jagged spasm of static. Through the acrid smoke, something vast convulses in the dark.
 
 - id: item_use_dissect_scope_01
   category: item_use
   key: dissect_scope
   zh: |
-    目镜里一只被钉住的果蝇，用和你手指一样的弧度弯了右前足。
+    目镜下是一只头壳被切开、露出针尖大小灰白神经节的活果蝇。当你伸手去碰桌边的手术刀时，它竟然用和你手指完全相同的弧度，缓缓弯起了右前足。
   en: |
-    In the eyepiece a pinned fly bends its right foreleg at exactly the angle of your finger.
+    Through the eyepiece sits a pinned fly with its head capsule opened, exposing a pinpoint of pale ganglion. As your fingers reach for the scalpel beside it, the fly curls its right foreleg at the exact same angle.
 
 - id: item_use_generic_01
   category: item_use
   key: generic
   zh: |
-    什么也没发生。至少你没看到。
+    你试着使用了它。黑暗里没有任何动静，只有空气仿佛稍微沉重了一点。
   en: |
-    Nothing happens. Nothing you can see.
+    You put it to use. Nothing answers from the dark, though the air feels a fraction heavier.

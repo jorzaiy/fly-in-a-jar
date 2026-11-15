@@ -1,19 +1,27 @@
 # drift.yaml
-# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
-# end to end. Replace with the real set written from fragment-guide.md.
+# MVP set: 2 default drift fragments + 1 generic fallback.
+# Note: never name the destination scene.
 
 - id: drift_default_01
   category: drift
   key: default
   zh: |
-    你眨了一下眼，走廊的方向不对了。
+    你只是眨了一下眼，脚下地面的反光就变了角度。等你的视线重新聚焦，周遭的墙与阴影已经换了一副模样。
   en: |
-    You blink, and the hallway points the wrong way.
+    You only blink, and the sheen on the floor shifts its angle. By the time your eyes refocus, the walls and shadows around you belong to somewhere else.
+
+- id: drift_default_02
+  category: drift
+  key: default
+  zh: |
+    耳畔的嗡鸣短暂地断了半拍，像磁带卡住又猛地跳了过去。你的鞋尖依然朝前，却发现自己站在一个陌生的门框下。
+  en: |
+    The hum skips half a beat, like tape snagging and snapping forward. Your shoes are still pointed straight ahead, yet you are standing beneath a different doorframe.
 
 - id: drift_generic_01
   category: drift
   key: generic
   zh: |
-    你不记得自己是怎么走到这里的。
+    你的记忆里漏掉了十几步的距离，回过神时，自己已经到了这里。
   en: |
-    You do not remember walking here.
+    A dozen paces drop clean out of your memory; when you come to, you are already here.

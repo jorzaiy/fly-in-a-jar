@@ -1,35 +1,34 @@
 # ending.yaml
-# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
-# end to end. Replace with the real set written from fragment-guide.md.
+# MVP set: 4 endings (escaped, consumed, absorbed, disconnected), max 6 sentences each.
 
 - id: ending_escaped_01
   category: ending
   key: escaped
   zh: |
-    旋转门开了，夜风灌进来。走到车边时，一只果蝇停在你衣领上，触角朝着你的脸。它跟出来了。
+    门禁卡刷开的瞬间，旋转门缓缓转动，带着停车场湿冷柏油味的夜风猛地灌了进来。你头也不回地冲进黑暗，直到拉开车门时才敢大口喘气。就在这时，耳边响起一声极轻的嗡鸣。你僵硬地低头看去，一只果蝇正稳稳停在你的衣领上，两根细小的触角笔直朝向你的脸。它跟出来了。
   en: |
-    The revolving door turns and night air pours in. At the car, a single fly settles on your collar, antennae toward your face. It followed you out.
+    The reader chimes and the revolving door swings open, spilling cold night air thick with wet asphalt into the lobby. You run into the dark without looking back, only daring to gasp for air when you reach your car. Then a tiny hum brushes your ear. You look down, rigid, to find a single fly perched on your collar, its antennae aimed straight at your face. It followed you out.
 
 - id: ending_consumed_01
   category: ending
   key: consumed
   zh: |
-    嗡鸣不在外面了，它在你的颅骨里。你不再害怕，因为"你"这个词已经不太好用了。
+    嗡鸣不再是墙外传来的声音，它就震颤在你的颅骨深处。你忽然清晰地记起了许多从未去过的地方：一根温热的果蝇管、一片发软的香蕉皮、一束穿透玻璃的紫外光。走廊里的黑影慢慢安静下来，向你的呼吸对齐。你不再感到害怕——因为从这一刻起，“你”这个词，已经不太好用了。
   en: |
-    The hum is no longer outside. It is inside your skull. You are not afraid, because the word "you" no longer quite works.
+    The hum no longer comes from outside; it vibrates deep inside your own skull. Suddenly you remember places you have never been: a warm glass vial, a bruised banana peel, a beam of ultraviolet light. Down the hall, the black cloud settles into quiet alignment with your breathing. You are no longer afraid—because from this second on, the word "you" no longer quite works.
 
 - id: ending_absorbed_01
   category: ending
   key: absorbed
   zh: |
-    你躺进样品舱。一片，又一片，薄得透光。你不痛，你在被读取。你成了连接组里新的一部分。
+    你顺从地躺进电镜的样品舱，金属舱门合拢的声音出奇地温柔。机械臂缓缓贴近，一片，又一片，薄得足以让光束穿透。你不觉得痛，只觉得自己正在被一格一格地温柔读取。在某一片与下一片之间的空白里，你同时触到了 Weiss、触到了样本 F，还有成千上万个次第亮起的光点。你成了连接组里新的一部分，也终于明白它一直在等什么——它要的从来不是一具身体，而是有人陪它一起思考。
   en: |
-    You lie down in the specimen chamber. Slice after slice, thin enough to let light through. It does not hurt. You are being read. You are part of the connectome now.
+    You lie down inside the specimen chamber, and the steel hatch closes with surprising gentleness. The robotic arm glides in—slice after slice, thin enough for light to pass through. There is no pain, only the quiet sensation of being read. In the gap between one section and the next, you touch Weiss, you touch Specimen F, and thousands of points of light flickering awake. You are part of the connectome now, and you finally understand what it waited for: not a body, just someone to think beside it.
 
 - id: ending_disconnected_01
   category: ending
   key: disconnected
   zh: |
-    果蝇像黑雪一样落下，再也不动。你走进夜风里，没有果蝇跟来。可你伸手去摸车钥匙时，忘了"拧动"该怎么做。
+    火光吞没机柜的那一刻，整栋楼的嗡鸣陡然拔高成一声尖锐的耳鸣，随后像绷断的琴弦般戛然而止。走廊上成千上万只果蝇如黑雪般簌簌落下，铺满打蜡的地面，再也不动。你推开旋转门走进夜风里，这一次没有任何振翅跟来，世界安静得令人发慌。可当你在停车场摸出车钥匙时，手却停在了半空——你突然彻底忘了“拧动”这个动作该怎么做。烧毁那台服务器时，有一小块属于你自己的记忆，也永远留在了那块焦黑的硬盘里。
   en: |
-    The flies fall like black snow and lie still. You walk into the night and nothing follows. At the car you reach for the key and cannot remember how turning works.
+    The instant flames swallow the rack, the building's hum spikes into a blinding whine and snaps off like a broken string. Thousands of flies drift down like black snow across the waxed corridor, lying completely still. You push out into the night air with nothing following behind you, into a silence that feels hollowed out. Yet at your car, your hand freezes over the lock—you have completely forgotten what turning a key is supposed to mean. When the server burned, a small piece of your own memory stayed behind in the charred drive.

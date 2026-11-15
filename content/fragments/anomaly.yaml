@@ -1,33 +1,69 @@
 # anomaly.yaml
-# PLACEHOLDER fragments (tasks.md 8.4): one per category and key so the game runs
-# end to end. Replace with the real set written from fragment-guide.md.
+# MVP set: 2 fragments per intensity (0-3), covering visual, sound, smell, memory,
+# all using 3 tiers (human / latent / instinct), plus 1 generic fallback.
 
 - id: anomaly_visual_01
   category: anomaly
   key: visual
-  intensity: 1
-  zh: |
-    视野边缘多了几个黑点，眨眼也不散。
-  en: |
-    Black specks gather at the edge of your vision. Blinking does not clear them.
+  intensity: 0
+  tiers:
+    human:
+      zh: |
+        眼角余光闪过一道极细的网格，像老式显示器上的噪点。你眨了眨眼，它就消失了。
+      en: |
+        A hairline grid flickers at the edge of your sight, like static on an old monitor. When you blink, it is gone.
+    latent:
+      zh: |
+        视野边缘浮出几十个透明的六边形格栅，把昏暗的光线切成了碎块。
+      en: |
+        Dozens of translucent hexagonal cells surface along your peripheral vision, dicing the dim light into shards.
+    instinct:
+      zh: |
+        左边的复眼格栅暗了一瞬，又亮起来。一切都很整齐，只是视角比你记忆里宽了一倍。
+      en: |
+        Your left compound grid dims for a beat, then clears. Everything aligns neatly, though the field of view is twice as wide as you remember.
 
 - id: anomaly_sound_01
   category: anomaly
   key: sound
-  intensity: 1
-  zh: |
-    嗡鸣里好像有人在念一串编号。
-  en: |
-    Inside the hum, someone seems to be reading out numbers.
+  intensity: 0
+  tiers:
+    human:
+      zh: |
+        寂静里夹着一丝极轻的咔哒声，像是某台机器在远处空转了一格。
+      en: |
+        A faint click threads through the quiet, as if some distant mechanism ticked forward by one notch.
+    latent:
+      zh: |
+        你听见一声细小的脉冲在颅骨内侧响起，紧接着是一阵微弱的振翅回音。
+      en: |
+        A tiny pulse snaps inside your skull, followed by the faintest echo of vibrating wings.
+    instinct:
+      zh: |
+        那不是外面的声音。是你自己的突触在替另一段回路报数。
+      en: |
+        It is not coming from the room. It is your own synapses ticking off the count for another circuit.
 
 - id: anomaly_smell_01
   category: anomaly
   key: smell
   intensity: 1
-  zh: |
-    空气里突然全是发酵的甜味。
-  en: |
-    The air is suddenly thick with fermented sweetness.
+  tiers:
+    human:
+      zh: |
+        鼻腔里忽然掠过一股发酵的甜酸味，混着一点刺鼻的固定液气息，很快又散了。
+      en: |
+        A whiff of fermented sweetness crosses your nose, sharp with a hint of fixative, then fades.
+    latent:
+      zh: |
+        甜味像一条发光的虚线钻进鼻腔，你的脚步不自觉地往那个方向偏了半寸。
+      en: |
+        Sweetness threads into your nostrils like a glowing trail; your next step drifts half an inch toward it before you catch yourself.
+    instinct:
+      zh: |
+        趋近信号。源头就在前面不远处，甜得让口器发痒。
+      en: |
+        Approach signal. The source is close ahead, sweet enough to make your mouthparts ache.
 
 - id: anomaly_memory_01
   category: anomaly
@@ -36,24 +72,128 @@
   tiers:
     human:
       zh: |
-        你想起一片香蕉皮。你从没见过那片香蕉皮。
+        你突然想起一只戴着橡胶手套的手，正小心地把你的名字贴在玻璃上。可你根本不记得自己什么时候去过那里。
       en: |
-        You remember a banana peel. You have never seen that banana peel.
+        You suddenly remember a gloved hand carefully labeling glass with your name—yet you have no memory of ever being there.
     latent:
       zh: |
-        一片香蕉皮，被六千个小镜面同时看见。
+        那只手套在强光下抖了一下。你同时看见指尖的微颤，也看见玻璃后面无数双复眼在微微反光。
       en: |
-        A banana peel, seen at once through six thousand tiny mirrors.
+        The gloved hand trembles under the lamp. You see both the twitch of the fingers and the glint of countless facets behind the glass.
     instinct:
       zh: |
-        甜。软。家。
+        她当时哭了，你记得那种咸涩。她说，再切最后一片就够了。
       en: |
-        Sweet. Soft. Home.
+        She was crying then—you remember the salt of it. Just one last section, she whispered, and it will be enough.
+
+- id: anomaly_visual_02
+  category: anomaly
+  key: visual
+  intensity: 2
+  effects:
+    sync: 5
+  tiers:
+    human:
+      zh: |
+        面前的空气骤然裂成无数重叠的残影，每一帧里你的双手都比上一帧慢了半拍。
+      en: |
+        The air ahead fractures into overlapping afterimages; in every frame, your hands lag half a beat behind your intent.
+    latent:
+      zh: |
+        七千个六边形切面同时在你眼前展开，把墙面、阴影和你自己的指尖拆成密密麻麻的像素。
+      en: |
+        Seven thousand hexagonal facets unfold across your sight at once, breaking walls, shadows, and your own fingertips into a hive of pixels.
+    instinct:
+      zh: |
+        复眼已经校准完成。黑暗不再是障碍，你看见了气流在空间里流动的纹路。
+      en: |
+        The compound array is calibrated. Darkness no longer blinds you; you can see the currents of air braiding through the room.
+
+- id: anomaly_sound_02
+  category: anomaly
+  key: sound
+  intensity: 2
+  effects:
+    sync: 6
+  tiers:
+    human:
+      zh: |
+        一阵低沉的嗡鸣直接钻进你的耳膜，音调冰冷而整齐，像有人在用你的心跳打拍子。
+      en: |
+        A low, mechanical hum bores straight into your eardrums, cold and rhythmic, as if something is keeping time with your pulse.
+    latent:
+      zh: |
+        你的呼吸声被某种更大的节律吞了进去。每呼出一口气，就有成百上千个细小的回声替你接上后半句。
+      en: |
+        Your breathing is swallowed by a larger cadence. Every exhale is finished for you by a hundred tiny echoes.
+    instinct:
+      zh: |
+        那是我们的同步频率。你张开嘴，发出的却是一声连自己都听不懂的振颤。
+      en: |
+        That is our sync frequency. You open your mouth, and what spills out is a vibration you no longer know how to translate.
+
+- id: anomaly_smell_02
+  category: anomaly
+  key: smell
+  intensity: 3
+  effects:
+    sync: 9
+  tiers:
+    human:
+      zh: |
+        浓烈得令人作呕的乙醇与腐甜气味猛地灌满你的鼻腔，喉咙像被无形的针刺穿，胃里一阵剧烈翻涌。
+      en: |
+        A suffocating wave of ethanol and rotting sweetness floods your nose; your throat tightens as if pierced, and your stomach heaves.
+    latent:
+      zh: |
+        你的嗅觉突然裂成两半：一半在拼命干呕，另一半却疯狂地分泌唾液，渴望扑进那股刺鼻的甜香里。
+      en: |
+        Your sense of smell splits in two: half of you gags violently, while the other half floods your mouth with saliva, desperate to dive into the sweet stench.
+    instinct:
+      zh: |
+        排斥信号已经熄灭。固定液的味道不再刺鼻——那是浸泡着整座记忆库的羊水。
+      en: |
+        Avoidance has shut down. The fixative no longer burns—it smells like the warm broth where every memory sleeps.
+
+- id: anomaly_memory_02
+  category: anomaly
+  key: memory
+  intensity: 3
+  effects:
+    sync: 11
+  tiers:
+    human:
+      zh: |
+        零点前那几分钟的空白突然塌陷：冰冷的金属台面、刺目的白光、某种细高频的震动贴近眉心。你猛地捂住额头，冷汗浸透了后背。
+      en: |
+        The blank minutes before midnight suddenly cave in: cold steel, blinding white light, a fine high-pitched hum grazing your brow. You clutch your forehead, drenched in cold sweat.
+    latent:
+      zh: |
+        你忽然记起自己薄得透光的样子——一格一格排在冷液里，等待电子束扫过。你分不清这是你的记忆，还是正在读取你的人的记忆。
+      en: |
+        You suddenly remember being thin enough for light to pass through—racked in cold fluid, waiting for the beam. You cannot tell whether the memory is yours or the reader's.
+    instinct:
+      zh: |
+        切片早已归位，可那段关于“逃出去”的旧回路还在空转。你迈出这一步，不过是在替它重演一次答案。
+      en: |
+        The tray is already full, yet the old loop labeled escape keeps firing on its own. Every step you take only replays the answer for it.
 
 - id: anomaly_generic_01
   category: anomaly
   key: generic
-  zh: |
-    有什么不太对，但你说不出是什么。
-  en: |
-    Something is wrong, and you cannot say what.
+  tiers:
+    human:
+      zh: |
+        周遭的空气陡然冷了一瞬，某种说不清的错位感顺着脊椎爬了上来。
+      en: |
+        The air around you drops a degree for no reason, and an unnamed wrongness crawls up your spine.
+    latent:
+      zh: |
+        感官的边缘轻微错齿，仿佛有另一双眼睛正借着你的视神经向外张望。
+      en: |
+        The edges of your senses slip out of gear, as if another pair of eyes is peering out through your optic nerve.
+    instinct:
+      zh: |
+        一次微小的校准脉冲掠过皮层。你停在原地，等待下一条指令。
+      en: |
+        A brief calibration pulse sweeps across the cortex. You stand still, waiting for the next stimulus.
