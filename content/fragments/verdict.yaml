@@ -387,3 +387,51 @@
     勉强完成。有那么一瞬间，你的手不太像是你自己的。
   en: |
     Barely done. For a moment, your hands did not quite feel like yours.
+
+- id: action_take_05
+  category: action
+  key: take
+  zh: |
+    你把{target}拿到手里，掂了掂。比看上去沉一点。
+  en: |
+    You pick up {target} and weigh it in your hand. A little heavier than it looks.
+
+- id: action_take_06
+  category: action
+  key: take
+  zh: |
+    你拿起{target}。它下面那块台面比周围干净，像是一直有人在等你来拿。
+  en: |
+    You take {target}. The surface under it is cleaner than the rest, as if someone had been waiting for you to come for it.
+
+- id: action_take_07
+  category: action
+  key: take
+  zh: |
+    {target}到手了。你下意识回头看了一眼，门口什么也没有。
+  en: |
+    {target} is yours now. You glance back without meaning to. Nothing in the doorway.
+
+- id: action_move_05
+  category: action
+  key: move
+  zh: |
+    你往{target}走。应急灯的嗡声一路跟着你，走到门口才停。
+  en: |
+    You head for {target}. The buzz of the emergency lights follows you all the way, and only stops at the door.
+
+- id: action_move_06
+  category: action
+  key: move
+  zh: |
+    你数着步子走向{target}。数到第十一步，你听见身后也有人在数。
+  en: |
+    You count your steps toward {target}. At eleven, you hear someone behind you counting too.
+
+- id: action_move_07
+  category: action
+  key: move
+  zh: |
+    你推门走向{target}。门轴吱的一声，像是在替谁通报你来了。
+  en: |
+    You push through toward {target}. The hinge creaks, as if announcing you to someone.

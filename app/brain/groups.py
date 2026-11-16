@@ -7,6 +7,7 @@ and builds per-turn Poisson stimulation maps.
 
 from __future__ import annotations
 
+import hashlib
 import logging
 from pathlib import Path
 from typing import Any, Mapping
@@ -114,8 +115,26 @@ class BrainGroups:
         danger: int = 0,
         stim_fatigue: Mapping[str, int] | None = None,
         max_stim_neurons: int = 150,
+        *,
+        input_key: str = "",
+        swarm_hz: float = 0.0,
+        sync: int = 0,
     ) -> dict[int, float]:
         """Build Poisson stimulus mapping {neuron_index: rate_hz} (design §5.3).
+
+        Four inputs add up, so the same action lands differently depending on
+        what was typed, where, and how far the night has gone:
+
+        1. Action pathway (judge category). `input_key` (the typed words) picks
+           which three quarters of that pathway's neurons fire and nudges the
+           rate, so "check the glass" and "check the door" are different inputs.
+        2. Feeding keywords (sugar, tap, strobe ...), with fatigue.
+        3. Room ambience: every room drives its own sense (config scene_ambience).
+        4. The swarm: looming (LC4/LPLC2), fermented odour and wingbeat (JO)
+           at `swarm_hz`, which the game state sets (power, time since power,
+           sync, sugar/CO2/fire). Looming is what drives the giant fibre.
+
+        Sync scales every rate up a little: the more assimilated, the louder.
 
         Args:
             category: Action category from judge (e.g. 'look', 'eat').
@@ -124,19 +143,28 @@ class BrainGroups:
             danger: Action danger score (0 safe, 1 risky, 2 dangerous, 3 suicidal).
             stim_fatigue: Dictionary of {pathway: consecutive_usage_count}.
             max_stim_neurons: Cap on stimulated neurons to ensure simulation speed.
+            input_key: Normalized player input; picks the neuron subset.
+            swarm_hz: Swarm drive in Hz (0 = dormant).
+            sync: Synaptic sync 0-100 (gain).
 
         Returns:
             Dictionary mapping neuron index to Poisson stimulation rate in Hz.
         """
         stim_fatigue = stim_fatigue or {}
         stimulus: dict[int, float] = {}
+        gain = 1.0 + max(0, min(100, sync)) / 200.0
 
         # 1. Base rate scaled by danger score: danger=0 -> 1.0x, danger=3 -> 1.9x
         danger_scale = 1.0 + (max(0, min(3, danger)) * 0.3)
-        base_rate = self.default_rate_hz * danger_scale
+        base_rate = self.default_rate_hz * danger_scale * gain
 
-        # Base category neurons
         neurons = self.get_stimulus_neurons(category, max_neurons=max_stim_neurons)
+        if input_key and len(neurons) > 8:
+            digest = hashlib.sha256(f"{category}:{input_key}".encode()).digest()
+            rng = np.random.default_rng(int.from_bytes(digest[:8], "big"))
+            keep = max(4, int(round(len(neurons) * 0.75)))
+            neurons = sorted(rng.choice(neurons, size=keep, replace=False).tolist())
+            base_rate *= 0.8 + 0.4 * (digest[8] / 255.0)
         for idx in neurons:
             stimulus[idx] = base_rate
 
@@ -158,9 +186,17 @@ class BrainGroups:
         if scene in self.scene_ambience:
             amb = self.scene_ambience[scene]
             pathway = amb["pathway"]
-            boost = float(amb["rate_boost_hz"])
-            amb_neurons = self.get_stimulus_neurons(pathway, max_neurons=30)
+            boost = float(amb["rate_boost_hz"]) * gain
+            amb_neurons = self.get_stimulus_neurons(pathway, max_neurons=int(amb.get("neurons", 30)))
             for idx in amb_neurons:
                 stimulus[idx] = stimulus.get(idx, 0.0) + boost
+
+        # 4. The swarm
+        if swarm_hz > 0:
+            sw = self.config.get("swarm", {})
+            for pathway, spec in sw.get("channels", {}).items():
+                rate = swarm_hz * float(spec.get("scale", 1.0)) * gain
+                for idx in self.get_stimulus_neurons(pathway, max_neurons=int(spec.get("neurons", 40))):
+                    stimulus[idx] = stimulus.get(idx, 0.0) + rate
 
         return stimulus

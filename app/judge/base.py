@@ -45,7 +45,7 @@ class JudgeResult(BaseModel):
     category: Category                        # Choice
     target: str                               # Choice, options from target_options()
     danger: int = Field(ge=0, le=3)           # Score: 0 safe, 1 risky, 2 dangerous, 3 suicidal
-    source: Literal["jev", "gemini", "openrouter", "commandcode", "mock"] = "mock"
+    source: Literal["jev", "gemini", "openrouter", "commandcode", "mock", "map"] = "mock"
 
 
 # --------------------------------------------------------------------- questions (design §6.1)

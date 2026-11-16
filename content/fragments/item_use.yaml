@@ -21,9 +21,9 @@
   category: item_use
   key: restore_power
   zh: |
-    新保险丝严丝合缝地卡进槽位。你推上电闸，一阵沉闷的电流声沿着墙壁贯通整栋大楼，仿佛有什么沉睡的巨兽长长吸了一口气。
+    新保险丝严丝合缝地卡进槽位。你推上电闸，一阵沉闷的电流声沿着墙壁贯通整栋大楼，仿佛有什么沉睡的巨兽长长吸了一口气。紧接着，楼道深处的嗡鸣一下子醒了，成千上万对翅膀同时振动起来。
   en: |
-    The new fuse snaps home. You throw the breaker, and a low surge of current runs through the walls like something vast drawing a long, waking breath.
+    The new fuse snaps home. You throw the breaker, and a low surge of current runs through the walls like something vast drawing a long, waking breath. Then, deep in the halls, the hum wakes all at once: thousands of wings starting together.
 
 - id: item_use_light_01
   category: item_use
@@ -178,3 +178,19 @@
     你把玻片放进样品舱，可电子显微镜毫无反应，真空泵一声不响。整栋楼没电，它什么也看不到。
   en: |
     You set the slide in the sample chamber, but the electron microscope does not respond and the vacuum pump stays silent. With the building dark, it can see nothing.
+
+- id: item_use_door_swarm_01
+  category: item_use
+  key: door_swarm
+  zh: |
+    你刚把门禁卡举到读卡器前，黑云就从旋转门顶上倒灌下来，把读卡器整个裹住。翅膀拍在你手背上，一下一下，把你往回推。它们不让外面的东西出去。
+  en: |
+    The moment you raise the keycard to the reader, a black cloud pours down from the top of the revolving door and smothers it. Wings beat against the back of your hand, again and again, pushing you back. They will not let an outsider leave.
+
+- id: item_use_door_swarm_02
+  category: item_use
+  key: door_swarm
+  zh: |
+    读卡器亮了绿灯，可旋转门前已经立着一道嗡嗡作响的黑墙。你往前一步，它就往你脸上压一寸，复眼密密麻麻地对着你，像在辨认你是不是自己人。
+  en: |
+    The reader blinks green, but a humming black wall already stands before the revolving door. Each step you take, it presses an inch closer to your face, compound eyes packed tight, as if checking whether you are one of them.

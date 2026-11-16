@@ -53,15 +53,40 @@ def test_ending_escaped(world, state):
     power_on(state, world)
     get_keycard(state, world)
     go(state, world, "prep_room", "corridor", "reception")
+    # The power woke the swarm; it guards the door against an outsider.
+    assert state.monster_near
+    out = act(state, world, "use", "keycard")
+    assert out.rule_id == "door_swarm" and out.blocked and state.ended is None
+    state.monster_near = False  # e.g. scared off with the lighter
     out = act(state, world, "use", "keycard")
     assert out.rule_id == "escape" and out.ending == "escaped" and state.ended == "escaped"
     assert out.fragment == ("ending", "escaped")
+
+
+def test_swarm_lets_one_of_its_own_out(world, state):
+    """Clue 8: a caught fly on you and the swarm lets you through."""
+    power_on(state, world)
+    get_keycard(state, world)
+    state.set_flag("caught_fly")
+    go(state, world, "prep_room", "corridor", "reception")
+    out = act(state, world, "use", "keycard")
+    assert out.rule_id == "escape" and state.ended == "escaped"
+
+
+def test_swarm_held_back_by_sugar(world, state):
+    power_on(state, world)
+    get_keycard(state, world)
+    go(state, world, "prep_room", "corridor", "reception")
+    state.monster_block = 2
+    out = act(state, world, "move", "exit")
+    assert state.ended == "escaped"
 
 
 def test_ending_escaped_by_moving_to_exit(world, state):
     power_on(state, world)
     get_keycard(state, world)
     go(state, world, "prep_room", "corridor", "reception")
+    state.monster_near = False
     out = act(state, world, "move", "exit")
     assert state.ended == "escaped" and out.moved_to is None
 

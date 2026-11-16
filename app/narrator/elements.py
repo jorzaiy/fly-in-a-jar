@@ -29,6 +29,7 @@ class StoryElements:
     intensity: int                     # 0, 1, 2, 3
     silence: bool                      # Dead silence event (all readout options absent)
     spikes: dict[str, int] = field(default_factory=dict)  # Group spike counts for brain log
+    swarm_hz: float = 0.0              # Swarm input this turn (for the brain log)
 
 
 def derive_story_elements(
@@ -36,10 +37,27 @@ def derive_story_elements(
     brain_groups: BrainGroups,
     state: GameState,
     world: World,
+    category: str | None = None,
 ) -> StoryElements:
-    """Derive story elements from connectome simulation spikes and game state."""
+    """Derive story elements from connectome simulation spikes and game state.
+
+    With `relative_baselines` in the config (scripts/calibrate.py), a readout
+    fires when it spikes more than that kind of action usually makes it spike:
+    the event is the brain doing something unusual, not the action echoing
+    back. The monster reads the giant fibre against fixed thresholds
+    (`monster_thresholds`), since the giant fibre answers to the swarm's
+    looming input.
+    """
     cfg = brain_groups.config
     baselines: dict[str, dict[str, float]] = cfg.get("baselines", {})
+    rel: dict[str, float] = (cfg.get("relative_baselines") or {}).get(category or "", {})
+    gf_cfg: dict[str, float] = cfg.get("monster_thresholds") or {}
+
+    def base_for(group: str, opt: str) -> float:
+        key = f"{group}.{opt}"
+        if key in rel:
+            return float(rel[key])
+        return float(baselines.get(group, {}).get(opt, 1.0))
     intensity_thresholds: list[float] = cfg.get("intensity_thresholds", [0.0, 210.0, 4019.0])
 
     spikes_recorded: dict[str, int] = {}
@@ -52,14 +70,23 @@ def derive_story_elements(
         idxs = brain_groups.get_readout_neurons("monster", opt)
         spk = sim_res.spikes_in_group(idxs)
         spikes_recorded[f"monster.{opt}"] = spk
-        base = baselines.get("monster", {}).get(opt, 1.0)
-        monster_scores[opt] = spk / max(1.0, base)
+        monster_scores[opt] = spk / max(1.0, base_for("monster", opt))
 
-    best_monster = max(monster_scores, key=monster_scores.get)
-    if monster_scores[best_monster] >= 1.0:
-        raw_monster = best_monster
+    if gf_cfg:
+        gf = spikes_recorded["monster.attack"]
+        if gf >= float(gf_cfg.get("attack_gf", 32)):
+            raw_monster = "attack"
+        elif gf >= float(gf_cfg.get("approach_gf", 12)):
+            raw_monster = "approach"
+        elif monster_scores["feed"] >= 1.0:
+            raw_monster = "feed"
+        elif monster_scores["retreat"] >= 1.0:
+            raw_monster = "retreat"
+        else:
+            raw_monster = "absent"
     else:
-        raw_monster = "absent"
+        best_monster = max(monster_scores, key=monster_scores.get)
+        raw_monster = best_monster if monster_scores[best_monster] >= 1.0 else "absent"
 
     # Monster overrides in priority order (design §5.4 & tasks.md 9.4):
     # ① monster_block > 0 -> absent
@@ -96,8 +123,7 @@ def derive_story_elements(
         idxs = brain_groups.get_readout_neurons("anomaly", opt)
         spk = sim_res.spikes_in_group(idxs)
         spikes_recorded[f"anomaly.{opt}"] = spk
-        base = baselines.get("anomaly", {}).get(opt, 1.0)
-        anomaly_scores[opt] = spk / max(1.0, base)
+        anomaly_scores[opt] = spk / max(1.0, base_for("anomaly", opt))
 
     best_anomaly = max(anomaly_scores, key=anomaly_scores.get)
     if anomaly_scores[best_anomaly] >= 1.0:
@@ -109,8 +135,8 @@ def derive_story_elements(
     clue_idxs = brain_groups.get_readout_neurons("clue", "clue")
     clue_spikes = sim_res.spikes_in_group(clue_idxs)
     spikes_recorded["clue.clue"] = clue_spikes
-    clue_base = baselines.get("clue", {}).get("clue", 1.0)
-    clue_yes = (clue_spikes / max(1.0, clue_base)) >= 1.0
+    clue_score = clue_spikes / max(1.0, base_for("clue", "clue"))
+    clue_yes = clue_score >= 1.0
 
     clue_id: int | None = None
     if clue_yes:
@@ -136,8 +162,8 @@ def derive_story_elements(
     drift_idxs = brain_groups.get_readout_neurons("drift", "drift")
     drift_spikes = sim_res.spikes_in_group(drift_idxs)
     spikes_recorded["drift.drift"] = drift_spikes
-    drift_base = baselines.get("drift", {}).get("drift", 1.0)
-    drift_yes = (drift_spikes / max(1.0, drift_base)) >= 1.0
+    drift_score = drift_spikes / max(1.0, base_for("drift", "drift"))
+    drift_yes = drift_score >= 1.0
 
     # 5. Intensity tier (0, 1, 2, 3)
     total_readout = sum(spikes_recorded.values())
@@ -145,7 +171,15 @@ def derive_story_elements(
     t1 = intensity_thresholds[1] if len(intensity_thresholds) > 1 else 200.0
     t2 = intensity_thresholds[2] if len(intensity_thresholds) > 2 else 2000.0
 
-    if total_readout < t1:
+    if rel:
+        # How far past its usual level the most surprising readout went.
+        peak = max([*anomaly_scores.values(), clue_score, 0.0])
+        intensity = 0 if peak < 1.0 else 1 if peak < 1.25 else 2 if peak < 1.6 else 3
+        # The building gets louder as the host slips: tier 3 only from sync 50.
+        intensity = min(intensity, 1 + state.sync // 25)
+        if raw_monster == "attack":
+            intensity = max(intensity, 2)
+    elif total_readout < t1:
         intensity = 0
     elif total_readout < t2:
         intensity = 1

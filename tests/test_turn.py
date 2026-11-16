@@ -164,4 +164,5 @@ def test_revisit_uses_short_scene_line(content, judge, brain_groups, simulator):
         res = _run(content, judge, brain_groups, simulator, state, text)
         state = res.state
     scene = [o["text"] for o in res.output if o["kind"] == "scene"]
-    assert scene and scene[0].startswith("The corridor is as long as ever")
+    revisits = [v["en"] for v in content.world.descriptions["revisit"]["corridor"]]
+    assert scene and scene[0] in revisits

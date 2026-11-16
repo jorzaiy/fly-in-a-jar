@@ -41,6 +41,19 @@ def localize_target(target: str, world: World, content: Content, lang: str) -> s
     return target
 
 
+def room_listing(state: GameState, world: World, lang: str) -> list[dict[str, str]]:
+    """One system line: exits and the items lying here."""
+    sc_info = world.scenes.get(state.scene, {})
+    exit_names = [world.scenes[e]["name"][lang] for e in sc_info.get("exits", []) if e in world.scenes]
+    items_names = [world.items[it]["name"][lang] for it in items_here(state, world) if it in world.items]
+    parts = []
+    if exit_names:
+        parts.append(f"{'出口' if lang == 'zh' else 'Exits'}: {', '.join(exit_names)}")
+    if items_names:
+        parts.append(f"{'可见物品' if lang == 'zh' else 'Visible items'}: {', '.join(items_names)}")
+    return [{"kind": "system", "text": " | ".join(parts)}] if parts else []
+
+
 def resolve_fragment_text(
     frag: dict[str, Any],
     state: GameState,
@@ -66,7 +79,7 @@ def resolve_fragment_text(
 
     # 2. Replace {target} placeholder
     if "{target}" in raw_text:
-        localized = localize_target(target or "", world, content, lang)
+        localized = localize_target(target or "", world, content, lang) or ("它" if lang == "zh" else "it")
         raw_text = raw_text.replace("{target}", localized)
 
     return raw_text.strip()
@@ -97,6 +110,8 @@ def format_brain_log(
 
     # 2. [BRAIN] stimulus line
     stim_text = f"stimulus  pathway={category} · scene={scene}"
+    if elements.swarm_hz > 0:
+        stim_text += f" · swarm {elements.swarm_hz:g}Hz"
     lines.append({"kind": "brainlog", "text": f"[BRAIN] {stim_text}"})
 
     # 3. [BRAIN] spikes line
@@ -199,6 +214,9 @@ def compose_turn(
             frag = select_fragment("item_use", rule_triggered, intensity, state, content, total_spikes)
             txt = resolve_fragment_text(frag, state, lang, tgt, world, content)
             output.append({"kind": "action", "text": txt})
+        elif res.category == "look" and (not tgt or tgt == "none"):
+            # Looking at nothing the world knows: say so, and remind what the room holds.
+            output.append({"kind": "action", "text": content.text("game.look_nothing", lang)})
         elif res.category in ("look", "touch") and tgt and describe(state, world, "look", tgt, lang):
             # Each thing in the world has its own look text, which may hint at its use.
             output.append({"kind": "action", "text": describe(state, world, "look", tgt, lang) or ""})
@@ -235,23 +253,7 @@ def compose_turn(
             txt = resolve_fragment_text(frag, state, lang, target, world, content)
             output.append({"kind": "scene", "text": txt})
 
-        # Append room exits and items listing
-        sc_info = world.scenes.get(moved_scene, {})
-        exits = sc_info.get("exits", [])
-        exit_names = [world.scenes[e]["name"][lang] for e in exits if e in world.scenes]
-        here = items_here(state, world)
-        items_names = [world.items[it]["name"][lang] for it in here if it in world.items]
-
-        listing_parts = []
-        if exit_names:
-            exits_title = "出口" if lang == "zh" else "Exits"
-            listing_parts.append(f"{exits_title}: {', '.join(exit_names)}")
-        if items_names:
-            items_title = "可见物品" if lang == "zh" else "Visible items"
-            listing_parts.append(f"{items_title}: {', '.join(items_names)}")
-
-        if listing_parts:
-            output.append({"kind": "system", "text": " | ".join(listing_parts)})
+        output.extend(room_listing(state, world, lang))
 
     # 5. [死寂片段] (silence event, replaces monster & anomaly)
     if elements.silence:
@@ -268,8 +270,9 @@ def compose_turn(
             txt = resolve_fragment_text(frag, state, lang, target, world, content)
             output.append({"kind": "monster", "text": txt})
 
-        # 7. [异象片段]
-        if elements.anomaly != "none":
+        # 7. [异象片段] Once the swarm is closing in it is the event; the
+        # anomaly readouts are mostly its own input, so they stay quiet.
+        if elements.anomaly != "none" and elements.monster not in ("attack", "approach"):
             frag = select_fragment("anomaly", elements.anomaly, intensity, state, content, elements.spikes.get(f"anomaly.{elements.anomaly}", total_spikes))
             txt = resolve_fragment_text(frag, state, lang, target, world, content)
             output.append({"kind": "anomaly", "text": txt})
@@ -281,6 +284,10 @@ def compose_turn(
             output.append({"kind": "clue", "text": txt})
             if elements.clue_id not in state.clues_found:
                 state.clues_found = [*state.clues_found, elements.clue_id]
+
+    # 8b. Every turn ends with where you can go, so nobody scrolls back for it.
+    if not moved_scene and not state.ended:
+        output.extend(room_listing(state, world, lang))
 
     # 9. Brain Log (if enabled)
     cat = judge_call.result.category if judge_call.result else "none"

@@ -65,8 +65,8 @@ look:
     - zh: 几百支果蝇管整齐插在架子上，每一支的棉塞都被从里面顶开了。管壁上残留着黄褐色的培养基，一只果蝇也没剩下。
       en: Hundreds of fly vials stand in neat rows, every cotton plug pushed out from the inside. Yellow-brown food still clings to the glass. Not a single fly is left.
   incubator:
-    - zh: 恒温培养箱的门虚掩着，25 ℃ 的暖气混着发酵的甜味扑出来。箱底散着几块被啃过的方糖——它们一向喜欢甜的。
-      en: The incubator door is ajar. Warm 25 °C air rolls out with a fermented sweetness. Gnawed sugar cubes lie scattered on the floor of it. They have always liked sweet things.
+    - zh: 恒温培养箱的门虚掩着，25 ℃ 的暖气混着发酵的甜味扑出来。玻璃内侧那道弧线是无数细小的脚印，一圈一圈，像有什么在里面排着队练习走路。箱底散着几块被啃过的方糖——它们一向喜欢甜的。
+      en: The incubator door is ajar. Warm 25 °C air rolls out with a fermented sweetness. The arc on the inside of the glass is countless tiny footprints, loop after loop, as if something in there had been queuing to practise walking. Gnawed sugar cubes lie scattered on the floor of it. They have always liked sweet things.
   sugar_cube:
     - zh: 一块方糖，表面被细小的口器啃出蜂窝似的坑。拿在手里，你竟然也有点想舔一舔。
       en: A sugar cube, its surface pitted like honeycomb by tiny mouthparts. Holding it, you find you want to lick it too.
@@ -187,6 +187,9 @@ look:
     - zh: 温度记录仪的曲线在 23:00 处有一个尖峰，像是冰柜门被打开过，又像是有什么东西从里面出来了。
       en: The temperature logger's trace spikes at 23:00, as if the freezer door were opened. Or as if something came out.
   sample_box:
+    - when: {flags: [box_open]}
+      zh: 盒子是空的。盒盖内侧那张打印标签还在：今晚的日期，下面是你的名字。像一张预约单。
+      en: The box is empty. The printed label inside the lid is still there, tonight's date and your name beneath it. Like an appointment slip.
     - zh: 冻存盒的标签上写着今晚的日期。盒盖冻住了，要用点力才能打开。
       en: The cryobox is labelled with tonight's date. The lid is frozen shut; it will take some force to open.
 
@@ -194,18 +197,34 @@ revisit:
   reception:
     - zh: 你回到前台。旋转门外的路灯还亮着，登记簿仍摊在桌上。
       en: You are back at reception. The lamps still burn beyond the revolving door; the log still lies open on the desk.
+    - zh: 前台的应急灯还是那片暗红。登记簿摊在桌上，旋转门外一辆车也没有。
+      en: "The reception emergency light is still that dark red. The log lies open; there is not one car beyond the revolving door."
   corridor:
     - zh: 走廊还是那么长。墙上的神经元照片在暗处排成一列，几扇门在两侧等着你。
       en: The corridor is as long as ever. The neuron photos line the dark wall, and the doors wait on either side.
+    - zh: 你又回到走廊。照片里的神经元好像比刚才更密了些，也可能只是你看得更仔细了。
+      en: "Back in the corridor. The neurons in the photos seem denser than before. Or you are just looking harder."
+    - zh: 走廊的地蜡映出你的影子，拉得很长。左右几扇门都关着，只有你来的那扇还留着一道缝。
+      en: "The waxed floor stretches your reflection long. The doors on both sides are shut, except the one you came through, still open a crack."
+    - zh: 走廊尽头那张安全海报在应急灯下发灰。你数着门往前走，数到一半，发现自己在跟着某种节奏迈步。
+      en: "The safety poster at the end of the corridor has gone grey under the emergency light. You count doors as you walk and, halfway, notice you are stepping to some rhythm."
+    - zh: 还是那条走廊。空调出风口吐着冷气，衣架上的白大褂轻轻晃了一下，像刚有人从旁边走过。
+      en: "The same corridor. The vent breathes cold air, and the lab coats on the rack sway once, as if someone just walked past."
   fly_room:
     - zh: 果蝇饲养室里那股发酵的甜味还没散，空管架一声不响。
       en: The fermented sweetness still hangs in the fly room. The empty vial racks make no sound.
+    - zh: 饲养室的恒温箱还在低声运转，玻璃上的那道弧线又多出了一圈。
+      en: "The incubator in the fly room still hums. The arc on its glass has gained another loop."
   prep_room:
     - zh: 解剖准备室的不锈钢台面泛着冷光，切片机的刀锋还停在原处。
       en: The steel benches of the prep room give off a cold sheen. The microtome blade has not moved.
+    - zh: 乙醇的味道又涌上来。解剖显微镜的目镜朝着门口，像在等你回来。
+      en: "The ethanol smell rises again. The dissecting scope's eyepieces face the door, as if waiting for you."
   em_room:
     - zh: 电镜室里，机械臂仍悬在半空，Weiss 博士还躺在原来的地方。
       en: In the EM room the robot arm still hangs mid-air, and Dr. Weiss lies where she lay.
+    - zh: 真空泵还在喘。你尽量不去看她，可余光里那只半睁的眼睛一直在。
+      en: "The vacuum pump still wheezes. You try not to look at her, but the half-open eye stays at the edge of your sight."
   server_room:
     - when: {flags: [power_on]}
       zh: 机房里风扇嗡嗡转着，终端屏幕的光照亮了半面墙。
@@ -215,3 +234,6 @@ revisit:
   cold_storage:
     - zh: 冷库的寒气一下子贴上你的皮肤，冰柜门缝的霜又厚了一层。
       en: The cold-room air clamps onto your skin at once. The frost on the freezer seal has grown thicker.
+    - zh: 冷库的白雾漫到脚踝。温度记录仪的绿灯一闪一闪，像在数你待了多久。
+      en: "The cold-room fog pools around your ankles. The temperature logger's green light blinks, as if counting how long you stay."
+

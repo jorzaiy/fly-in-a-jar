@@ -110,6 +110,11 @@ hijack:
 
 game:
   already_carried: {zh: "（{item} 已经在你身上了。）", en: "(You already have the {item}.)"}
+  already_here: {zh: "你已经在{scene}了。", en: "You are already in the {scene}."}
+  no_direct_path: {zh: "从这里去不了{scene}，得先去{via}。", en: "You cannot reach the {scene} from here. Go to the {via} first."}
+  exits_line: {zh: "出口: {exits}", en: "Exits: {exits}"}
+  items_line: {zh: "可见物品: {items}", en: "Visible items: {items}"}
+  look_nothing: {zh: "你仔细看了看，没找到什么特别的。", en: "You look closely and find nothing in particular."}
   clue_seen: {zh: "（你已经看过这个了，内容没有变化。输入「笔记」可以回顾线索 #{n}。）", en: "(You have seen this before; nothing has changed. Type notes to review clue #{n}.)"}
 
 thinking: {zh: 神经元正在放电……, en: Neurons are firing…}

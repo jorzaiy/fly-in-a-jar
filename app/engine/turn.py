@@ -20,15 +20,17 @@ import hashlib
 import logging
 from typing import Any
 
+from app.brain.drive import swarm_drive
 from app.brain.groups import BrainGroups
 from app.brain.lif import LIFSimulator, derive_seed
 from app.content.loader import Content, World
 from app.content.schema import HIJACK_KEYS, TARGET_NONE, tier_for_sync
 from app.engine.commands import run_command
+from app.engine.moves import match_scene, next_hop
 from app.engine.rules import RulesConfig, load_rules_config, resolve_turn
 from app.engine.state import GameState
 from app.judge.base import Judge, JudgeCall, JudgeResult, safe_judge
-from app.narrator.compose import compose_turn, resolve_fragment_text
+from app.narrator.compose import compose_turn, resolve_fragment_text, room_listing
 from app.narrator.elements import StoryElements, derive_story_elements
 from app.narrator.select import select_fragment
 
@@ -214,8 +216,28 @@ async def execute_turn(
         else:
             effective_input = "wait"
 
+    # 4b. A room name on its own: answered by the map, not the judge.
+    named_scene = None if hijacked_instinct else match_scene(player_input, world, state.scene)
+    if named_scene == state.scene:
+        name = world.scenes[named_scene]["name"][lang]
+        out = [{"kind": "system", "text": content.text("game.already_here", lang, scene=name)}]
+        out += room_listing(state, world, lang)
+        return TurnResult(state=state, output=out, ended=state.ended, is_system_command=True)
+    if named_scene and named_scene not in world.scenes[state.scene].get("exits", []):
+        via = next_hop(world, state.scene, named_scene)
+        if via:
+            out = [{"kind": "system", "text": content.text(
+                "game.no_direct_path", lang,
+                scene=world.scenes[named_scene]["name"][lang], via=world.scenes[via]["name"][lang])}]
+            out += room_listing(state, world, lang)
+            return TurnResult(state=state, output=out, ended=state.ended, is_system_command=True)
+
     # 5. Call Judge (with safe_judge hard timeout)
-    judge_call = await safe_judge(judge, state, world, effective_input, timeout_s=cfg.judge_timeout_s)
+    if named_scene:
+        judge_call = JudgeCall(ok=True, result=JudgeResult(
+            feasible=0.97, reason="feasible", category="move", target=named_scene, danger=0, source="map"), ms=0)
+    else:
+        judge_call = await safe_judge(judge, state, world, effective_input, timeout_s=cfg.judge_timeout_s)
 
     if not judge_call.ok or judge_call.result is None:
         # Judge timed out or failed: state remains untouched, no sync penalty (design §14)
@@ -245,18 +267,23 @@ async def execute_turn(
     update_feeding_fatigue(player_input, state, brain_groups)
 
     # 8. Build stimulus and run connectome LIF simulation
+    swarm_hz = swarm_drive(state, brain_groups.config)
     stimulus = brain_groups.build_stimulus(
         category=j_res.category,
         action_text=player_input,
         scene=state.scene,
         danger=j_res.danger,
         stim_fatigue=state.stim_fatigue,
+        input_key=" ".join(player_input.lower().split()),
+        swarm_hz=swarm_hz,
+        sync=state.sync,
     )
     sim_seed = derive_seed(state.seed, state.turn)
     sim_res = simulator.simulate(stimulus, seed=sim_seed)
 
     # 9. Derive story elements & save last_spikes
-    elements = derive_story_elements(sim_res, brain_groups, state, world)
+    elements = derive_story_elements(sim_res, brain_groups, state, world, category=j_res.category)
+    elements.swarm_hz = swarm_hz
     state.last_spikes = dict(elements.spikes)
 
     # 10. Assemble turn narrative output
@@ -293,5 +320,8 @@ async def execute_turn(
         "clue": action_outcome.clue,
         "spikes": sim_res.total_spikes,
         "intensity": elements.intensity,
+        "swarm_hz": swarm_hz,
+        "monster": elements.monster,
+        "anomaly": elements.anomaly,
     }
     return TurnResult(state=state, output=output, ended=state.ended, trace=trace)

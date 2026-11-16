@@ -111,7 +111,7 @@ fixtures:
   incubator:
     scene: fly_room
     name: {zh: 恒温培养箱, en: incubator}
-    aliases: {zh: [培养箱, 恒温箱], en: [incubator]}
+    aliases: {zh: [培养箱, 恒温箱, 脚印, 弧线, 小脚印], en: [incubator, footprints, arc, prints]}
   dissecting_scope:
     scene: prep_room
     name: {zh: 解剖显微镜, en: dissecting microscope}
@@ -258,7 +258,7 @@ items:
 # ---------------------------------------------------------------- flags
 # caught_fly is also a top-level state field (design §9); rules read/write it
 # through the flag name.
-flags: [power_on, light_on, ears_plugged, server_burned, caught_fly, read_usb, saw_slide]
+flags: [power_on, light_on, ears_plugged, server_burned, caught_fly, read_usb, saw_slide, box_open]
 
 # ---------------------------------------------------------------- clues (story.md ch. 6)
 # source: brain (PAM spike) or item (an item rule gives it).
@@ -329,7 +329,8 @@ rules:
   - id: restore_power
     trigger: [{actions: [use], targets: [fuse, fuse_box]}]
     when: {scene: server_room, items: [fuse]}
-    effects: {set_flags: [power_on], consume: [fuse]}
+    # The lights coming back wake the swarm: from here on it hunts you.
+    effects: {set_flags: [power_on], consume: [fuse], monster_near: true}
 
   # Fourth ending must be checked before the plain escape.
   - id: disconnected
@@ -338,6 +339,15 @@ rules:
       - {actions: [move], targets: [exit]}
     when: {scene: reception, items: [keycard], flags: [server_burned, ears_plugged], not_flags: [caught_fly]}
     effects: {ending: disconnected}
+
+  # With power on the swarm guards the door. It lets through only one of its own
+  # (a caught fly on you, clue 8), or a moment when it is lured, stunned or held back.
+  - id: door_swarm
+    trigger:
+      - {actions: [use], targets: [keycard, card_reader, revolving_door]}
+      - {actions: [move], targets: [exit]}
+    when: {scene: reception, items: [keycard], flags: [power_on], not_flags: [caught_fly], swarm_free: false}
+    effects: {block: true, sync: 8}
 
   - id: escape
     trigger:
@@ -419,9 +429,9 @@ rules:
     effects: {clue: 8}
 
   - id: open_box
-    trigger: [{actions: [use], targets: [sample_box]}]
+    trigger: [{actions: [use, touch, attack], targets: [sample_box]}]
     when: {reachable: [sample_box]}
-    effects: {clue: 10, sync: 5}
+    effects: {clue: 10, sync: 5, set_flags: [box_open]}
 
   - id: read_usb
     trigger: [{actions: [use], targets: [usb_drive, terminal]}]

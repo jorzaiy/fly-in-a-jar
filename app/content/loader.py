@@ -213,7 +213,7 @@ def validate_world(world: World) -> list[str]:
                 for i in v:
                     if i not in world.items:
                         errs.append(f"world: rule {rid}: unknown item '{i}'")
-            elif k not in ("monster_near", "sync_min"):
+            elif k not in ("monster_near", "sync_min", "swarm_free"):
                 errs.append(f"world: rule {rid}: unknown condition '{k}'")
         eff = r.get("effects") or {}
         for k, v in eff.items():
@@ -265,7 +265,7 @@ def load_world(path: Path | None = None) -> World:
 
 
 WHEN_KEYS = {"scene", "items", "reachable", "not_items", "flags", "not_flags",
-             "monster_near", "sync_min", "taken", "not_taken"}
+             "monster_near", "sync_min", "taken", "not_taken", "swarm_free"}
 
 
 def validate_descriptions(world: World) -> list[str]:

@@ -165,6 +165,8 @@ def _conditions_hold(state: GameState, world: World, when: dict[str, Any]) -> bo
         return False
     if "monster_near" in when and state.monster_near != when["monster_near"]:
         return False
+    if "swarm_free" in when and swarm_free(state) != when["swarm_free"]:
+        return False
     if "sync_min" in when and state.sync < when["sync_min"]:
         return False
     if any(i not in state.taken for i in when.get("taken", [])):
@@ -174,13 +176,26 @@ def _conditions_hold(state: GameState, world: World, when: dict[str, Any]) -> bo
     return True
 
 
+def swarm_free(state: GameState) -> bool:
+    """Nothing in the way: the swarm is away, held back, or stunned."""
+    return (not state.monster_near) or state.monster_block > 0 or state.monster_stunned > 0
+
+
 def describe(state: GameState, world: World, table: str, ident: str, lang: str) -> Optional[str]:
-    """Text from content/descriptions.yaml (`look` or `revisit`), first variant whose `when` holds."""
-    for v in world.descriptions.get(table, {}).get(ident, []):
-        if _conditions_hold(state, world, v.get("when") or {}):
-            text = v.get(lang)
-            return text.strip() if isinstance(text, str) else None
-    return None
+    """Text from content/descriptions.yaml (`look` or `revisit`).
+
+    The first variant whose `when` holds decides the condition; variants that
+    share that same `when` take turns, so a room you pass through often does
+    not read the same every time.
+    """
+    variants = world.descriptions.get(table, {}).get(ident, [])
+    first = next((v for v in variants if _conditions_hold(state, world, v.get("when") or {})), None)
+    if first is None:
+        return None
+    pool = [v for v in variants if (v.get("when") or {}) == (first.get("when") or {})]
+    pick = pool[state.turn % len(pool)] if len(pool) > 1 else first
+    text = pick.get(lang)
+    return text.strip() if isinstance(text, str) else None
 
 
 def match_rule(state: GameState, world: World, category: str, target: str) -> Optional[dict]:
@@ -206,6 +221,8 @@ def _apply_rule(state: GameState, world: World, rule: dict, out: ActionOutcome) 
         _take_item(state, eff["take"])
         out.took = eff["take"]
     for f in eff.get("set_flags", []):
+        if f == "power_on" and not state.has_flag(f):
+            state.power_turn = max(1, state.turn)
         state.set_flag(f)
     for f in eff.get("clear_flags", []):
         state.clear_flag(f)
@@ -302,6 +319,9 @@ def resolve_turn(state: GameState, world: World, *, feasible: float, reason: str
     if out.verdict == "fail" and category in PERCEPTION:
         # Looking, listening or sniffing never costs sync, even when it makes no sense.
         out.fragment = ("verdict_fail", reason if reason != "feasible" else "generic")
+    elif out.verdict == "fail" and reason == "not_an_action":
+        # Gibberish or a typo is not a risk the player took; no sync.
+        out.fragment = ("verdict_fail", reason)
     elif out.verdict == "fail":
         add_sync(state, fail_sync(danger, cfg))
         out.fragment = ("verdict_fail", reason if reason != "feasible" else "generic")
@@ -318,6 +338,6 @@ def resolve_turn(state: GameState, world: World, *, feasible: float, reason: str
 
 __all__ = [
     "ActionOutcome", "RulesConfig", "add_sync", "apply_action", "check_endings", "classify",
-    "describe", "fail_sync", "is_visible", "items_here", "load_rules_config", "match_rule", "reachable", "resolve_turn",
+    "describe", "fail_sync", "is_visible", "items_here", "swarm_free", "load_rules_config", "match_rule", "reachable", "resolve_turn",
     "tick_countdowns", "visible_targets", "TARGET_MONSTER",
 ]
