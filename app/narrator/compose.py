@@ -153,6 +153,42 @@ def format_brain_log(
     return lines
 
 
+# Which neurons moved, for the line under each event the fly brain caused:
+# (spike group, zh neurons, en neurons, zh effect, en effect).
+NEURO = {
+    "monster.attack":   ("monster.attack", "巨纤维 DNp01（逃逸反射）", "giant fibre DNp01 (escape reflex)", "蜂群扑来", "the swarm lunges"),
+    "monster.approach": ("monster.attack", "巨纤维 DNp01（逃逸反射）", "giant fibre DNp01 (escape reflex)", "蜂群逼近", "the swarm closes in"),
+    "monster.retreat":  ("monster.retreat", "后退神经元 MDN", "moonwalker neurons MDN", "蜂群退开", "the swarm pulls back"),
+    "monster.feed":     ("monster.feed", "进食神经元", "feeding neurons", "它们落下来吃", "they land to feed"),
+    "anomaly.visual":   ("anomaly.visual", "视觉投射神经元 LC4/LPLC2", "visual projection neurons LC4/LPLC2", "眼前出现异象", "something shows in your eyes"),
+    "anomaly.sound":    ("anomaly.sound", "约翰斯顿器听觉神经元", "Johnston's organ neurons", "耳边出现异响", "something sounds in your ears"),
+    "anomaly.smell":    ("anomaly.smell", "嗅觉受体神经元 DA1/DM1", "olfactory receptor neurons DA1/DM1", "闻到不存在的气味", "you smell what isn't there"),
+    "anomaly.memory":   ("anomaly.memory", "蘑菇体输出神经元 MBON", "mushroom body output neurons MBON", "浮出不属于你的记忆", "a memory that isn't yours"),
+    "clue.clue":        ("clue.clue", "多巴胺神经元 PAM", "dopamine neurons PAM", "想起一条线索", "a clue surfaces"),
+    "hijack.eat":       ("monster.feed", "进食神经元", "feeding neurons", "本能接管：进食", "instinct takes over: feed"),
+    "hijack.flinch":    ("monster.attack", "巨纤维 DNp01", "giant fibre DNp01", "本能接管：惊跳", "instinct takes over: flinch"),
+    "hijack.freeze":    ("monster.retreat", "后退神经元 MDN", "moonwalker neurons MDN", "本能接管：僵住", "instinct takes over: freeze"),
+}
+
+
+def neuro_line(key: str, spikes: dict[str, int], lang: str) -> list[dict[str, str]]:
+    """'The fly stirs' line naming the neurons whose firing caused this event."""
+    row = NEURO.get(key)
+    if row is None:
+        return []
+    group, zh_n, en_n, zh_e, en_e = row
+    n = int(spikes.get(group, 0))
+    if n <= 0:
+        return []
+    if key.startswith("hijack."):
+        text = (f"⟡ 果蝇被触动 · 上一刻 {zh_n} 放电 {n} 次 → {zh_e}" if lang == "zh"
+                else f"⟡ The fly stirs · {en_n} fired {n} spikes a moment ago → {en_e}")
+    else:
+        text = (f"⟡ 果蝇被触动 · {zh_n} 放电 {n} 次 → {zh_e}" if lang == "zh"
+                else f"⟡ The fly stirs · {en_n} fired {n} spikes → {en_e}")
+    return [{"kind": "neuro", "text": text}]
+
+
 def compose_turn(
     elements: StoryElements,
     judge_call: JudgeCall,
@@ -168,6 +204,7 @@ def compose_turn(
     target: str | None = None,
     lang: str | None = None,
     outcome: ActionOutcome | None = None,
+    hijack_spikes: dict[str, int] | None = None,
 ) -> list[dict[str, str]]:
     """Assemble the turn narrative output in sequence (design §7.1).
 
@@ -190,6 +227,7 @@ def compose_turn(
         frag = select_fragment("hijack", hijacked_action, intensity, state, content, total_spikes)
         txt = resolve_fragment_text(frag, state, lang, target, world, content)
         output.append({"kind": "hijack", "text": txt})
+        output.extend(neuro_line(f"hijack.{hijacked_action}", hijack_spikes or {}, lang))
 
     # 2. [判定片段] (verdict or action)
     if judge_call.result:
@@ -269,6 +307,8 @@ def compose_turn(
             frag = select_fragment("monster", elements.monster, intensity, state, content, elements.spikes.get(f"monster.{elements.monster}", total_spikes))
             txt = resolve_fragment_text(frag, state, lang, target, world, content)
             output.append({"kind": "monster", "text": txt})
+            if elements.monster_override in (None, "not_present"):
+                output.extend(neuro_line(f"monster.{elements.monster}", elements.spikes, lang))
 
         # 7. [异象片段] Once the swarm is closing in it is the event; the
         # anomaly readouts are mostly its own input, so they stay quiet.
@@ -276,12 +316,14 @@ def compose_turn(
             frag = select_fragment("anomaly", elements.anomaly, intensity, state, content, elements.spikes.get(f"anomaly.{elements.anomaly}", total_spikes))
             txt = resolve_fragment_text(frag, state, lang, target, world, content)
             output.append({"kind": "anomaly", "text": txt})
+            output.extend(neuro_line(f"anomaly.{elements.anomaly}", elements.spikes, lang))
 
         # 8. [线索片段] (fruit fly brain clue discovery)
         if elements.clue_id:
             frag = select_fragment("clue", f"clue_{elements.clue_id}", intensity, state, content, elements.spikes.get("clue.clue", total_spikes))
             txt = resolve_fragment_text(frag, state, lang, target, world, content)
             output.append({"kind": "clue", "text": txt})
+            output.extend(neuro_line("clue.clue", elements.spikes, lang))
             if elements.clue_id not in state.clues_found:
                 state.clues_found = [*state.clues_found, elements.clue_id]
 

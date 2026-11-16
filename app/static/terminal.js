@@ -70,7 +70,7 @@
     const item = printQueue.shift();
 
     // Fast-print brainlog, system, error lines; typewriter narrative lines
-    const isFast = ["brainlog", "system", "error"].includes(item.kind);
+    const isFast = ["brainlog", "system", "error", "neuro"].includes(item.kind);
     if (isFast) {
       appendLine(item.kind, item.text);
     } else {

@@ -144,6 +144,14 @@ body.crt::after {
   margin: 6px 0;
 }
 
+.kind-neuro {
+  color: var(--text-green);
+  font-size: 12.5px;
+  font-family: Consolas, monospace;
+  opacity: 0.75;
+  margin: -2px 0 6px 12px;
+}
+
 .kind-brainlog {
   color: var(--text-green);
   font-size: 13px;

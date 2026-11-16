@@ -206,6 +206,7 @@ async def execute_turn(
 
     # 4. Neuro-hijack check (sync >= 70%)
     hijacked_instinct = roll_hijack(state, cfg)
+    hijack_spikes = dict(state.last_spikes or {}) if hijacked_instinct else None
     effective_input = player_input
     if hijacked_instinct:
         # Override action with instinct
@@ -296,6 +297,7 @@ async def execute_turn(
         rule_triggered=action_outcome.rule_id,
         rule_clue_id=action_outcome.clue,
         hijacked_action=hijacked_instinct,
+        hijack_spikes=hijack_spikes,
         moved_scene=action_outcome.moved_to,
         took=action_outcome.took,
         target=j_res.target,
