@@ -8,6 +8,7 @@ fragment effects on the GameState.
 from __future__ import annotations
 
 import logging
+from contextvars import ContextVar
 from typing import Any
 
 from app.content.loader import Content, World
@@ -15,6 +16,15 @@ from app.content.schema import SYNC_MAX, SYNC_MIN, tier_for_sync
 from app.engine.state import GameState
 
 log = logging.getLogger("fly.narrator.select")
+
+# Playtest trace: when a list is set here, every chosen fragment id is appended.
+fragment_trace: ContextVar[list[str] | None] = ContextVar("fragment_trace", default=None)
+
+
+def _trace(frag_id: str) -> None:
+    tr = fragment_trace.get()
+    if tr is not None:
+        tr.append(frag_id)
 
 
 def fragment_satisfies_requires(frag: dict[str, Any], state: GameState) -> bool:
@@ -121,8 +131,10 @@ def select_fragment(
             chosen = fallback[0]
             apply_fragment_effects(chosen, state)
             state.record_fragment(chosen["id"])
+            _trace(chosen["id"])
             return chosen
         # Emergency stub
+        _trace(f"{category}_empty")
         return {"id": f"{category}_empty", "category": category, "key": key, "en": "...", "zh": "..."}
 
     # Deduplicate against used fragments in this session
@@ -146,5 +158,6 @@ def select_fragment(
     apply_fragment_effects(chosen, state)
     if chosen["id"] not in state.used_fragments:
         state.used_fragments = [*state.used_fragments, chosen["id"]]
+    _trace(chosen["id"])
 
     return chosen

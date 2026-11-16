@@ -43,6 +43,7 @@ class TurnResult:
     output: list[dict[str, str]]
     ended: str | None = None
     is_system_command: bool = False
+    trace: dict = field(default_factory=dict)
 
 
 def check_server_terminal(state: GameState, text: str, lang: str) -> list[dict[str, str]] | None:
@@ -211,6 +212,7 @@ async def execute_turn(
             state=state,
             output=silent_output(lang, content),
             ended=state.ended,
+            trace={"hijack": hijacked_instinct, "judge_ok": False, "judge_error": judge_call.error, "judge_ms": judge_call.ms},
         )
 
     j_res = judge_call.result
@@ -267,4 +269,16 @@ async def execute_turn(
         ending_text = resolve_fragment_text(ending_frag, state, lang, j_res.target, world, content)
         output.append({"kind": "ending", "text": ending_text})
 
-    return TurnResult(state=state, output=output, ended=state.ended)
+    trace = {
+        "hijack": hijacked_instinct,
+        "judge_ok": True,
+        "judge_ms": judge_call.ms,
+        "judge": j_res.model_dump(),
+        "rule": action_outcome.rule_id,
+        "moved_to": action_outcome.moved_to,
+        "took": action_outcome.took,
+        "clue": action_outcome.clue,
+        "spikes": sim_res.total_spikes,
+        "intensity": elements.intensity,
+    }
+    return TurnResult(state=state, output=output, ended=state.ended, trace=trace)

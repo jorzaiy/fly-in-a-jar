@@ -114,6 +114,8 @@ python -m content.validate --mvp      # also fail below the MVP fragment coverag
 
 The server refuses to start if the content does not validate, and it lists every bad fragment id.
 
+For playtesting, set `PLAYTEST_LOG=/tmp/playtest.jsonl`: each turn appends the raw input, the judge's answers, the rule that fired, the fragment ids chosen and the text shown. It is off by default, and the normal log never stores player input.
+
 ## Cloud Sandbox (Instabox)
 
 The heavy whole-brain connectome simulations and calibrations run on an [Instabox](https://instabox.sh) cloud sandbox:
