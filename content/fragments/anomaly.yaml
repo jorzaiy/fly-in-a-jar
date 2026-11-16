@@ -197,3 +197,123 @@
         一次微小的校准脉冲掠过皮层。你停在原地，等待下一条指令。
       en: |
         A brief calibration pulse sweeps across the cortex. You stand still, waiting for the next stimulus.
+
+# --- 11-16 playtest: more anomaly variants so the same room does not loop ----
+
+- id: anomaly_sound_03
+  category: anomaly
+  key: sound
+  intensity: 0
+  zh: |
+    机柜深处传来一串细碎的咔哒声，节奏不像机器，更像什么东西在用很多只脚轻轻敲击。
+  en: |
+    A patter of tiny clicks rises from deep inside the racks, too irregular for a machine, more like many small feet tapping.
+
+- id: anomaly_sound_04
+  category: anomaly
+  key: sound
+  intensity: 1
+  zh: |
+    耳边的嗡鸣忽高忽低，你试着屏住呼吸，它也跟着停了一拍。
+  en: |
+    The hum in your ears rises and falls. When you hold your breath, it skips a beat with you.
+
+- id: anomaly_sound_05
+  category: anomaly
+  key: sound
+  intensity: 1
+  zh: |
+    你听见有人在很远的地方念一串数字，四〇九五，四〇九六……声音像是从墙的另一面贴过来的。
+  en: |
+    Somewhere far away a voice counts — four-oh-nine-five, four-oh-nine-six — as if pressed to the other side of the wall.
+
+- id: anomaly_sound_06
+  category: anomaly
+  key: sound
+  intensity: 2
+  effects:
+    sync: 5
+  zh: |
+    嗡鸣突然离得很近，近到你分不清它是在屋里，还是在你的颅骨里面。
+  en: |
+    Suddenly the hum is very close, so close you cannot tell whether it is in the room or inside your skull.
+
+- id: anomaly_sound_07
+  category: anomaly
+  key: sound
+  intensity: 3
+  effects:
+    sync: 9
+  zh: |
+    所有的振翅声在同一刻停下，然后整齐地喊出了你的名字。不是用声音，是用频率。
+  en: |
+    Every wingbeat stops at once, then calls your name in unison. Not in a voice. In a frequency.
+
+- id: anomaly_visual_03
+  category: anomaly
+  key: visual
+  intensity: 0
+  zh: |
+    手电光圈的边缘闪过一个黑点，你转头去看，它已经不在了。
+  en: |
+    A black speck flicks across the edge of your light. When you turn, it is gone.
+
+- id: anomaly_visual_04
+  category: anomaly
+  key: visual
+  intensity: 1
+  zh: |
+    墙上的影子比你慢了半拍才跟着你转身。
+  en: |
+    Your shadow on the wall turns half a beat after you do.
+
+- id: anomaly_visual_05
+  category: anomaly
+  key: visual
+  intensity: 3
+  effects:
+    sync: 9
+  zh: |
+    你眨了一下眼，视野碎成几百个小格，每一格里都有一个你，正从不同的角度看着自己。
+  en: |
+    You blink and your sight shatters into hundreds of small cells. In every one of them is you, watching yourself from another angle.
+
+- id: anomaly_smell_03
+  category: anomaly
+  key: smell
+  intensity: 0
+  zh: |
+    空气里飘来一丝熟透的香蕉味，甜得发腻，你的口水不受控制地多了起来。
+  en: |
+    A whiff of overripe banana drifts by, cloyingly sweet. Your mouth floods before you can stop it.
+
+- id: anomaly_smell_04
+  category: anomaly
+  key: smell
+  intensity: 2
+  effects:
+    sync: 5
+  zh: |
+    那股发酵的甜味浓得像一只手捂住了你的口鼻，你发现自己正顺着它的方向侧过头去。
+  en: |
+    The fermented sweetness thickens like a hand over your mouth, and you find your head turning to follow it.
+
+- id: anomaly_memory_03
+  category: anomaly
+  key: memory
+  intensity: 0
+  zh: |
+    你想不起自己今晚是怎么进楼的。只记得门很重，手里的笔很冷。
+  en: |
+    You cannot remember how you came into the building tonight. Only that the door was heavy and the pen in your hand was cold.
+
+- id: anomaly_memory_04
+  category: anomaly
+  key: memory
+  intensity: 2
+  effects:
+    sync: 5
+  zh: |
+    一段不属于你的记忆浮上来：一片熟烂的桃子，阳光，和成千上万个同伴落在上面的重量。
+  en: |
+    A memory that is not yours surfaces: a rotting peach, sunlight, and the weight of thousands of others landing on it with you.
