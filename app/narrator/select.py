@@ -137,9 +137,18 @@ def select_fragment(
         _trace(f"{category}_empty")
         return {"id": f"{category}_empty", "category": category, "key": key, "en": "...", "zh": "..."}
 
-    # Deduplicate against used fragments in this session
+    # Deduplicate against used fragments in this session. Once every option has
+    # been shown, prefer the ones shown longest ago so lines rotate instead of
+    # bouncing between the same two.
     unused = [c for c in eligible if c["id"] not in state.used_fragments]
-    pool = unused if unused else eligible
+    if unused:
+        pool = unused
+    else:
+        order = {fid: i for i, fid in enumerate(state.used_fragments)}
+        oldest = min(order.get(c["id"], -1) for c in eligible)
+        # keep everything not shown in the newer half of the rotation
+        cutoff = sorted(order.get(c["id"], -1) for c in eligible)[(len(eligible) - 1) // 2]
+        pool = [c for c in eligible if order.get(c["id"], -1) <= max(oldest, cutoff)]
 
     # Match intensity
     exact_intensity = [c for c in pool if c.get("intensity") == intensity]
@@ -154,10 +163,9 @@ def select_fragment(
     idx = abs(spike_count) % len(intensity_pool)
     chosen = intensity_pool[idx]
 
-    # Apply effects and record
+    # Apply effects and record (most recent last)
     apply_fragment_effects(chosen, state)
-    if chosen["id"] not in state.used_fragments:
-        state.used_fragments = [*state.used_fragments, chosen["id"]]
+    state.used_fragments = [f for f in state.used_fragments if f != chosen["id"]] + [chosen["id"]]
     _trace(chosen["id"])
 
     return chosen

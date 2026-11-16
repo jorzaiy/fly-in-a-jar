@@ -11,7 +11,7 @@ from typing import Any
 
 from app.content.loader import Content, World
 from app.content.schema import tier_for_sync
-from app.engine.rules import items_here
+from app.engine.rules import ActionOutcome, describe, items_here
 from app.engine.state import GameState
 from app.judge.base import JudgeCall
 
@@ -19,6 +19,9 @@ from .elements import StoryElements
 from .select import select_fragment
 
 log = logging.getLogger("fly.narrator.compose")
+
+# Show a dead-silence line at most once every this many turns.
+SILENCE_EVERY = 3
 
 
 def localize_target(target: str, world: World, content: Content, lang: str) -> str:
@@ -149,11 +152,20 @@ def compose_turn(
     took: str | None = None,
     target: str | None = None,
     lang: str | None = None,
+    outcome: ActionOutcome | None = None,
 ) -> list[dict[str, str]]:
-    """Assemble the turn narrative output in sequence (design §7.1)."""
+    """Assemble the turn narrative output in sequence (design §7.1).
+
+    `outcome` (from the rules engine) is authoritative for the verdict when given:
+    a world rule or a look at something in plain sight succeeds whatever the
+    judge's confidence was.
+    """
     lang = lang or state.lang
     output: list[dict[str, str]] = []
     intensity = elements.intensity
+    revisit = bool(moved_scene) and any(
+        f.startswith(f"scene_enter_{moved_scene}_") for f in state.used_fragments
+    )
 
     # Total spike count used as random modulo seed for deterministic selection
     total_spikes = sum(elements.spikes.values())
@@ -167,27 +179,38 @@ def compose_turn(
     # 2. [判定片段] (verdict or action)
     if judge_call.result:
         res = judge_call.result
-        if res.feasible < 0.40:
-            frag = select_fragment("verdict_fail", res.reason, intensity, state, content, total_spikes)
-            txt = resolve_fragment_text(frag, state, lang, target or res.target, world, content)
-            output.append({"kind": "verdict", "text": txt})
-        elif res.feasible < 0.65:
-            frag = select_fragment("verdict_partial", "default", intensity, state, content, total_spikes)
-            txt = resolve_fragment_text(frag, state, lang, target or res.target, world, content)
-            output.append({"kind": "verdict", "text": txt})
+        tgt = target or res.target
+        if outcome is not None:
+            verdict = outcome.verdict
         else:
-            # Feasible >= 0.65
-            if rule_triggered and (rule_clue_id or state.ended):
-                # The clue or ending text narrates this action; no second line.
-                pass
-            elif rule_triggered:
-                frag = select_fragment("item_use", rule_triggered, intensity, state, content, total_spikes)
-                txt = resolve_fragment_text(frag, state, lang, target or res.target, world, content)
-                output.append({"kind": "action", "text": txt})
-            else:
-                frag = select_fragment("action", res.category, intensity, state, content, total_spikes)
-                txt = resolve_fragment_text(frag, state, lang, target or res.target, world, content)
-                output.append({"kind": "action", "text": txt})
+            verdict = "fail" if res.feasible < 0.40 else ("partial" if res.feasible < 0.65 else "success")
+        if verdict == "fail":
+            frag = select_fragment("verdict_fail", res.reason, intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, tgt, world, content)
+            output.append({"kind": "verdict", "text": txt})
+        elif verdict == "partial" and not rule_triggered:
+            frag = select_fragment("verdict_partial", "default", intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, tgt, world, content)
+            output.append({"kind": "verdict", "text": txt})
+        elif rule_triggered and (rule_clue_id or state.ended):
+            # The clue or ending text narrates this action; no second line.
+            pass
+        elif rule_triggered:
+            frag = select_fragment("item_use", rule_triggered, intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, tgt, world, content)
+            output.append({"kind": "action", "text": txt})
+        elif res.category in ("look", "touch") and tgt and describe(state, world, "look", tgt, lang):
+            # Each thing in the world has its own look text, which may hint at its use.
+            output.append({"kind": "action", "text": describe(state, world, "look", tgt, lang) or ""})
+        elif res.category == "move" and revisit:
+            pass  # the short revisit line below is enough
+        elif outcome is not None and "already carried" in outcome.notes:
+            name = world.items.get(tgt, {}).get("name", {}).get(lang, tgt)
+            output.append({"kind": "system", "text": content.text("game.already_carried", lang, item=name)})
+        else:
+            frag = select_fragment("action", res.category, intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, tgt, world, content)
+            output.append({"kind": "action", "text": txt})
 
     # 2b. Picked-up item, stated plainly so the player knows it worked.
     if took and took in world.items:
@@ -195,16 +218,22 @@ def compose_turn(
         output.append({"kind": "system", "text": f"（获得：{name}）" if lang == "zh" else f"(Taken: {name})"})
 
     # 3. [物品线索] (clue from item use rule)
-    if rule_clue_id:
+    if rule_clue_id and outcome is not None and outcome.clue_repeat:
+        output.append({"kind": "system", "text": content.text("game.clue_seen", lang, n=rule_clue_id)})
+    elif rule_clue_id:
         frag = select_fragment("clue", f"clue_{rule_clue_id}", intensity, state, content, total_spikes)
         txt = resolve_fragment_text(frag, state, lang, target, world, content)
         output.append({"kind": "clue", "text": txt})
 
     # 4. [移动片段] (scene_enter + room listing)
     if moved_scene:
-        frag = select_fragment("scene_enter", moved_scene, intensity, state, content, total_spikes)
-        txt = resolve_fragment_text(frag, state, lang, target, world, content)
-        output.append({"kind": "scene", "text": txt})
+        short = describe(state, world, "revisit", moved_scene, lang) if revisit else None
+        if short:
+            output.append({"kind": "scene", "text": short})
+        else:
+            frag = select_fragment("scene_enter", moved_scene, intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, target, world, content)
+            output.append({"kind": "scene", "text": txt})
 
         # Append room exits and items listing
         sc_info = world.scenes.get(moved_scene, {})
@@ -226,9 +255,12 @@ def compose_turn(
 
     # 5. [死寂片段] (silence event, replaces monster & anomaly)
     if elements.silence:
-        frag = select_fragment("silence", "default", intensity, state, content, total_spikes)
-        txt = resolve_fragment_text(frag, state, lang, target, world, content)
-        output.append({"kind": "silence", "text": txt})
+        # Dead silence is the brain choosing nothing. Say so now and then, not every turn.
+        if state.turn - state.last_silence_turn >= SILENCE_EVERY or state.last_silence_turn == 0:
+            frag = select_fragment("silence", "default", intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, target, world, content)
+            output.append({"kind": "silence", "text": txt})
+            state.last_silence_turn = max(1, state.turn)
     else:
         # 6. [怪物片段]
         if elements.monster != "absent":

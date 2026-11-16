@@ -35,6 +35,9 @@ from app.narrator.select import select_fragment
 log = logging.getLogger("fly.engine.turn")
 
 
+MIN_ACTION_CHARS = 2
+
+
 @dataclass
 class TurnResult:
     """The outcome of a turn sent back to client."""
@@ -190,6 +193,15 @@ async def execute_turn(
             is_system_command=True,
         )
 
+    # 3b. Too short to be an action (a stray character): ask again, no turn spent.
+    if len(player_input.strip()) < MIN_ACTION_CHARS:
+        return TurnResult(
+            state=state,
+            output=[{"kind": "system", "text": content.text("errors.too_short", lang)}],
+            ended=state.ended,
+            is_system_command=True,
+        )
+
     # 4. Neuro-hijack check (sync >= 70%)
     hijacked_instinct = roll_hijack(state, cfg)
     effective_input = player_input
@@ -261,6 +273,7 @@ async def execute_turn(
         took=action_outcome.took,
         target=j_res.target,
         lang=lang,
+        outcome=action_outcome,
     )
 
     # 11. Check ending and attach ending fragment if ended

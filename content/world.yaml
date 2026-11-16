@@ -303,10 +303,28 @@ rules:
     when: {scene: cold_storage, not_items: [cryo_gloves]}
     effects: {block: true, sync: 5}
 
+  # With the gloves on, the fuse comes out cleanly (the judge's doubt does not matter).
+  - id: fuse_gloved
+    trigger: [{actions: [take, touch, use], targets: [fuse, freezer]}]
+    when: {scene: cold_storage, items: [cryo_gloves], not_taken: [fuse]}
+    effects: {take: fuse}
+
   - id: keycard_tangled
     trigger: [{actions: [take], targets: [keycard]}]
     when: {scene: em_room, not_items: [scalpel]}
     effects: {block: true}
+
+  - id: keycard_cut
+    trigger:
+      - {actions: [take], targets: [keycard]}
+      - {actions: [use, attack], targets: [scalpel, robot_arm, keycard]}
+    when: {scene: em_room, items: [scalpel], not_taken: [keycard]}
+    effects: {take: keycard}
+
+  - id: wear_gloves
+    trigger: [{actions: [use, touch], targets: [cryo_gloves]}]
+    when: {items: [cryo_gloves]}
+    effects: {}
 
   - id: restore_power
     trigger: [{actions: [use], targets: [fuse, fuse_box]}]
@@ -327,6 +345,21 @@ rules:
       - {actions: [move], targets: [exit]}
     when: {scene: reception, items: [keycard], flags: [power_on]}
     effects: {ending: escaped}
+
+  # Hints at the door when the way out is not ready yet.
+  - id: door_no_power
+    trigger:
+      - {actions: [use, touch, attack], targets: [keycard, card_reader, revolving_door]}
+      - {actions: [move], targets: [exit]}
+    when: {scene: reception, not_flags: [power_on]}
+    effects: {block: true}
+
+  - id: door_no_card
+    trigger:
+      - {actions: [use, touch, attack], targets: [card_reader, revolving_door]}
+      - {actions: [move], targets: [exit]}
+    when: {scene: reception, not_items: [keycard], flags: [power_on]}
+    effects: {block: true}
 
   - id: light
     trigger: [{actions: [use, light], targets: [flashlight]}]
@@ -396,6 +429,22 @@ rules:
     effects: {clue: 11, set_flags: [read_usb]}
 
   # Hidden ending before the slide view so the microscope means "lie down" once ready.
+  # Hints for the USB drive and the slide when the player is close but not there yet.
+  - id: terminal_dead
+    trigger: [{actions: [use], targets: [usb_drive, terminal]}]
+    when: {scene: server_room, not_flags: [power_on]}
+    effects: {block: true}
+
+  - id: usb_wrong_slot
+    trigger: [{actions: [use], targets: [server_rack]}]
+    when: {scene: server_room, items: [usb_drive], not_flags: [read_usb]}
+    effects: {block: true}
+
+  - id: slide_wrong_place
+    trigger: [{actions: [use], targets: [slide_4096, microtome]}]
+    when: {scene: prep_room, items: [slide_4096]}
+    effects: {block: true}
+
   - id: absorbed
     trigger: [{actions: [use], targets: [electron_microscope]}]
     when: {scene: em_room, flags: [saw_slide], sync_min: 70}
@@ -405,6 +454,11 @@ rules:
     trigger: [{actions: [use, look], targets: [slide_4096, electron_microscope]}]
     when: {scene: em_room, items: [slide_4096], flags: [power_on]}
     effects: {clue: 12, set_flags: [saw_slide]}
+
+  - id: slide_no_power
+    trigger: [{actions: [use], targets: [slide_4096, electron_microscope]}]
+    when: {scene: em_room, items: [slide_4096], not_flags: [power_on]}
+    effects: {block: true}
 
   # Story ch. 5.3: the dissecting-scope stare. Narrative only, no state change.
   - id: dissect_scope

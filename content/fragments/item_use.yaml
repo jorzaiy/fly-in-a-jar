@@ -104,3 +104,77 @@
     你试着使用了它。黑暗里没有任何动静，只有空气仿佛稍微沉重了一点。
   en: |
     You put it to use. Nothing answers from the dark, though the air feels a fraction heavier.
+
+# --- 11-16 playtest: success branches and hints -----------------------------
+
+- id: item_use_fuse_gloved_01
+  category: item_use
+  key: fuse_gloved
+  zh: |
+    隔着厚厚的防冻手套，你把手探进白雾里。寒气透过内衬咬上指节，但保险丝稳稳落进了掌心，霜花在手套上碎成一层细粉。
+  en: |
+    Through the thick cryo gloves you reach into the white fog. The cold bites through the lining at your knuckles, but the fuse settles firmly into your palm, its frost crumbling to powder on the glove.
+
+- id: item_use_keycard_cut_01
+  category: item_use
+  key: keycard_cut
+  zh: |
+    你用手术刀压住挂绳，刀刃一拉，绷紧的绳子“嘣”地断开。门禁卡滑进你手里，还带着一点她的体温。机械臂的关节轻轻一颤，像是不舍得放手。
+  en: |
+    You press the scalpel to the lanyard and draw it once. The taut cord snaps. The keycard drops into your hand, still faintly warm from her. The robot arm's joint gives a small shudder, as if reluctant to let go.
+
+- id: item_use_wear_gloves_01
+  category: item_use
+  key: wear_gloves
+  zh: |
+    你把防冻手套套上，内衬又厚又涩，手指一下子笨拙了许多。至少现在，你敢去碰那些冰冷的东西了。
+  en: |
+    You pull the cryo gloves on. The lining is thick and stiff and your fingers turn clumsy at once. But now, at least, you can touch the cold things.
+
+- id: item_use_door_no_power_01
+  category: item_use
+  key: door_no_power
+  zh: |
+    你推了推旋转门，加固玻璃纹丝不动。门边的读卡器一片死黑——整栋楼都断了电，这扇门现在只是一堵玻璃墙。
+  en: |
+    You push the revolving door. The reinforced glass does not move an inch. The card reader beside it is dead black: the whole building has lost power, and for now this door is just a wall of glass.
+
+- id: item_use_door_no_card_01
+  category: item_use
+  key: door_no_card
+  zh: |
+    读卡器亮着一粒红灯，屏幕上滚动着「请刷卡」。你身上没有门禁卡。有人进了楼却没签退，卡应该还在她身上。
+  en: |
+    The card reader glows a single red light, its screen scrolling PLEASE PRESENT CARD. You have no keycard. Someone came in tonight and never signed out; the card should still be on her.
+
+- id: item_use_terminal_dead_01
+  category: item_use
+  key: terminal_dead
+  zh: |
+    终端的屏幕一片漆黑，按下电源键也毫无反应。没电，它什么都读不了。电闸箱就在墙边。
+  en: |
+    The terminal screen stays black; the power button does nothing. Without power it cannot read anything. The fuse box is right there on the wall.
+
+- id: item_use_usb_wrong_slot_01
+  category: item_use
+  key: usb_wrong_slot
+  zh: |
+    你在机柜面板上摸了一圈，只摸到散热孔和一排排网线口，没有能插 U 盘的地方。所有线缆都汇向墙角那台终端。
+  en: |
+    You run your hand over the rack panels and find only vents and rows of network ports, nowhere to plug in a USB drive. Every cable runs to the terminal in the corner.
+
+- id: item_use_slide_wrong_place_01
+  category: item_use
+  key: slide_wrong_place
+  zh: |
+    这片组织已经切好了，薄得几乎透明，再放回切片机只会把它毁掉。这么薄的东西，得送进隔壁的电子显微镜才看得清。
+  en: |
+    This tissue has already been sectioned, so thin it is nearly transparent; putting it back on the microtome would only destroy it. Something this thin needs the electron microscope next door.
+
+- id: item_use_slide_no_power_01
+  category: item_use
+  key: slide_no_power
+  zh: |
+    你把玻片放进样品舱，可电子显微镜毫无反应，真空泵一声不响。整栋楼没电，它什么也看不到。
+  en: |
+    You set the slide in the sample chamber, but the electron microscope does not respond and the vacuum pump stays silent. With the building dark, it can see nothing.

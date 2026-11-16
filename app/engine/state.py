@@ -52,6 +52,7 @@ class GameState(BaseModel):
     caught_fly: bool = False
     last_spikes: dict[str, int] = Field(default_factory=dict)
     stim_fatigue: dict[str, int] = Field(default_factory=dict)
+    last_silence_turn: int = Field(default=0, ge=0)
     clues_found: list[int] = Field(default_factory=list, max_length=32)
     used_fragments: list[str] = Field(default_factory=list)
     recent_actions: list[RecentAction] = Field(default_factory=list, max_length=MAX_RECENT_ACTIONS)

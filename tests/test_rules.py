@@ -143,9 +143,9 @@ def test_keycard_without_power_does_not_escape(world, state):
     get_keycard(state, world)
     go(state, world, "prep_room", "corridor", "reception")
     out = act(state, world, "use", "keycard")
-    assert state.ended is None and out.rule_id is None
+    assert state.ended is None and out.rule_id == "door_no_power" and out.blocked
     out = act(state, world, "move", "exit")
-    assert out.blocked and out.reason == "against_world_rules" and state.scene == "reception"
+    assert out.blocked and out.rule_id == "door_no_power" and state.scene == "reception"
 
 
 def test_monster_tools(world, state):
@@ -214,7 +214,7 @@ def test_resolve_turn_success_partial_fail(world, state, cfg):
                        target="earplugs", danger=2, cfg=cfg)
     assert out.verdict == "partial" and "earplugs" in state.items and out.sync_delta == 3
     out = resolve_turn(state, world, feasible=0.1, reason="missing_item", category="use",
-                       target="card_reader", danger=2, cfg=cfg)
+                       target="desk_phone", danger=2, cfg=cfg)
     assert out.verdict == "fail" and out.sync_delta == fail_sync(2, cfg) == 11
     assert out.fragment == ("verdict_fail", "missing_item")
     assert state.sync == 14 and state.turn == 3
@@ -236,3 +236,60 @@ def test_resolve_turn_refuses_after_ending(world, state, cfg):
     with pytest.raises(ValueError):
         resolve_turn(state, world, feasible=1, reason="feasible", category="wait", target="none",
                      danger=0, cfg=cfg)
+
+
+
+# ------------------------------------------------------------------ playtest 11-16
+
+
+def test_world_rule_overrides_judge_doubt(world, state, cfg):
+    """With gloves on, taking the fuse succeeds even when the judge is unsure."""
+    state.scene = "cold_storage"
+    state.items = ["cryo_gloves"]
+    out = resolve_turn(state, world, feasible=0.45, reason="against_world_rules", category="take",
+                       target="fuse", danger=1, cfg=cfg)
+    assert out.verdict == "success" and out.rule_id == "fuse_gloved"
+    assert out.took == "fuse" and "fuse" in state.items and state.sync == 0
+
+
+def test_scalpel_cuts_keycard_free(world, state, cfg):
+    state.scene = "em_room"
+    state.items = ["scalpel"]
+    out = resolve_turn(state, world, feasible=0.43, reason="against_world_rules", category="take",
+                       target="keycard", danger=0, cfg=cfg)
+    assert out.rule_id == "keycard_cut" and "keycard" in state.items and state.sync == 0
+
+
+def test_looking_never_costs_sync(world, state, cfg):
+    state.scene = "server_room"
+    out = resolve_turn(state, world, feasible=0.3, reason="missing_item", category="look",
+                       target="usb_drive", danger=0, cfg=cfg)
+    assert out.verdict == "success" and state.sync == 0
+    out = resolve_turn(state, world, feasible=0.1, reason="no_such_target", category="look",
+                       target="robot_arm", danger=2, cfg=cfg)
+    assert out.verdict == "fail" and state.sync == 0
+
+
+def test_usb_in_rack_gives_hint(world, state, cfg):
+    state.scene = "server_room"
+    state.items = ["usb_drive"]
+    out = resolve_turn(state, world, feasible=0.72, reason="feasible", category="use",
+                       target="server_rack", danger=0, cfg=cfg)
+    assert out.rule_id == "usb_wrong_slot" and out.blocked
+
+
+def test_clue_repeat_is_flagged(world, state, cfg):
+    out = resolve_turn(state, world, feasible=0.9, reason="feasible", category="look",
+                       target="visitor_log", danger=0, cfg=cfg)
+    assert out.clue == 4 and not out.clue_repeat
+    out = resolve_turn(state, world, feasible=0.9, reason="feasible", category="look",
+                       target="visitor_log", danger=0, cfg=cfg)
+    assert out.clue == 4 and out.clue_repeat
+
+
+def test_descriptions_follow_state(world, state):
+    from app.engine.rules import describe
+    state.scene = "em_room"
+    assert "刀" in describe(state, world, "look", "robot_arm", "zh")
+    state.taken = ["keycard"]
+    assert "割断" in describe(state, world, "look", "robot_arm", "zh")

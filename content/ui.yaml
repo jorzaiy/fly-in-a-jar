@@ -108,6 +108,10 @@ ending:
 hijack:
   label: {zh: "[神经劫持]", en: "[NEURO-HIJACK]"}
 
+game:
+  already_carried: {zh: "（{item} 已经在你身上了。）", en: "(You already have the {item}.)"}
+  clue_seen: {zh: "（你已经看过这个了，内容没有变化。输入「笔记」可以回顾线索 #{n}。）", en: "(You have seen this before; nothing has changed. Type notes to review clue #{n}.)"}
+
 thinking: {zh: 神经元正在放电……, en: Neurons are firing…}
 
 errors:
@@ -115,6 +119,7 @@ errors:
   brain_overload: {zh: 大脑过载。请稍等片刻再试。, en: The brain is overloaded. Wait a moment and try again.}
   bad_state: {zh: 存档损坏了。输入 restart 重新开始。, en: Your save is corrupted. Type restart to begin again.}
   input_too_long: {zh: 太长了。一次只做一件事（不超过 200 字）。, en: Too long. One thing at a time (200 characters max).}
+  too_short: {zh: 这算不上一个动作。写完整一点，比如「拿起手电筒」「去走廊」。, en: "That is not quite an action. Say a little more, like 'take the flashlight' or 'go to the corridor'."}
   input_empty: {zh: 你什么也没做。, en: You do nothing.}
   rate_limited: {zh: 你太急了。喘口气，过一会儿再试。, en: Too fast. Catch your breath and try again shortly.}
   network: {zh: 信号断了。检查网络后再试。, en: The signal is lost. Check your connection and try again.}
