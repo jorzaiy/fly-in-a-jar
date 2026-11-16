@@ -238,11 +238,15 @@ def test_resolve_turn_success_partial_fail(world, state, cfg):
     out = resolve_turn(state, world, feasible=0.5, reason="feasible", category="take",
                        target="earplugs", danger=2, cfg=cfg)
     assert out.verdict == "partial" and "earplugs" in state.items and out.sync_delta == 3
-    out = resolve_turn(state, world, feasible=0.1, reason="missing_item", category="use",
+    out = resolve_turn(state, world, feasible=0.1, reason="physically_impossible", category="use",
                        target="desk_phone", danger=2, cfg=cfg)
     assert out.verdict == "fail" and out.sync_delta == fail_sync(2, cfg) == 11
-    assert out.fragment == ("verdict_fail", "missing_item")
+    assert out.fragment == ("verdict_fail", "physically_impossible")
     assert state.sync == 14 and state.turn == 3
+    # Reaching for something that isn't there costs only the base, whatever the danger.
+    out = resolve_turn(state, world, feasible=0.1, reason="missing_item", category="use",
+                       target="desk_phone", danger=3, cfg=cfg)
+    assert out.sync_delta == cfg.fail_sync_base and out.fragment == ("verdict_fail", "missing_item")
 
 
 def test_failed_take_changes_nothing_but_sync(world, state, cfg):
@@ -318,3 +322,16 @@ def test_descriptions_follow_state(world, state):
     assert "刀" in describe(state, world, "look", "robot_arm", "zh")
     state.taken = ["keycard"]
     assert "割断" in describe(state, world, "look", "robot_arm", "zh")
+
+
+def test_monster_tools_work_where_they_lie(world, state):
+    # The CO2 pad, sugar and vial can be used in the fly room without picking them up first.
+    state.scene, state.monster_near = "fly_room", True
+    out = apply_action(state, world, "use", "co2_pad")
+    assert out.rule_id == "stun" and state.monster_stunned == 2
+    assert "co2_pad" in state.taken and "co2_pad" not in state.items
+    out = apply_action(state, world, "use", "vial")
+    assert out.rule_id == "catch_fly" and "vial_fly" in state.items and "vial" in state.taken
+    out = apply_action(state, world, "use", "sugar_cube")
+    assert out.rule_id == "bait" and state.monster_block == 2
+    assert "sugar_cube" not in items_here(state, world)

@@ -207,7 +207,7 @@ items:
     location: null
   co2_pad:
     name: {zh: CO₂ 麻醉垫, en: CO₂ Pad}
-    aliases: {zh: [CO2麻醉垫, CO₂麻醉垫, 麻醉垫, co2垫, 二氧化碳], en: [co2 pad, co₂ pad, co2, anesthesia pad, pad]}
+    aliases: {zh: [CO2麻醉垫, CO₂麻醉垫, 麻醉垫, co2垫, 二氧化碳, 阀门, 钢瓶], en: [co2 pad, co₂ pad, co2, anesthesia pad, pad]}
     location: fly_room
   scalpel:
     name: {zh: 手术刀, en: Scalpel}
@@ -383,19 +383,19 @@ rules:
 
   - id: bait
     trigger: [{actions: [use], targets: [sugar_cube]}]
-    when: {items: [sugar_cube]}
+    when: {reachable: [sugar_cube]}
     effects: {monster_block: 2, consume: [sugar_cube]}
 
   - id: catch_fly
     trigger:
       - {actions: [use], targets: [vial]}
       - {actions: [take], targets: [monster]}
-    when: {items: [vial], monster_near: true}
+    when: {reachable: [vial], monster_near: true}
     effects: {transform: {vial: vial_fly}, set_flags: [caught_fly]}
 
   - id: stun
     trigger: [{actions: [use], targets: [co2_pad]}]
-    when: {items: [co2_pad], monster_near: true}
+    when: {reachable: [co2_pad], monster_near: true}
     effects: {monster_stunned: 2, consume: [co2_pad]}
 
   # Burning the server is checked before the generic ethanol / lighter rules.

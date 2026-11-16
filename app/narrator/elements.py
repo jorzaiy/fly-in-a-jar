@@ -72,7 +72,10 @@ def derive_story_elements(
         spikes_recorded[f"monster.{opt}"] = spk
         monster_scores[opt] = spk / max(1.0, base_for("monster", opt))
 
-    if gf_cfg:
+    if gf_cfg and not state.has_flag("power_on"):
+        # The swarm sleeps until the power is back; a startle is only a startle.
+        raw_monster = "feed" if monster_scores["feed"] >= 1.0 else "absent"
+    elif gf_cfg:
         gf = spikes_recorded["monster.attack"]
         if gf >= float(gf_cfg.get("attack_gf", 32)):
             raw_monster = "attack"
@@ -177,6 +180,8 @@ def derive_story_elements(
         intensity = 0 if peak < 1.0 else 1 if peak < 1.25 else 2 if peak < 1.6 else 3
         # The building gets louder as the host slips: tier 3 only from sync 50.
         intensity = min(intensity, 1 + state.sync // 25)
+        if state.monster_stunned > 0 or state.monster_block > 0:
+            intensity = min(intensity, 1)  # a breather while the swarm is held off
         if raw_monster == "attack":
             intensity = max(intensity, 2)
     elif total_readout < t1:

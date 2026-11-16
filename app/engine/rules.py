@@ -226,6 +226,11 @@ def _apply_rule(state: GameState, world: World, rule: dict, out: ActionOutcome) 
         state.set_flag(f)
     for f in eff.get("clear_flags", []):
         state.clear_flag(f)
+    # A rule may act on an item still lying in the room (`reachable`): using
+    # it there counts as picking it up.
+    for item in [*eff.get("consume", []), *(eff.get("transform") or {})]:
+        if item not in state.items and item in items_here(state, world):
+            _take_item(state, item)
     for item in eff.get("consume", []):
         state.items = [i for i in state.items if i != item]
     for src, dst in (eff.get("transform") or {}).items():
@@ -236,6 +241,9 @@ def _apply_rule(state: GameState, world: World, rule: dict, out: ActionOutcome) 
         state.monster_block = max(state.monster_block, int(eff["monster_block"]))
     if "monster_stunned" in eff:
         state.monster_stunned = max(state.monster_stunned, int(eff["monster_stunned"]))
+    if ("monster_stunned" in eff or "monster_block" in eff) and state.has_flag("power_on"):
+        # Knocking the swarm back sets its restlessness back a few turns too.
+        state.power_turn = max(state.power_turn, state.turn - 4)
     if "monster_near" in eff:
         state.monster_near = bool(eff["monster_near"])
     if "clue" in eff:
@@ -321,6 +329,10 @@ def resolve_turn(state: GameState, world: World, *, feasible: float, reason: str
         out.fragment = ("verdict_fail", reason if reason != "feasible" else "generic")
     elif out.verdict == "fail" and reason == "not_an_action":
         # Gibberish or a typo is not a risk the player took; no sync.
+        out.fragment = ("verdict_fail", reason)
+    elif out.verdict == "fail" and reason in ("no_such_target", "missing_item"):
+        # Reaching for something that isn't there is a misunderstanding, not a risk.
+        add_sync(state, cfg.fail_sync_base)
         out.fragment = ("verdict_fail", reason)
     elif out.verdict == "fail":
         add_sync(state, fail_sync(danger, cfg))
