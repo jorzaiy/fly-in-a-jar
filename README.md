@@ -95,7 +95,6 @@ The specs are written in Chinese; code, comments and this README are in English.
 
 - **Kiro wrote the start.** The spec in `.kiro/specs/fly-brain-horror/` (requirements, design, tasks) was written with Kiro on 1 Nov, and Kiro then worked through the tasks spec-first: the fly-brain simulation, the narrator, the turn engine and the CRT terminal (`3a37dd0`) came out of Kiro task runs, with the steering files keeping it on the "no LLM writes text at runtime" rule and the hooks re-running content validation and tests on every save.
 - **Then my Kiro credits ran out.** From mid-November I had used up my monthly Kiro credits, so the remaining work was written by another coding agent (Hark) under my review: the alternative judges (Gemini / OpenRouter / Command Code), the playtest fixes, making the brain read the player's input, and the "the fly stirs" neuron lines. Those commits say so in their messages. An earlier mock-mode scaffold, the steering files and the hooks were also drafted with that agent's help before Kiro used them.
-- **What I'd do differently:** start the spec smaller. Kiro followed the spec closely, which was great for the engine, but tuning a horror game's pacing needed fast play-and-fix loops more than spec tasks.
 
 ## Run locally
 
