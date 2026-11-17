@@ -73,12 +73,49 @@ feeding:
     pathway: listen
     multiplier: 1.8
 scene_ambience:
+  reception:
+    pathway: light
+    rate_boost_hz: 25.0
+  corridor:
+    pathway: move
+    rate_boost_hz: 15.0
+  fly_room:
+    pathway: smell
+    rate_boost_hz: 35.0
+  prep_room:
+    pathway: smell
+    rate_boost_hz: 20.0
+  em_room:
+    pathway: listen
+    rate_boost_hz: 25.0
   cold_storage:
     pathway: touch
     rate_boost_hz: 50.0
   server_room:
     pathway: listen
     rate_boost_hz: 40.0
+swarm:
+  dormant_hz: 0.0
+  wake_hz: 30.0
+  ramp_hz_per_turn: 2.5
+  ramp_turns_max: 12
+  sync_hz_per_point: 0.2
+  block_factor: 0.2
+  stunned_factor: 0.1
+  own_fly_factor: 0.6
+  channels:
+    attack:
+      neurons: 150
+      scale: 1.0
+    smell:
+      neurons: 40
+      scale: 0.4
+    listen:
+      neurons: 40
+      scale: 0.4
+monster_thresholds:
+  approach_gf: 12
+  attack_gf: 32
 readout_groups:
   monster:
     attack:
@@ -143,3 +180,70 @@ intensity_thresholds:
 - 0.0
 - 210.0
 - 4019.0
+relative_baselines:
+  look:
+    monster.attack: 3.0
+    monster.retreat: 1.0
+    monster.approach: 1.0
+    monster.feed: 1.0
+    anomaly.visual: 3218.0
+    anomaly.sound: 157.0
+    anomaly.smell: 110.0
+    anomaly.memory: 175.0
+    clue.clue: 30.0
+    drift.drift: 101.2
+  move:
+    monster.attack: 14.0
+    monster.retreat: 20.0
+    monster.approach: 5.0
+    monster.feed: 1.0
+    anomaly.visual: 326.5
+    anomaly.sound: 167.0
+    anomaly.smell: 107.0
+    anomaly.memory: 177.0
+    clue.clue: 30.0
+    drift.drift: 2182.7
+  smell:
+    monster.attack: 11.0
+    monster.retreat: 1.0
+    monster.approach: 1.0
+    monster.feed: 1.0
+    anomaly.visual: 709.0
+    anomaly.sound: 122.0
+    anomaly.smell: 3613.2
+    anomaly.memory: 203.2
+    clue.clue: 30.0
+    drift.drift: 30.0
+  take:
+    monster.attack: 15.2
+    monster.retreat: 1.0
+    monster.approach: 1.0
+    monster.feed: 1.0
+    anomaly.visual: 30.0
+    anomaly.sound: 102.0
+    anomaly.smell: 98.0
+    anomaly.memory: 180.0
+    clue.clue: 30.0
+    drift.drift: 109.0
+  touch:
+    monster.attack: 8.8
+    monster.retreat: 1.0
+    monster.approach: 1.0
+    monster.feed: 1.0
+    anomaly.visual: 122.5
+    anomaly.sound: 75.0
+    anomaly.smell: 109.5
+    anomaly.memory: 170.5
+    clue.clue: 30.0
+    drift.drift: 106.5
+  use:
+    monster.attack: 18.0
+    monster.retreat: 1.0
+    monster.approach: 1.0
+    monster.feed: 1.0
+    anomaly.visual: 1387.0
+    anomaly.sound: 148.5
+    anomaly.smell: 130.0
+    anomaly.memory: 179.2
+    clue.clue: 30.0
+    drift.drift: 125.5

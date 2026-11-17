@@ -5,9 +5,9 @@
   category: hijack
   key: eat
   zh: |
-    你本想把{target}推开，手臂却在中途违背了你的意志。你的嘴唇自己张开，舌尖不受控制地迎了上去，仿佛饿了整整七千个昼夜。
+    你的手伸向{target}，却在半路违背了你的意志。你的嘴唇自己张开，舌尖不受控制地迎了上去，仿佛饿了整整七千个昼夜。
   en: |
-    You meant to shove {target} away, but your arm betrays you mid-reach. Your lips part on their own and your tongue strains forward, starved across seven thousand nights.
+    You reach for {target}, but your arm betrays you mid-reach. Your lips part on their own and your tongue strains forward, starved across seven thousand nights.
 
 - id: hijack_flinch_01
   category: hijack
@@ -21,9 +21,9 @@
   category: hijack
   key: freeze
   zh: |
-    你的大脑拼命向{target}下达指令，双腿却像被钉死在地板上一样动弹不得。恐惧卡在喉咙里，你只能眼睁睁看着自己的手指慢慢垂落。
+    你想朝{target}动一下，双腿却像被钉死在地板上。恐惧卡在喉咙里，你只能眼睁睁看着自己的手指慢慢垂落。
   en: |
-    Your mind screams at you to move toward {target}, yet your legs lock fast to the floor. Panic jams in your throat as you watch your own fingers go slack.
+    You will yourself toward {target}, yet your legs lock fast to the floor. Panic jams in your throat as you watch your own fingers go slack.
 
 - id: hijack_generic_01
   category: hijack

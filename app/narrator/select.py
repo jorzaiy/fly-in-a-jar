@@ -8,6 +8,7 @@ fragment effects on the GameState.
 from __future__ import annotations
 
 import logging
+from contextvars import ContextVar
 from typing import Any
 
 from app.content.loader import Content, World
@@ -15,6 +16,15 @@ from app.content.schema import SYNC_MAX, SYNC_MIN, tier_for_sync
 from app.engine.state import GameState
 
 log = logging.getLogger("fly.narrator.select")
+
+# Playtest trace: when a list is set here, every chosen fragment id is appended.
+fragment_trace: ContextVar[list[str] | None] = ContextVar("fragment_trace", default=None)
+
+
+def _trace(frag_id: str) -> None:
+    tr = fragment_trace.get()
+    if tr is not None:
+        tr.append(frag_id)
 
 
 def fragment_satisfies_requires(frag: dict[str, Any], state: GameState) -> bool:
@@ -121,13 +131,24 @@ def select_fragment(
             chosen = fallback[0]
             apply_fragment_effects(chosen, state)
             state.record_fragment(chosen["id"])
+            _trace(chosen["id"])
             return chosen
         # Emergency stub
+        _trace(f"{category}_empty")
         return {"id": f"{category}_empty", "category": category, "key": key, "en": "...", "zh": "..."}
 
-    # Deduplicate against used fragments in this session
+    # Deduplicate against used fragments in this session. Once every option has
+    # been shown, prefer the ones shown longest ago so lines rotate instead of
+    # bouncing between the same two.
     unused = [c for c in eligible if c["id"] not in state.used_fragments]
-    pool = unused if unused else eligible
+    if unused:
+        pool = unused
+    else:
+        order = {fid: i for i, fid in enumerate(state.used_fragments)}
+        oldest = min(order.get(c["id"], -1) for c in eligible)
+        # keep everything not shown in the newer half of the rotation
+        cutoff = sorted(order.get(c["id"], -1) for c in eligible)[(len(eligible) - 1) // 2]
+        pool = [c for c in eligible if order.get(c["id"], -1) <= max(oldest, cutoff)]
 
     # Match intensity
     exact_intensity = [c for c in pool if c.get("intensity") == intensity]
@@ -142,9 +163,9 @@ def select_fragment(
     idx = abs(spike_count) % len(intensity_pool)
     chosen = intensity_pool[idx]
 
-    # Apply effects and record
+    # Apply effects and record (most recent last)
     apply_fragment_effects(chosen, state)
-    if chosen["id"] not in state.used_fragments:
-        state.used_fragments = [*state.used_fragments, chosen["id"]]
+    state.used_fragments = [f for f in state.used_fragments if f != chosen["id"]] + [chosen["id"]]
+    _trace(chosen["id"])
 
     return chosen

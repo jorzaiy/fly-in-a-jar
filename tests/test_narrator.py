@@ -32,6 +32,7 @@ def brain_groups():
 
 def test_derive_story_elements_monster_overrides(brain_groups, content):
     state = new_state(content.world, seed=12345)
+    state.set_flag("power_on")  # the swarm only acts once it has woken
     import numpy as np
 
     # Mock simulation result with GF spikes to trigger raw attack
@@ -72,6 +73,12 @@ def test_derive_story_elements_monster_overrides(brain_groups, content):
     assert elems.monster == "retreat"
     assert elems.monster_override == "monster_stunned"
     state.monster_stunned = 0
+
+    # 5. Before the power is back a giant-fibre startle is not the swarm
+    state.clear_flag("power_on")
+    elems = derive_story_elements(sim_res, brain_groups, state, content.world)
+    assert elems.raw_monster == "absent"
+    state.set_flag("power_on")
 
     # 5. When monster_block > 0, attack -> absent
     state.monster_block = 1

@@ -124,3 +124,45 @@ def test_neuro_hijack_triggers_at_high_sync(content, judge, brain_groups, simula
             break
 
     assert triggered, "Expected neuro-hijack to trigger across test seeds at sync=85"
+
+
+# ------------------------------------------------------------------ playtest 11-16
+
+
+def _run(content, judge, brain_groups, simulator, state, text):
+    return asyncio.run(execute_turn(state, text, content.world, content, judge, brain_groups, simulator))
+
+
+def test_one_character_input_costs_nothing(content, judge, brain_groups, simulator):
+    state = new_state(content.world, seed=42, lang="zh")
+    res = _run(content, judge, brain_groups, simulator, state, "把")
+    assert res.is_system_command and res.state.turn == 0 and res.state.sync == 0
+    assert res.output[0]["kind"] == "system"
+
+
+def test_looking_shows_the_things_own_description(content, judge, brain_groups, simulator):
+    state = new_state(content.world, seed=42, lang="en")
+    res = _run(content, judge, brain_groups, simulator, state, "look at the drawer")
+    texts = " ".join(o["text"] for o in res.output if o["kind"] == "action")
+    assert "flashlight" in texts.lower() and "paper clips" in texts
+
+
+def test_silence_line_is_not_every_turn(content, judge, brain_groups, simulator):
+    state = new_state(content.world, seed=42, lang="en")
+    silences = 0
+    for text in ["look at the desk", "look at the drawer", "look at the phone",
+                 "look at the door", "look at the card reader", "wait"]:
+        res = _run(content, judge, brain_groups, simulator, state, text)
+        state = res.state
+        silences += sum(1 for o in res.output if o["kind"] == "silence")
+    assert silences <= 2
+
+
+def test_revisit_uses_short_scene_line(content, judge, brain_groups, simulator):
+    state = new_state(content.world, seed=42, lang="en")
+    for text in ["go to the corridor", "go to reception", "go to the corridor"]:
+        res = _run(content, judge, brain_groups, simulator, state, text)
+        state = res.state
+    scene = [o["text"] for o in res.output if o["kind"] == "scene"]
+    revisits = [v["en"] for v in content.world.descriptions["revisit"]["corridor"]]
+    assert scene and scene[0] in revisits

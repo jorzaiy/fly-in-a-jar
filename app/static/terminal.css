@@ -144,6 +144,14 @@ body.crt::after {
   margin: 6px 0;
 }
 
+.kind-neuro {
+  color: var(--text-green);
+  font-size: 12.5px;
+  font-family: Consolas, monospace;
+  opacity: 0.75;
+  margin: -2px 0 6px 12px;
+}
+
 .kind-brainlog {
   color: var(--text-green);
   font-size: 13px;
@@ -203,4 +211,17 @@ body.crt::after {
 @keyframes pulse {
   from { opacity: 0.5; }
   to { opacity: 1.0; }
+}
+
+/* Status bar: scene, sync, turn and inventory, always visible above the prompt. */
+.terminal-status-bar {
+  border-top: 1px solid var(--text-green);
+  color: var(--text-amber);
+  padding: 4px 0 2px;
+  margin-top: 6px;
+  font-size: 0.9em;
+  opacity: 0.85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

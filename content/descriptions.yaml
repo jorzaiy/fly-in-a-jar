@@ -1,0 +1,239 @@
+# descriptions.yaml
+# What the player sees when looking at (or touching) a thing, and the short line
+# shown when walking back into a scene already visited.
+#
+# Each entry is a list of variants. The first variant whose `when` holds is used;
+# the last one has no `when` and is the default. `when` takes the same keys as
+# rules in world.yaml, plus `taken` / `not_taken` (item ids picked up at some point).
+# Descriptions may hint at what to do next, but never spoil a clue outright.
+
+look:
+  # ------------------------------------------------------------- reception
+  reception_desk:
+    - zh: 前台桌面落着一层薄灰，正中却有一块干净的长方形，像刚有人把什么东西拿走了。桌下的空隙够你整个人蜷进去。
+      en: A thin film of dust covers the reception desk, except for one clean rectangle in the middle, as if something was just lifted away. The gap beneath it is big enough to curl up in.
+  drawer:
+    - when: {not_taken: [flashlight]}
+      zh: 抽屉半开着，里面躺着一支手电筒和几枚回形针，金属表面凝着一层细密的水汽。
+      en: The drawer hangs half open. Inside lie a flashlight and a few paper clips, their metal beaded with fine condensation.
+    - zh: 抽屉里只剩回形针和一张折了角的值班表。今晚值班那一栏写着：H. Weiss。
+      en: Only paper clips are left, and a dog-eared duty roster. Tonight's line reads H. Weiss.
+  revolving_door:
+    - when: {flags: [power_on]}
+      zh: 旋转门的加固玻璃外，停车场的路灯远得像另一个世界。门边的读卡器亮着红灯，在等一张卡。
+      en: Beyond the reinforced glass of the revolving door, the parking-lot lamps look like another world. The card reader beside it glows red, waiting for a card.
+    - zh: 旋转门的加固玻璃纹丝不动，门外停车场的路灯远得像另一个世界。门边的读卡器是黑的——楼里没电。
+      en: The revolving door's reinforced glass will not budge. Outside, the parking-lot lamps look like another world. The card reader beside it is dark; the building has no power.
+  card_reader:
+    - when: {flags: [power_on]}
+      zh: 读卡器亮着一粒红灯，屏幕上滚动着「请刷卡」。
+      en: The card reader glows a single red light. Its screen scrolls PLEASE PRESENT CARD.
+    - zh: 读卡器的屏幕一片死黑。没有电，什么卡都刷不开这扇门。
+      en: The card reader's screen is dead black. Without power, no card will open this door.
+  desk_phone:
+    - zh: 内线电话的听筒里只有沙沙声。仔细听，那沙沙声有节律，像很多翅膀在很远的地方同时扇动。
+      en: The internal line gives only static. Listen closely and the static has a rhythm, like a great many wings beating somewhere far away.
+  flashlight:
+    - zh: 黑色铝壳手电筒，开关上缠着一圈医用胶布。掂一掂，电池还是满的。
+      en: A black aluminium flashlight, its switch wrapped in medical tape. It feels heavy; the batteries are full.
+  earplugs:
+    - zh: 一对还没拆封的泡棉耳塞，包装上印着「动物房噪声防护」。
+      en: A pair of foam earplugs, still sealed. The packet reads ANIMAL FACILITY NOISE PROTECTION.
+  visitor_log:
+    - zh: 硬皮访客登记簿，摊开在今晚那一页。
+      en: A hardbound visitor log, lying open at tonight's page.
+
+  # ------------------------------------------------------------- corridor
+  coat_rack:
+    - when: {not_taken: [cryo_gloves]}
+      zh: 衣架上挂着三件白大褂。最里面那件的口袋里塞着一副厚厚的蓝色防冻手套。
+      en: Three lab coats hang on the rack. The pocket of the innermost one is stuffed with a pair of thick blue cryo gloves.
+    - zh: 三件白大褂空荡荡地晃着。胸牌上的照片都被人用指甲划花了。
+      en: The three lab coats sway, empty. Every photo on their name badges has been scratched out with a fingernail.
+  neuron_photos:
+    - zh: 墙上一排装裱好的神经元显微照片，标签从 #0001 一路排到 #4095。最后一个相框是空的，标签已经印好：#4096。
+      en: A row of framed neuron micrographs lines the wall, labelled #0001 through #4095. The last frame is empty. Its label is already printed — #4096.
+  safety_poster:
+    - zh: 安全海报上写着：「进入 −80 ℃ 冷库请佩戴防冻手套。」「果蝇逃逸时请使用 CO₂ 麻醉。」角落里有人用圆珠笔补了一行小字：它们怕火。
+      en: "The safety poster reads: WEAR CRYO GLOVES IN THE −80 °C COLD ROOM. USE CO₂ IF FLIES ESCAPE. In the corner someone has added in ballpoint: they fear fire."
+  cryo_gloves:
+    - zh: 蓝色加厚防冻手套，内衬起了毛，指尖有几道冻裂的白痕。戴着它，应该能碰冰柜里的东西。
+      en: Thick blue cryo gloves, the lining pilled, the fingertips scarred with white frost cracks. With these on, you could reach into a freezer.
+
+  # ------------------------------------------------------------- fly room
+  vial_rack:
+    - zh: 几百支果蝇管整齐插在架子上，每一支的棉塞都被从里面顶开了。管壁上残留着黄褐色的培养基，一只果蝇也没剩下。
+      en: Hundreds of fly vials stand in neat rows, every cotton plug pushed out from the inside. Yellow-brown food still clings to the glass. Not a single fly is left.
+  incubator:
+    - zh: 恒温培养箱的门虚掩着，25 ℃ 的暖气混着发酵的甜味扑出来。玻璃内侧那道弧线是无数细小的脚印，一圈一圈，像有什么在里面排着队练习走路。箱底散着几块被啃过的方糖——它们一向喜欢甜的。
+      en: The incubator door is ajar. Warm 25 °C air rolls out with a fermented sweetness. The arc on the inside of the glass is countless tiny footprints, loop after loop, as if something in there had been queuing to practise walking. Gnawed sugar cubes lie scattered on the floor of it. They have always liked sweet things.
+  sugar_cube:
+    - zh: 一块方糖，表面被细小的口器啃出蜂窝似的坑。拿在手里，你竟然也有点想舔一舔。
+      en: A sugar cube, its surface pitted like honeycomb by tiny mouthparts. Holding it, you find you want to lick it too.
+  vial:
+    - zh: 一支干净的空果蝇管，配着海绵塞。刚好能装下一只果蝇。
+      en: A clean, empty fly vial with a foam stopper. Just big enough for one fly.
+  vial_fly:
+    - zh: 管子里的果蝇停在海绵塞底下，复眼对着你。你动，它也跟着转；你不动，它就一直看着你。
+      en: The fly in the vial rests under the stopper, its compound eyes on you. When you move, it turns with you. When you stop, it keeps watching.
+  co2_pad:
+    - zh: CO₂ 麻醉垫，连着一只小钢瓶。拧开阀门，二氧化碳会从多孔垫面喷出来，果蝇一碰就会昏过去。
+      en: A CO₂ anaesthesia pad hooked to a small cylinder. Open the valve and gas hisses from the porous surface; any fly that touches it drops.
+
+  # ------------------------------------------------------------- prep room
+  dissecting_scope:
+    - zh: 一台解剖显微镜，目镜上还留着谁的睫毛印。载物台上压着什么东西。
+      en: A dissecting microscope, someone's eyelash smudge still on the eyepiece. Something is pinned on the stage.
+  microtome:
+    - zh: 切片机的刀锋上沾着一层半透明的蜡，样本托空着。旁边的记录写着最后一次切片：#4096，厚度 40 纳米。这么薄的东西，得放进电镜才看得清。
+      en: Translucent wax clings to the microtome blade; the specimen holder is empty. The log beside it records the last cut — #4096, 40 nanometres thick. Something that thin needs the electron microscope.
+  slide_box:
+    - zh: 玻片盒里的编号一格格排下去，越往后字迹越新。最后一格的标签已经印好了，编号很长，你不想细看。
+      en: The slide box is numbered cell by cell, the handwriting fresher the further it goes. The last cell's label is already printed. The number is long. You would rather not read it.
+  airlock_door:
+    - zh: 通往电镜室的气密门敞着一条缝，缝里吹出带着机油味的冷风。
+      en: The airlock door to the EM room stands open a crack. Cold air smelling of machine oil seeps through.
+  scalpel:
+    - zh: 一次性手术刀，刀片锋利，包装才撕开一角。割断一根挂绳绰绰有余。
+      en: A disposable scalpel, its blade keen, the wrapper barely torn open. Plenty sharp enough to cut a lanyard.
+  ethanol:
+    - zh: 一瓶 95% 乙醇，瓶身贴着易燃标志。拧开瓶盖，气味冲得你眼眶发酸。泼在地上点着，就是一堵火墙。
+      en: A bottle of 95% ethanol with a flammable label. Uncap it and the fumes sting your eyes. Splash it and light it, and you have a wall of fire.
+  slide_4096:
+    - zh: 一片玻片，夹着几乎看不见的超薄组织。标签手写着：#4096 · H.W.。肉眼什么也看不出，得放进电子显微镜。
+      en: "A glass slide holding a nearly invisible sliver of tissue. The handwritten label reads: #4096 · H.W. The naked eye shows nothing; it needs the electron microscope."
+
+  # ------------------------------------------------------------- EM room
+  electron_microscope:
+    - when: {flags: [power_on]}
+      zh: 电子显微镜的真空泵在低鸣，屏幕上显示「样品舱就绪」。光标停在「下一个样本」那一栏，一闪一闪。
+      en: The electron microscope's vacuum pump hums. The screen reads SAMPLE CHAMBER READY. The cursor blinks in the field marked NEXT SPECIMEN.
+    - zh: 电子显微镜沉默着，样品舱敞开，像在等什么东西放进去。没电，它什么也做不了。
+      en: The electron microscope sits silent, its sample chamber open as if waiting for something. Without power it can do nothing.
+  robot_arm:
+    - when: {not_taken: [keycard]}
+      zh: 机械臂停在半空，关节里绞着一根挂绳，绳尾吊着一张门禁卡，正好悬在 Weiss 博士的肩膀上方。挂绳勒得死紧，徒手解不开，得找把刀。
+      en: The robot arm is frozen mid-air, a lanyard wound tight in its joint, a keycard dangling from the end just above Dr. Weiss's shoulder. It is pulled far too tight to work loose by hand. You need a blade.
+    - zh: 机械臂的关节里只剩一截割断的挂绳，在冷风里轻轻摆。
+      en: Only a cut stub of lanyard is left in the robot arm's joint, swaying in the cold air.
+  console:
+    - zh: 控制台的屏幕停在自动采集程序上：「切片 #4096 采集完成 · 等待下一个样本」。下面的样本登记栏里，有一行空着。
+      en: "The console is parked on the auto-acquisition program: SECTION #4096 COMPLETE · AWAITING NEXT SPECIMEN. In the specimen register below, one row is blank."
+  weiss_body:
+    - when: {not_taken: [keycard]}
+      zh: Weiss 博士侧躺在电镜旁，白大褂的领口被挂绳勒出一道深痕。门禁卡就吊在她肩膀上方。她的眼睛半睁着，瞳孔里有极细的东西在动。
+      en: Dr. Weiss lies on her side by the microscope, a deep crease at her collar where the lanyard pulled. The keycard hangs just above her shoulder. Her eyes are half open, and something very fine is moving in her pupils.
+    - zh: Weiss 博士侧躺在电镜旁，眼睛半睁着。你割断挂绳之后，她的头微微偏向了你这边——是你记错了吗？
+      en: Dr. Weiss lies on her side by the microscope, eyes half open. Since you cut the lanyard her head has turned slightly toward you. Or are you misremembering?
+  recorder:
+    - zh: 一支银色录音笔，指示灯还亮着。最后一段录音长 00:47。
+      en: A silver voice recorder, its light still on. The last recording runs 00:47.
+  keycard:
+    - zh: 门禁卡正面是 Weiss 博士的证件照，背面印着「全楼通行」。
+      en: The keycard shows Dr. Weiss's ID photo on the front. The back reads ALL ACCESS.
+
+  # ------------------------------------------------------------- server room
+  fuse_box:
+    - when: {flags: [power_on]}
+      zh: 电闸已经推上，新保险丝稳稳卡在槽里。整栋楼都在嗡嗡作响。
+      en: The breaker is up, the new fuse seated firmly. The whole building hums.
+    - zh: 电闸箱的盖子开着，一枚保险丝烧得焦黑，槽位空了一半。换上新的，整栋楼也许就能来电。
+      en: The fuse box hangs open. One fuse is burnt black, its slot half empty. Replace it and the building might come back to life.
+  terminal:
+    - when: {flags: [power_on], not_taken: [usb_drive]}
+      zh: 终端屏幕亮着，命令行在等待输入。侧面插着一个 U 盘，指示灯一闪一闪。
+      en: The terminal screen is lit, a command prompt waiting. A USB drive sits in the side port, its light blinking.
+    - when: {flags: [power_on]}
+      zh: 终端屏幕亮着，命令行在等待输入。侧面的 USB 口空着。
+      en: The terminal screen is lit, a command prompt waiting. The USB port on its side is empty.
+    - when: {not_taken: [usb_drive]}
+      zh: 终端屏幕是黑的，侧面插着一个 U 盘，键盘旁边放着一只打火机。没电，它什么也读不了。
+      en: The terminal screen is black. A USB drive sticks out of its side port and a lighter lies by the keyboard. Without power it can read nothing.
+    - zh: 终端屏幕是黑的。没电，它什么也读不了。
+      en: The terminal screen is black. Without power it can read nothing.
+  server_rack:
+    - when: {flags: [read_usb]}
+      zh: 一排排机柜还带着余温，硬盘灯不规律地闪着。你现在知道，那个东西就在里面运行。如果它烧起来……
+      en: The racks are still warm, drive lights flickering in no pattern you can read. You know now that the thing is running in there. If it were to burn...
+    - zh: 一排排机柜，面板上只有散热孔和网线口，没有能插 U 盘的地方。所有线缆都汇向墙角那台终端。贴近一点，你能感到里面还有余温。
+      en: Row after row of racks, their panels nothing but vents and network ports — nowhere to plug in a drive. Every cable runs to the terminal in the corner. Up close, you can feel they are still warm.
+  lighter:
+    - zh: 一只廉价塑料打火机，还剩小半管燃气。打一下，火苗窜得很高。
+      en: A cheap plastic lighter, a third of its gas left. One flick and the flame jumps high.
+  usb_drive:
+    - zh: 一个没有标签的 U 盘，外壳上刻着 FW-783。得插在通了电的终端上才能读。
+      en: An unlabelled USB drive, FW-783 etched into its casing. It needs a powered terminal to read.
+  fuse:
+    - when: {not_taken: [fuse]}
+      zh: 一枚陶瓷保险丝，躺在冰柜里，表面结着白霜。−80 ℃，徒手碰会粘掉一层皮。
+      en: A ceramic fuse lying in the freezer, furred with frost. At −80 °C, bare skin would stick and tear.
+    - zh: 一枚陶瓷保险丝，规格正好和机房电闸箱里烧掉的那枚一样。
+      en: A ceramic fuse, the same rating as the burnt one in the server-room fuse box.
+
+  # ------------------------------------------------------------- cold storage
+  freezer:
+    - when: {not_taken: [fuse]}
+      zh: −80 ℃ 冰柜的门缝结满了霜。透过白雾，最上层放着一盒备用保险丝。徒手伸进去会冻伤。
+      en: Frost crusts the seal of the −80 °C freezer. Through the fog, a box of spare fuses sits on the top shelf. Reaching in bare-handed would mean frostbite.
+    - zh: 冰柜里的白雾慢慢翻涌，备用保险丝的盒子空了一格。
+      en: White fog churns slowly inside the freezer. One slot in the box of spare fuses is empty.
+  sample_shelf:
+    - when: {not_taken: [sample_box]}
+      zh: 样本架上一排排冻存盒，标签都是日期。最外面那一盒，标着今晚的日期。
+      en: Rows of cryoboxes line the shelf, each labelled with a date. The one at the front is labelled with tonight's.
+    - zh: 样本架上一排排冻存盒，标签都是日期。最外面空出了一格。
+      en: Rows of cryoboxes line the shelf, each labelled with a date. There is a gap at the front.
+  temp_logger:
+    - zh: 温度记录仪的曲线在 23:00 处有一个尖峰，像是冰柜门被打开过，又像是有什么东西从里面出来了。
+      en: The temperature logger's trace spikes at 23:00, as if the freezer door were opened. Or as if something came out.
+  sample_box:
+    - when: {flags: [box_open]}
+      zh: 盒子是空的。盒盖内侧那张打印标签还在：今晚的日期，下面是你的名字。像一张预约单。
+      en: The box is empty. The printed label inside the lid is still there, tonight's date and your name beneath it. Like an appointment slip.
+    - zh: 冻存盒的标签上写着今晚的日期。盒盖冻住了，要用点力才能打开。
+      en: The cryobox is labelled with tonight's date. The lid is frozen shut; it will take some force to open.
+
+revisit:
+  reception:
+    - zh: 你回到前台。旋转门外的路灯还亮着，登记簿仍摊在桌上。
+      en: You are back at reception. The lamps still burn beyond the revolving door; the log still lies open on the desk.
+    - zh: 前台的应急灯还是那片暗红。登记簿摊在桌上，旋转门外一辆车也没有。
+      en: "The reception emergency light is still that dark red. The log lies open; there is not one car beyond the revolving door."
+  corridor:
+    - zh: 走廊还是那么长。墙上的神经元照片在暗处排成一列，几扇门在两侧等着你。
+      en: The corridor is as long as ever. The neuron photos line the dark wall, and the doors wait on either side.
+    - zh: 你又回到走廊。照片里的神经元好像比刚才更密了些，也可能只是你看得更仔细了。
+      en: "Back in the corridor. The neurons in the photos seem denser than before. Or you are just looking harder."
+    - zh: 走廊的地蜡映出你的影子，拉得很长。左右几扇门都关着，只有你来的那扇还留着一道缝。
+      en: "The waxed floor stretches your reflection long. The doors on both sides are shut, except the one you came through, still open a crack."
+    - zh: 走廊尽头那张安全海报在应急灯下发灰。你数着门往前走，数到一半，发现自己在跟着某种节奏迈步。
+      en: "The safety poster at the end of the corridor has gone grey under the emergency light. You count doors as you walk and, halfway, notice you are stepping to some rhythm."
+    - zh: 还是那条走廊。空调出风口吐着冷气，衣架上的白大褂轻轻晃了一下，像刚有人从旁边走过。
+      en: "The same corridor. The vent breathes cold air, and the lab coats on the rack sway once, as if someone just walked past."
+  fly_room:
+    - zh: 果蝇饲养室里那股发酵的甜味还没散，空管架一声不响。
+      en: The fermented sweetness still hangs in the fly room. The empty vial racks make no sound.
+    - zh: 饲养室的恒温箱还在低声运转，玻璃上的那道弧线又多出了一圈。
+      en: "The incubator in the fly room still hums. The arc on its glass has gained another loop."
+  prep_room:
+    - zh: 解剖准备室的不锈钢台面泛着冷光，切片机的刀锋还停在原处。
+      en: The steel benches of the prep room give off a cold sheen. The microtome blade has not moved.
+    - zh: 乙醇的味道又涌上来。解剖显微镜的目镜朝着门口，像在等你回来。
+      en: "The ethanol smell rises again. The dissecting scope's eyepieces face the door, as if waiting for you."
+  em_room:
+    - zh: 电镜室里，机械臂仍悬在半空，Weiss 博士还躺在原来的地方。
+      en: In the EM room the robot arm still hangs mid-air, and Dr. Weiss lies where she lay.
+    - zh: 真空泵还在喘。你尽量不去看她，可余光里那只半睁的眼睛一直在。
+      en: "The vacuum pump still wheezes. You try not to look at her, but the half-open eye stays at the edge of your sight."
+  server_room:
+    - when: {flags: [power_on]}
+      zh: 机房里风扇嗡嗡转着，终端屏幕的光照亮了半面墙。
+      en: Fans whir in the server room; the terminal's glow lights half the wall.
+    - zh: 机房里一片死寂，只有机柜的金属外壳还带着余温。
+      en: The server room is dead quiet. Only the metal of the racks still holds some warmth.
+  cold_storage:
+    - zh: 冷库的寒气一下子贴上你的皮肤，冰柜门缝的霜又厚了一层。
+      en: The cold-room air clamps onto your skin at once. The frost on the freezer seal has grown thicker.
+    - zh: 冷库的白雾漫到脚踝。温度记录仪的绿灯一闪一闪，像在数你待了多久。
+      en: "The cold-room fog pools around your ankles. The temperature logger's green light blinks, as if counting how long you stay."
+

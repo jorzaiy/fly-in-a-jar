@@ -23,11 +23,13 @@ from pydantic import BaseModel, Field
 from app.brain.groups import BrainGroups
 from app.brain.lif import LIFSimulator
 from app.content.loader import Content
+from app.engine.rules import items_here
 from app.engine.state import GameState, Lang, MAX_INPUT_CHARS, new_state
 from app.engine.turn import execute_turn
 from app.judge import get_judge, judge_mode
 from app.narrator.compose import resolve_fragment_text
-from app.narrator.select import select_fragment
+from app.narrator.select import fragment_trace, select_fragment
+from app.api.playtest import playtest_path, write_playtest
 
 log = logging.getLogger("fly.api")
 
@@ -70,6 +72,16 @@ class TurnRequest(BaseModel):
     input: str = Field(max_length=MAX_INPUT_CHARS)
 
 
+def hud(state: GameState, world: Any, lang: str) -> dict[str, Any]:
+    """Always-visible status: scene, sync, turn and what the player carries."""
+    return {
+        "scene": world.scenes.get(state.scene, {}).get("name", {}).get(lang, state.scene),
+        "sync": state.sync,
+        "turn": state.turn,
+        "items": [world.items[i]["name"][lang] for i in state.items if i in world.items],
+    }
+
+
 @router.get("/health")
 def health() -> dict[str, Any]:
     """Liveness check reporting judge mode and simulation queue size."""
@@ -100,7 +112,7 @@ def new_game(req: NewGameRequest, request: Request) -> dict[str, Any]:
     sc_info = content.world.scenes.get(state.scene, {})
     exits = sc_info.get("exits", [])
     exit_names = [content.world.scenes[e]["name"][req.lang] for e in exits if e in content.world.scenes]
-    items_names = [content.world.items[it]["name"][req.lang] for it in state.items if it in content.world.items]
+    items_names = [content.world.items[it]["name"][req.lang] for it in items_here(state, content.world) if it in content.world.items]
 
     listing_parts = []
     if exit_names:
@@ -117,10 +129,17 @@ def new_game(req: NewGameRequest, request: Request) -> dict[str, Any]:
     if listing_parts:
         output.append({"kind": "system", "text": " | ".join(listing_parts)})
 
+    if playtest_path():
+        write_playtest({
+            "event": "new", "session": state.seed, "lang": req.lang,
+            "scene": state.scene, "output": output,
+        })
+
     return {
         "state": state.model_dump(),
         "output": output,
         "ended": None,
+        "hud": hud(state, content.world, req.lang),
     }
 
 
@@ -147,6 +166,9 @@ async def turn_endpoint(req: TurnRequest, request: Request) -> dict[str, Any]:
 
     _waiting_count += 1
     t0 = time.perf_counter()
+    frag_ids: list[str] = []
+    trace_token = fragment_trace.set(frag_ids)
+    scene_before = req.state.scene
     try:
         async with _sim_semaphore:
             turn_res = await execute_turn(
@@ -160,6 +182,7 @@ async def turn_endpoint(req: TurnRequest, request: Request) -> dict[str, Any]:
             )
     finally:
         _waiting_count -= 1
+        fragment_trace.reset(trace_token)
 
     elapsed_ms = int((time.perf_counter() - t0) * 1000)
 
@@ -173,8 +196,19 @@ async def turn_endpoint(req: TurnRequest, request: Request) -> dict[str, Any]:
     }
     print(json.dumps(log_record, ensure_ascii=False))
 
+    if playtest_path():
+        write_playtest({
+            "event": "turn", "session": turn_res.state.seed, "lang": turn_res.state.lang,
+            "turn": turn_res.state.turn, "scene_before": scene_before,
+            "scene": turn_res.state.scene, "sync": turn_res.state.sync,
+            "input": req.input, "system_command": turn_res.is_system_command,
+            **turn_res.trace, "fragments": frag_ids,
+            "output": turn_res.output, "ended": turn_res.ended, "duration_ms": elapsed_ms,
+        })
+
     return {
         "state": turn_res.state.model_dump(),
         "output": turn_res.output,
         "ended": turn_res.ended,
+        "hud": hud(turn_res.state, content.world, turn_res.state.lang),
     }

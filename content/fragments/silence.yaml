@@ -5,9 +5,9 @@
   category: silence
   key: default
   zh: |
-    什么也没有发生。连墙里那点细碎的嗡鸣都突然停了，静得你能听见自己眼球转动的摩擦声。
+    墙里那点细碎的嗡鸣突然停了，静得你能听见自己眼球转动的摩擦声。
   en: |
-    Nothing happens. Even the faint hum inside the walls cuts out, leaving a silence so tight you can hear your own eyes shift in their sockets.
+    The faint hum inside the walls cuts out, leaving a silence so tight you can hear your own eyes shift in their sockets.
 
 - id: silence_default_02
   category: silence
@@ -24,3 +24,53 @@
     四周安静得过分，反而像暴风雨前刻意留出的空隙。
   en: |
     Everything is too quiet, like a deliberate pause before something breaks.
+
+# --- 11-16 playtest: more silence lines (shown at most every 3 turns) -------
+
+- id: silence_default_03
+  category: silence
+  key: default
+  zh: |
+    远处传来水管里一声闷响，然后又什么都没有了。
+  en: |
+    A pipe knocks once somewhere far off. Then nothing.
+
+- id: silence_default_04
+  category: silence
+  key: default
+  zh: |
+    你听见自己的脉搏在耳朵里一下一下地敲。楼里别的声音都消失了。
+  en: |
+    Your pulse thuds in your ears. Every other sound in the building is gone.
+
+- id: silence_default_05
+  category: silence
+  key: default
+  zh: |
+    应急灯的绿光在墙上一动不动。连灰尘都停在了半空。
+  en: |
+    The green glow of the exit sign does not waver. Even the dust hangs still.
+
+- id: silence_default_06
+  category: silence
+  key: default
+  zh: |
+    有那么几秒，安静得连嗡鸣都像是从来没存在过。
+  en: |
+    For a few seconds it is so quiet the hum might never have existed.
+
+- id: silence_default_07
+  category: silence
+  key: default
+  zh: |
+    空调出风口停了。你这才意识到，刚才它一直在响。
+  en: |
+    The air vent stops. Only now do you realise it had been running all along.
+
+- id: silence_default_08
+  category: silence
+  key: default
+  zh: |
+    什么也没有靠近。你不知道这算不算好事。
+  en: |
+    Nothing comes near. You are not sure that is a good thing.

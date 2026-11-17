@@ -51,7 +51,7 @@
   key: attack
   intensity: 2
   effects:
-    sync: 7
+    sync: 6
   zh: |
     黑云猛地扑进你的视野，无数翅膀疯狂拍打你的眼皮与鼻翼。你呛进一口带着发酵甜味的冷气，太阳穴突突地跳。
   en: |
@@ -73,7 +73,7 @@
   key: attack
   intensity: 3
   effects:
-    sync: 12
+    sync: 9
   zh: |
     成千上万只果蝇在半空聚成一道高挑的人形，几乎贴上你的鼻尖。那轮廓猛地溃散成暴雨般的黑潮将你吞没，耳膜里只剩震耳的复眼嗡鸣——有那么一瞬间，你分不清是谁在尖叫。
   en: |
@@ -97,3 +97,80 @@
     黑暗里的嗡鸣换了一个频率，仿佛有什么庞大的东西刚刚调整了呼吸。
   en: |
     The hum in the dark shifts pitch, as if something vast just adjusted its breathing.
+
+- id: monster_approach_03
+  category: monster
+  key: approach
+  intensity: 1
+  effects:
+    monster_near: true
+  zh: |
+    天花板的灯罩里落下一小撮黑点，在你头顶一米处悬停，像在量你的身高。
+  en: |
+    A small cluster of black specks drops from the light fixture and hovers a metre above your head, as if measuring you.
+
+- id: monster_approach_04
+  category: monster
+  key: approach
+  intensity: 2
+  effects:
+    monster_near: true
+  zh: |
+    门缝底下渗进一条黑线，慢慢铺开。你退一步，它就往前铺一步。
+  en: |
+    A dark line seeps in under the door and spreads slowly. Each step you take back, it takes one forward.
+
+- id: monster_approach_05
+  category: monster
+  key: approach
+  intensity: 2
+  effects:
+    monster_near: true
+  zh: |
+    嗡鸣从四面墙里同时响起，又同时停下。停下的那一刻，你身后的空气变得很密。
+  en: |
+    The hum starts in all four walls at once, then stops at once. In the silence, the air behind you has turned thick.
+
+- id: monster_approach_06
+  category: monster
+  key: approach
+  intensity: 3
+  effects:
+    monster_near: true
+  zh: |
+    黑云已经堵在门口，边缘一明一暗地起伏，像一张在呼吸的脸。它没有进来，它在等你出去。
+  en: |
+    The black cloud fills the doorway, its edges pulsing light and dark like a face breathing. It doesn't come in. It is waiting for you to come out.
+
+- id: monster_attack_03
+  category: monster
+  key: attack
+  intensity: 2
+  effects:
+    sync: 6
+  zh: |
+    一群果蝇撞上你的脸，钻进领口、袖口和发根。你拍打着后退，皮肤上留下一层黏甜的痒。
+  en: |
+    A swarm slams into your face, into your collar, your cuffs, the roots of your hair. You back away slapping, and your skin is left sticky and itching.
+
+- id: monster_attack_04
+  category: monster
+  key: attack
+  intensity: 3
+  effects:
+    sync: 8
+  zh: |
+    它们不再绕着你飞，而是直接落进你的眼角和嘴边。你听见自己在用一种很高的频率喘气。
+  en: |
+    They stop circling and land straight in the corners of your eyes and mouth. You hear yourself panting at a very high pitch.
+
+- id: monster_attack_05
+  category: monster
+  key: attack
+  intensity: 3
+  effects:
+    sync: 8
+  zh: |
+    黑潮从地面卷起，把你整个裹住又松开。你踉跄着站稳，发现自己正朝着甜味的方向转身。
+  en: |
+    A black tide rolls up from the floor, wraps you whole, then lets go. You stagger upright and find yourself turning toward the sweet smell.

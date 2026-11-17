@@ -74,6 +74,11 @@ class World:
         return self.raw["endings"]
 
     @property
+    def descriptions(self) -> dict[str, dict[str, list[dict]]]:
+        """content/descriptions.yaml: {'look': {id: [variant]}, 'revisit': {scene: [variant]}}."""
+        return self.raw.get("descriptions") or {}
+
+    @property
     def judge_rules_en(self) -> list[str]:
         return self.raw.get("judge_rules_en", [])
 
@@ -204,7 +209,11 @@ def validate_world(world: World) -> list[str]:
                 for fl in v:
                     if fl not in world.flags:
                         errs.append(f"world: rule {rid}: unknown flag '{fl}'")
-            elif k not in ("monster_near", "sync_min"):
+            elif k in ("taken", "not_taken"):
+                for i in v:
+                    if i not in world.items:
+                        errs.append(f"world: rule {rid}: unknown item '{i}'")
+            elif k not in ("monster_near", "sync_min", "swarm_free"):
                 errs.append(f"world: rule {rid}: unknown condition '{k}'")
         eff = r.get("effects") or {}
         for k, v in eff.items():
@@ -220,6 +229,9 @@ def validate_world(world: World) -> list[str]:
                 for a, b in v.items():
                     if a not in world.items or b not in world.items:
                         errs.append(f"world: rule {rid}: bad transform {a}->{b}")
+            elif k == "take":
+                if v not in world.items:
+                    errs.append(f"world: rule {rid}: unknown item '{v}'")
             elif k == "clue":
                 if v not in world.clues:
                     errs.append(f"world: rule {rid}: unknown clue {v}")
@@ -244,7 +256,58 @@ def validate_world(world: World) -> list[str]:
 def load_world(path: Path | None = None) -> World:
     path = path or CONTENT_DIR / "world.yaml"
     with open(path, encoding="utf-8") as fh:
-        return World(yaml.safe_load(fh))
+        raw = yaml.safe_load(fh)
+    desc_path = path.parent / "descriptions.yaml"
+    if desc_path.exists() and "descriptions" not in raw:
+        with open(desc_path, encoding="utf-8") as fh:
+            raw["descriptions"] = yaml.safe_load(fh) or {}
+    return World(raw)
+
+
+WHEN_KEYS = {"scene", "items", "reachable", "not_items", "flags", "not_flags",
+             "monster_near", "sync_min", "taken", "not_taken", "swarm_free"}
+
+
+def validate_descriptions(world: World) -> list[str]:
+    """Every fixture and placed item needs a `look` text; every playable scene a `revisit` text."""
+    errs: list[str] = []
+    d = world.descriptions
+    if not d:
+        return errs
+    look, revisit = d.get("look") or {}, d.get("revisit") or {}
+    for ident in look:
+        if world.kind(ident) not in ("fixture", "item", "scene"):
+            errs.append(f"descriptions: look: unknown id '{ident}'")
+    for ident in revisit:
+        if ident not in world.scenes:
+            errs.append(f"descriptions: revisit: unknown scene '{ident}'")
+    need = list(world.fixtures) + [i for i, it in world.items.items() if it.get("location")]
+    for ident in need:
+        if ident not in look:
+            errs.append(f"descriptions: look: missing '{ident}'")
+    for sc in world.playable_scenes:
+        if sc not in revisit:
+            errs.append(f"descriptions: revisit: missing scene '{sc}'")
+    for table, entries in (("look", look), ("revisit", revisit)):
+        for ident, variants in entries.items():
+            where = f"descriptions: {table}: {ident}"
+            if not isinstance(variants, list) or not variants:
+                errs.append(f"{where}: must be a non-empty list of variants")
+                continue
+            if (variants[-1] or {}).get("when"):
+                errs.append(f"{where}: last variant must have no 'when' (the default)")
+            for v in variants:
+                for lang in LANGS:
+                    if not isinstance(v.get(lang), str) or not v[lang].strip():
+                        errs.append(f"{where}: variant missing {lang}")
+                for k, val in (v.get("when") or {}).items():
+                    if k not in WHEN_KEYS:
+                        errs.append(f"{where}: unknown condition '{k}'")
+                    elif k in ("items", "reachable", "not_items", "taken", "not_taken"):
+                        errs += [f"{where}: unknown item '{i}'" for i in val if i not in world.items]
+                    elif k in ("flags", "not_flags"):
+                        errs += [f"{where}: unknown flag '{f}'" for f in val if f not in world.flags]
+    return errs
 
 
 # --------------------------------------------------------------------- ui
@@ -672,6 +735,7 @@ def check_content(content_dir: Path | None = None) -> tuple[World | None, dict |
     try:
         world = load_world(content_dir / "world.yaml")
         errors += validate_world(world)
+        errors += validate_descriptions(world)
     except (OSError, yaml.YAMLError, AttributeError, TypeError) as exc:
         return None, None, [], [f"world.yaml: cannot load: {exc}"], []
     try:

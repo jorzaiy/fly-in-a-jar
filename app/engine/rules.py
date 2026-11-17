@@ -71,6 +71,7 @@ class ActionOutcome:
     moved_to: Optional[str] = None
     took: Optional[str] = None
     clue: Optional[int] = None
+    clue_repeat: bool = False         # the rule's clue was already found before this turn
     ending: Optional[str] = None
     dampen_anomaly: Optional[str] = None
     sync_before: int = 0
@@ -124,6 +125,17 @@ def reachable(state: GameState, world: World, item: str) -> bool:
     return item in state.items or item in items_here(state, world)
 
 
+PERCEPTION = ("look", "listen", "smell")
+
+
+def is_visible(state: GameState, world: World, target: str) -> bool:
+    """The current scene, its fixtures, items lying here, or anything carried."""
+    if target in ("none", "", state.scene, TARGET_MONSTER):
+        return True
+    v = visible_targets(state, world)
+    return any(target in xs for xs in v.values())
+
+
 def visible_targets(state: GameState, world: World) -> dict[str, list[str]]:
     """Everything the player could name right now (feeds the judge's target options)."""
     scene = world.scenes[state.scene]
@@ -153,9 +165,37 @@ def _conditions_hold(state: GameState, world: World, when: dict[str, Any]) -> bo
         return False
     if "monster_near" in when and state.monster_near != when["monster_near"]:
         return False
+    if "swarm_free" in when and swarm_free(state) != when["swarm_free"]:
+        return False
     if "sync_min" in when and state.sync < when["sync_min"]:
         return False
+    if any(i not in state.taken for i in when.get("taken", [])):
+        return False
+    if any(i in state.taken for i in when.get("not_taken", [])):
+        return False
     return True
+
+
+def swarm_free(state: GameState) -> bool:
+    """Nothing in the way: the swarm is away, held back, or stunned."""
+    return (not state.monster_near) or state.monster_block > 0 or state.monster_stunned > 0
+
+
+def describe(state: GameState, world: World, table: str, ident: str, lang: str) -> Optional[str]:
+    """Text from content/descriptions.yaml (`look` or `revisit`).
+
+    The first variant whose `when` holds decides the condition; variants that
+    share that same `when` take turns, so a room you pass through often does
+    not read the same every time.
+    """
+    variants = world.descriptions.get(table, {}).get(ident, [])
+    first = next((v for v in variants if _conditions_hold(state, world, v.get("when") or {})), None)
+    if first is None:
+        return None
+    pool = [v for v in variants if (v.get("when") or {}) == (first.get("when") or {})]
+    pick = pool[state.turn % len(pool)] if len(pool) > 1 else first
+    text = pick.get(lang)
+    return text.strip() if isinstance(text, str) else None
 
 
 def match_rule(state: GameState, world: World, category: str, target: str) -> Optional[dict]:
@@ -177,10 +217,20 @@ def _apply_rule(state: GameState, world: World, rule: dict, out: ActionOutcome) 
     out.blocked = bool(eff.get("block"))
     if "sync" in eff:
         add_sync(state, int(eff["sync"]))
+    if "take" in eff and eff["take"] not in state.items:
+        _take_item(state, eff["take"])
+        out.took = eff["take"]
     for f in eff.get("set_flags", []):
+        if f == "power_on" and not state.has_flag(f):
+            state.power_turn = max(1, state.turn)
         state.set_flag(f)
     for f in eff.get("clear_flags", []):
         state.clear_flag(f)
+    # A rule may act on an item still lying in the room (`reachable`): using
+    # it there counts as picking it up.
+    for item in [*eff.get("consume", []), *(eff.get("transform") or {})]:
+        if item not in state.items and item in items_here(state, world):
+            _take_item(state, item)
     for item in eff.get("consume", []):
         state.items = [i for i in state.items if i != item]
     for src, dst in (eff.get("transform") or {}).items():
@@ -191,10 +241,14 @@ def _apply_rule(state: GameState, world: World, rule: dict, out: ActionOutcome) 
         state.monster_block = max(state.monster_block, int(eff["monster_block"]))
     if "monster_stunned" in eff:
         state.monster_stunned = max(state.monster_stunned, int(eff["monster_stunned"]))
+    if ("monster_stunned" in eff or "monster_block" in eff) and state.has_flag("power_on"):
+        # Knocking the swarm back sets its restlessness back a few turns too.
+        state.power_turn = max(state.power_turn, state.turn - 4)
     if "monster_near" in eff:
         state.monster_near = bool(eff["monster_near"])
     if "clue" in eff:
         out.clue = int(eff["clue"])
+        out.clue_repeat = out.clue in state.clues_found
         if out.clue not in state.clues_found:
             state.clues_found = [*state.clues_found, out.clue]
     if "dampen_anomaly" in eff:
@@ -264,7 +318,23 @@ def resolve_turn(state: GameState, world: World, *, feasible: float, reason: str
     tick_countdowns(state)
     out = ActionOutcome(category=category, target=target, sync_before=state.sync, reason=reason)
     out.verdict = classify(feasible, cfg)
-    if out.verdict == "fail":
+    if out.verdict != "success":
+        if match_rule(state, world, category, target) is not None:
+            # The world has a rule for exactly this; it decides, not the judge's confidence.
+            out.verdict, out.reason = "success", "feasible"
+        elif category in PERCEPTION and is_visible(state, world, target):
+            out.verdict, out.reason = "success", "feasible"
+    if out.verdict == "fail" and category in PERCEPTION:
+        # Looking, listening or sniffing never costs sync, even when it makes no sense.
+        out.fragment = ("verdict_fail", reason if reason != "feasible" else "generic")
+    elif out.verdict == "fail" and reason == "not_an_action":
+        # Gibberish or a typo is not a risk the player took; no sync.
+        out.fragment = ("verdict_fail", reason)
+    elif out.verdict == "fail" and reason in ("no_such_target", "missing_item"):
+        # Reaching for something that isn't there is a misunderstanding, not a risk.
+        add_sync(state, cfg.fail_sync_base)
+        out.fragment = ("verdict_fail", reason)
+    elif out.verdict == "fail":
         add_sync(state, fail_sync(danger, cfg))
         out.fragment = ("verdict_fail", reason if reason != "feasible" else "generic")
     else:
@@ -280,6 +350,6 @@ def resolve_turn(state: GameState, world: World, *, feasible: float, reason: str
 
 __all__ = [
     "ActionOutcome", "RulesConfig", "add_sync", "apply_action", "check_endings", "classify",
-    "fail_sync", "items_here", "load_rules_config", "match_rule", "reachable", "resolve_turn",
+    "describe", "fail_sync", "is_visible", "items_here", "swarm_free", "load_rules_config", "match_rule", "reachable", "resolve_turn",
     "tick_countdowns", "visible_targets", "TARGET_MONSTER",
 ]

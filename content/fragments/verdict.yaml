@@ -158,7 +158,7 @@
   category: verdict_fail
   key: missing_item
   zh: |
-    你空着能派上用场的那只手，无法对{target}下手。缺失的工具让你的意图停在半空，被干脆地驳回。
+    你手里没有能对付{target}的东西。念头悬在半空，被干脆地驳回。
   en: |
     You lack the tool needed to act on {target}. Without it, your intent stalls mid-motion and is summarily overruled.
 
@@ -174,9 +174,9 @@
   category: verdict_fail
   key: against_world_rules
   zh: |
-    {target}不站在允许的规则之内。你的念头刚成型，就被一道更冷的判决按了回去。
+    这里不允许你对{target}这么做。念头刚成形，就被一道更冷的判决按了回去。
   en: |
-    {target} falls outside what is permitted here. The impulse is pushed back down by a colder verdict before your hands can even rise.
+    What you want with {target} is not permitted here. The impulse is pushed back down by a colder verdict before your hands can even rise.
 
 - id: verdict_fail_not_an_action_01
   category: verdict_fail
@@ -193,3 +193,245 @@
     不可行。判决冰冷地落下，不留余地。
   en: |
     Infeasible. The verdict drops without appeal.
+
+# --- 11-16 playtest: more action variants so lines rotate ------------------
+
+- id: action_look_02
+  category: action
+  key: look
+  zh: |
+    你眯起眼睛打量{target}。看得越久，它的轮廓越像在微微起伏。
+  en: |
+    You narrow your eyes at {target}. The longer you look, the more its outline seems to breathe.
+
+- id: action_look_03
+  category: action
+  key: look
+  zh: |
+    你的目光在{target}上停了很久，久到你开始怀疑，是谁在看谁。
+  en: |
+    Your gaze rests on {target} so long you start to wonder which of you is doing the looking.
+
+- id: action_move_02
+  category: action
+  key: move
+  zh: |
+    你贴着墙往{target}挪过去，指尖一路擦过冰冷的墙皮。
+  en: |
+    You edge along the wall toward {target}, fingertips trailing over cold plaster.
+
+- id: action_move_03
+  category: action
+  key: move
+  zh: |
+    你放轻脚步走向{target}。黑暗里，有什么东西跟着你的节奏轻轻振了一下翅。
+  en: |
+    You walk softly toward {target}. Somewhere in the dark, something beats its wings once in time with your steps.
+
+- id: action_move_04
+  category: action
+  key: move
+  zh: |
+    你朝{target}走去。走廊的灯管闪了一下，你的影子在地上多出了几条细腿。
+  en: |
+    You head for {target}. A tube light flickers, and for an instant your shadow sprouts extra thin legs.
+
+- id: action_take_02
+  category: action
+  key: take
+  zh: |
+    你把{target}揣进口袋，布料下传来它轻微的重量。
+  en: |
+    You slip {target} into your pocket and feel its small weight against you.
+
+- id: action_take_03
+  category: action
+  key: take
+  zh: |
+    你拿起{target}。手指合拢的那一刻，掌心莫名地发痒。
+  en: |
+    You pick up {target}. As your fingers close, your palm itches for no reason.
+
+- id: action_take_04
+  category: action
+  key: take
+  zh: |
+    你迅速把{target}收好，像怕被谁看见似的。
+  en: |
+    You tuck {target} away quickly, as though someone might be watching.
+
+- id: action_use_02
+  category: action
+  key: use
+  zh: |
+    你试着摆弄{target}，手上的动作比你想的更熟练，像以前做过很多次。
+  en: |
+    You work at {target}, your hands surer than they should be, as if they had done this many times.
+
+- id: action_use_03
+  category: action
+  key: use
+  zh: |
+    你拿着{target}比划了一下，没发生什么。也许不是在这里，也许不是这样用。
+  en: |
+    You try {target} this way and that. Nothing happens. Maybe not here. Maybe not like this.
+
+- id: action_use_04
+  category: action
+  key: use
+  zh: |
+    你把{target}翻来覆去地试了几次，四周只传来自己的呼吸声。
+  en: |
+    You turn {target} over and try it a few times. All you hear is your own breathing.
+
+- id: action_touch_02
+  category: action
+  key: touch
+  zh: |
+    你伸手碰了碰{target}，表面有一层说不清的黏腻，像刚被许多细小的脚爬过。
+  en: |
+    You touch {target}. Its surface has a faint tackiness, as though many tiny feet had just crossed it.
+
+- id: action_touch_03
+  category: action
+  key: touch
+  zh: |
+    你的指尖按在{target}上，冷意顺着指骨爬上来，一直爬到后颈。
+  en: |
+    You lay your fingertips on {target}. The cold climbs your finger bones all the way to the back of your neck.
+
+- id: action_listen_02
+  category: action
+  key: listen
+  zh: |
+    你屏住呼吸听了很久。楼里很安静，安静得像是所有东西都在同时屏息。
+  en: |
+    You hold your breath and listen. The building is quiet, as if everything in it were holding its breath with you.
+
+- id: action_smell_02
+  category: action
+  key: smell
+  zh: |
+    你吸了吸鼻子。空气里有消毒水、旧纸，还有一丝熟透水果似的甜。
+  en: |
+    You sniff. Disinfectant, old paper, and a sweetness like overripe fruit.
+
+- id: action_wait_02
+  category: action
+  key: wait
+  zh: |
+    你靠着墙等了一会儿。黑暗没有动，但你总觉得它离你近了一点。
+  en: |
+    You lean on the wall and wait. The dark does not move, but it feels a little closer.
+
+- id: action_hide_02
+  category: action
+  key: hide
+  zh: |
+    你缩进{target}的阴影里，把心跳压到最低。外面的嗡鸣绕了一圈，又远了。
+  en: |
+    You fold yourself into the shadow of {target} and slow your heart. The hum outside circles once and fades.
+
+- id: action_other_02
+  category: action
+  key: other
+  zh: |
+    你照着自己的想法做了。四周没什么变化，只是你的手指比刚才更僵了一点。
+  en: |
+    You do as you meant to. Nothing around you changes, only your fingers are a little stiffer than before.
+
+- id: action_other_03
+  category: action
+  key: other
+  zh: |
+    你做完这个动作，停下来等了等。这栋楼没有回应，像是在看你下一步要做什么。
+  en: |
+    You finish and wait. The building gives no answer, as if waiting to see what you do next.
+
+- id: action_generic_02
+  category: action
+  key: generic
+  zh: |
+    你做了。黑暗吞下了这个动作，没有任何回音。
+  en: |
+    You do it. The dark swallows the gesture without an echo.
+
+- id: action_generic_03
+  category: action
+  key: generic
+  zh: |
+    什么也没有改变。也许要换个地方，或者换样东西。
+  en: |
+    Nothing changes. Perhaps another place, or another thing.
+
+- id: verdict_partial_default_03
+  category: verdict_partial
+  key: default
+  zh: |
+    成了，只是比预想的费劲。你停下来喘口气，发现自己的手指在无意识地互相摩擦。
+  en: |
+    It works, though harder than it should have been. You pause for breath and notice your fingertips rubbing together on their own.
+
+- id: verdict_partial_default_04
+  category: verdict_partial
+  key: default
+  zh: |
+    你做到了，但动静太大。远处的嗡鸣顿了一顿，像是转过头来听了听。
+  en: |
+    You manage it, but too loudly. The distant hum pauses, as if turning its head to listen.
+
+- id: verdict_partial_default_05
+  category: verdict_partial
+  key: default
+  zh: |
+    勉强完成。有那么一瞬间，你的手不太像是你自己的。
+  en: |
+    Barely done. For a moment, your hands did not quite feel like yours.
+
+- id: action_take_05
+  category: action
+  key: take
+  zh: |
+    你把{target}拿到手里，掂了掂。比看上去沉一点。
+  en: |
+    You pick up {target} and weigh it in your hand. A little heavier than it looks.
+
+- id: action_take_06
+  category: action
+  key: take
+  zh: |
+    你拿起{target}。它下面那块台面比周围干净，像是一直有人在等你来拿。
+  en: |
+    You take {target}. The surface under it is cleaner than the rest, as if someone had been waiting for you to come for it.
+
+- id: action_take_07
+  category: action
+  key: take
+  zh: |
+    {target}到手了。你下意识回头看了一眼，门口什么也没有。
+  en: |
+    {target} is yours now. You glance back without meaning to. Nothing in the doorway.
+
+- id: action_move_05
+  category: action
+  key: move
+  zh: |
+    你往{target}走。应急灯的嗡声一路跟着你，走到门口才停。
+  en: |
+    You head for {target}. The buzz of the emergency lights follows you all the way, and only stops at the door.
+
+- id: action_move_06
+  category: action
+  key: move
+  zh: |
+    你数着步子走向{target}。数到第十一步，你听见身后也有人在数。
+  en: |
+    You count your steps toward {target}. At eleven, you hear someone behind you counting too.
+
+- id: action_move_07
+  category: action
+  key: move
+  zh: |
+    你推门走向{target}。门轴吱的一声，像是在替谁通报你来了。
+  en: |
+    You push through toward {target}. The hinge creaks, as if announcing you to someone.

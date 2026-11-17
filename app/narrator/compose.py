@@ -11,7 +11,7 @@ from typing import Any
 
 from app.content.loader import Content, World
 from app.content.schema import tier_for_sync
-from app.engine.rules import items_here
+from app.engine.rules import ActionOutcome, describe, items_here
 from app.engine.state import GameState
 from app.judge.base import JudgeCall
 
@@ -19,6 +19,9 @@ from .elements import StoryElements
 from .select import select_fragment
 
 log = logging.getLogger("fly.narrator.compose")
+
+# Show a dead-silence line at most once every this many turns.
+SILENCE_EVERY = 3
 
 
 def localize_target(target: str, world: World, content: Content, lang: str) -> str:
@@ -36,6 +39,19 @@ def localize_target(target: str, world: World, content: Content, lang: str) -> s
         return world.scenes[target].get("name", {}).get(lang, target)
 
     return target
+
+
+def room_listing(state: GameState, world: World, lang: str) -> list[dict[str, str]]:
+    """One system line: exits and the items lying here."""
+    sc_info = world.scenes.get(state.scene, {})
+    exit_names = [world.scenes[e]["name"][lang] for e in sc_info.get("exits", []) if e in world.scenes]
+    items_names = [world.items[it]["name"][lang] for it in items_here(state, world) if it in world.items]
+    parts = []
+    if exit_names:
+        parts.append(f"{'出口' if lang == 'zh' else 'Exits'}: {', '.join(exit_names)}")
+    if items_names:
+        parts.append(f"{'可见物品' if lang == 'zh' else 'Visible items'}: {', '.join(items_names)}")
+    return [{"kind": "system", "text": " | ".join(parts)}] if parts else []
 
 
 def resolve_fragment_text(
@@ -63,7 +79,7 @@ def resolve_fragment_text(
 
     # 2. Replace {target} placeholder
     if "{target}" in raw_text:
-        localized = localize_target(target or "", world, content, lang)
+        localized = localize_target(target or "", world, content, lang) or ("它" if lang == "zh" else "it")
         raw_text = raw_text.replace("{target}", localized)
 
     return raw_text.strip()
@@ -94,6 +110,8 @@ def format_brain_log(
 
     # 2. [BRAIN] stimulus line
     stim_text = f"stimulus  pathway={category} · scene={scene}"
+    if elements.swarm_hz > 0:
+        stim_text += f" · swarm {elements.swarm_hz:g}Hz"
     lines.append({"kind": "brainlog", "text": f"[BRAIN] {stim_text}"})
 
     # 3. [BRAIN] spikes line
@@ -135,6 +153,42 @@ def format_brain_log(
     return lines
 
 
+# Which neurons moved, for the line under each event the fly brain caused:
+# (spike group, zh neurons, en neurons, zh effect, en effect).
+NEURO = {
+    "monster.attack":   ("monster.attack", "巨纤维 DNp01（逃逸反射）", "giant fibre DNp01 (escape reflex)", "蜂群扑来", "the swarm lunges"),
+    "monster.approach": ("monster.attack", "巨纤维 DNp01（逃逸反射）", "giant fibre DNp01 (escape reflex)", "蜂群逼近", "the swarm closes in"),
+    "monster.retreat":  ("monster.retreat", "后退神经元 MDN", "moonwalker neurons MDN", "蜂群退开", "the swarm pulls back"),
+    "monster.feed":     ("monster.feed", "进食神经元", "feeding neurons", "它们落下来吃", "they land to feed"),
+    "anomaly.visual":   ("anomaly.visual", "视觉投射神经元 LC4/LPLC2", "visual projection neurons LC4/LPLC2", "眼前出现异象", "something shows in your eyes"),
+    "anomaly.sound":    ("anomaly.sound", "约翰斯顿器听觉神经元", "Johnston's organ neurons", "耳边出现异响", "something sounds in your ears"),
+    "anomaly.smell":    ("anomaly.smell", "嗅觉受体神经元 DA1/DM1", "olfactory receptor neurons DA1/DM1", "闻到不存在的气味", "you smell what isn't there"),
+    "anomaly.memory":   ("anomaly.memory", "蘑菇体输出神经元 MBON", "mushroom body output neurons MBON", "浮出不属于你的记忆", "a memory that isn't yours"),
+    "clue.clue":        ("clue.clue", "多巴胺神经元 PAM", "dopamine neurons PAM", "想起一条线索", "a clue surfaces"),
+    "hijack.eat":       ("monster.feed", "进食神经元", "feeding neurons", "本能接管：进食", "instinct takes over: feed"),
+    "hijack.flinch":    ("monster.attack", "巨纤维 DNp01", "giant fibre DNp01", "本能接管：惊跳", "instinct takes over: flinch"),
+    "hijack.freeze":    ("monster.retreat", "后退神经元 MDN", "moonwalker neurons MDN", "本能接管：僵住", "instinct takes over: freeze"),
+}
+
+
+def neuro_line(key: str, spikes: dict[str, int], lang: str) -> list[dict[str, str]]:
+    """'The fly stirs' line naming the neurons whose firing caused this event."""
+    row = NEURO.get(key)
+    if row is None:
+        return []
+    group, zh_n, en_n, zh_e, en_e = row
+    n = int(spikes.get(group, 0))
+    if n <= 0:
+        return []
+    if key.startswith("hijack."):
+        text = (f"⟡ 果蝇被触动 · 上一刻 {zh_n} 放电 {n} 次 → {zh_e}" if lang == "zh"
+                else f"⟡ The fly stirs · {en_n} fired {n} spikes a moment ago → {en_e}")
+    else:
+        text = (f"⟡ 果蝇被触动 · {zh_n} 放电 {n} 次 → {zh_e}" if lang == "zh"
+                else f"⟡ The fly stirs · {en_n} fired {n} spikes → {en_e}")
+    return [{"kind": "neuro", "text": text}]
+
+
 def compose_turn(
     elements: StoryElements,
     judge_call: JudgeCall,
@@ -146,13 +200,24 @@ def compose_turn(
     rule_clue_id: int | None = None,
     hijacked_action: str | None = None,
     moved_scene: str | None = None,
+    took: str | None = None,
     target: str | None = None,
     lang: str | None = None,
+    outcome: ActionOutcome | None = None,
+    hijack_spikes: dict[str, int] | None = None,
 ) -> list[dict[str, str]]:
-    """Assemble the turn narrative output in sequence (design §7.1)."""
+    """Assemble the turn narrative output in sequence (design §7.1).
+
+    `outcome` (from the rules engine) is authoritative for the verdict when given:
+    a world rule or a look at something in plain sight succeeds whatever the
+    judge's confidence was.
+    """
     lang = lang or state.lang
     output: list[dict[str, str]] = []
     intensity = elements.intensity
+    revisit = bool(moved_scene) and any(
+        f.startswith(f"scene_enter_{moved_scene}_") for f in state.used_fragments
+    )
 
     # Total spike count used as random modulo seed for deterministic selection
     total_spikes = sum(elements.spikes.values())
@@ -162,84 +227,109 @@ def compose_turn(
         frag = select_fragment("hijack", hijacked_action, intensity, state, content, total_spikes)
         txt = resolve_fragment_text(frag, state, lang, target, world, content)
         output.append({"kind": "hijack", "text": txt})
+        output.extend(neuro_line(f"hijack.{hijacked_action}", hijack_spikes or {}, lang))
 
     # 2. [判定片段] (verdict or action)
     if judge_call.result:
         res = judge_call.result
-        if res.feasible < 0.40:
-            frag = select_fragment("verdict_fail", res.reason, intensity, state, content, total_spikes)
-            txt = resolve_fragment_text(frag, state, lang, target or res.target, world, content)
-            output.append({"kind": "verdict", "text": txt})
-        elif res.feasible < 0.65:
-            frag = select_fragment("verdict_partial", "default", intensity, state, content, total_spikes)
-            txt = resolve_fragment_text(frag, state, lang, target or res.target, world, content)
-            output.append({"kind": "verdict", "text": txt})
+        tgt = target or res.target
+        if outcome is not None:
+            verdict = outcome.verdict
         else:
-            # Feasible >= 0.65
-            if rule_triggered:
-                frag = select_fragment("item_use", rule_triggered, intensity, state, content, total_spikes)
-                txt = resolve_fragment_text(frag, state, lang, target or res.target, world, content)
-                output.append({"kind": "action", "text": txt})
-            else:
-                frag = select_fragment("action", res.category, intensity, state, content, total_spikes)
-                txt = resolve_fragment_text(frag, state, lang, target or res.target, world, content)
-                output.append({"kind": "action", "text": txt})
+            verdict = "fail" if res.feasible < 0.40 else ("partial" if res.feasible < 0.65 else "success")
+        if verdict == "fail":
+            frag = select_fragment("verdict_fail", res.reason, intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, tgt, world, content)
+            output.append({"kind": "verdict", "text": txt})
+        elif verdict == "partial" and not rule_triggered:
+            frag = select_fragment("verdict_partial", "default", intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, tgt, world, content)
+            output.append({"kind": "verdict", "text": txt})
+        elif rule_triggered and (rule_clue_id or state.ended):
+            # The clue or ending text narrates this action; no second line.
+            pass
+        elif rule_triggered:
+            frag = select_fragment("item_use", rule_triggered, intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, tgt, world, content)
+            output.append({"kind": "action", "text": txt})
+        elif res.category == "look" and (not tgt or tgt == "none"):
+            # Looking at nothing the world knows: say so, and remind what the room holds.
+            output.append({"kind": "action", "text": content.text("game.look_nothing", lang)})
+        elif res.category in ("look", "touch") and tgt and describe(state, world, "look", tgt, lang):
+            # Each thing in the world has its own look text, which may hint at its use.
+            output.append({"kind": "action", "text": describe(state, world, "look", tgt, lang) or ""})
+        elif res.category == "move" and revisit:
+            pass  # the short revisit line below is enough
+        elif outcome is not None and "already carried" in outcome.notes:
+            name = world.items.get(tgt, {}).get("name", {}).get(lang, tgt)
+            output.append({"kind": "system", "text": content.text("game.already_carried", lang, item=name)})
+        else:
+            frag = select_fragment("action", res.category, intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, tgt, world, content)
+            output.append({"kind": "action", "text": txt})
+
+    # 2b. Picked-up item, stated plainly so the player knows it worked.
+    if took and took in world.items:
+        name = world.items[took].get("name", {}).get(lang, took)
+        output.append({"kind": "system", "text": f"（获得：{name}）" if lang == "zh" else f"(Taken: {name})"})
 
     # 3. [物品线索] (clue from item use rule)
-    if rule_clue_id:
+    if rule_clue_id and outcome is not None and outcome.clue_repeat:
+        output.append({"kind": "system", "text": content.text("game.clue_seen", lang, n=rule_clue_id)})
+    elif rule_clue_id:
         frag = select_fragment("clue", f"clue_{rule_clue_id}", intensity, state, content, total_spikes)
         txt = resolve_fragment_text(frag, state, lang, target, world, content)
         output.append({"kind": "clue", "text": txt})
 
     # 4. [移动片段] (scene_enter + room listing)
     if moved_scene:
-        frag = select_fragment("scene_enter", moved_scene, intensity, state, content, total_spikes)
-        txt = resolve_fragment_text(frag, state, lang, target, world, content)
-        output.append({"kind": "scene", "text": txt})
+        short = describe(state, world, "revisit", moved_scene, lang) if revisit else None
+        if short:
+            output.append({"kind": "scene", "text": short})
+        else:
+            frag = select_fragment("scene_enter", moved_scene, intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, target, world, content)
+            output.append({"kind": "scene", "text": txt})
 
-        # Append room exits and items listing
-        sc_info = world.scenes.get(moved_scene, {})
-        exits = sc_info.get("exits", [])
-        exit_names = [world.scenes[e]["name"][lang] for e in exits if e in world.scenes]
-        here = items_here(state, world)
-        items_names = [world.items[it]["name"][lang] for it in here if it in world.items]
-
-        listing_parts = []
-        if exit_names:
-            exits_title = "出口" if lang == "zh" else "Exits"
-            listing_parts.append(f"{exits_title}: {', '.join(exit_names)}")
-        if items_names:
-            items_title = "可见物品" if lang == "zh" else "Visible items"
-            listing_parts.append(f"{items_title}: {', '.join(items_names)}")
-
-        if listing_parts:
-            output.append({"kind": "system", "text": " | ".join(listing_parts)})
+        output.extend(room_listing(state, world, lang))
 
     # 5. [死寂片段] (silence event, replaces monster & anomaly)
     if elements.silence:
-        frag = select_fragment("silence", "default", intensity, state, content, total_spikes)
-        txt = resolve_fragment_text(frag, state, lang, target, world, content)
-        output.append({"kind": "silence", "text": txt})
+        # Dead silence is the brain choosing nothing. Say so now and then, not every turn.
+        if state.turn - state.last_silence_turn >= SILENCE_EVERY or state.last_silence_turn == 0:
+            frag = select_fragment("silence", "default", intensity, state, content, total_spikes)
+            txt = resolve_fragment_text(frag, state, lang, target, world, content)
+            output.append({"kind": "silence", "text": txt})
+            state.last_silence_turn = max(1, state.turn)
     else:
         # 6. [怪物片段]
         if elements.monster != "absent":
             frag = select_fragment("monster", elements.monster, intensity, state, content, elements.spikes.get(f"monster.{elements.monster}", total_spikes))
             txt = resolve_fragment_text(frag, state, lang, target, world, content)
             output.append({"kind": "monster", "text": txt})
+            if elements.monster_override in (None, "not_present"):
+                output.extend(neuro_line(f"monster.{elements.monster}", elements.spikes, lang))
 
-        # 7. [异象片段]
-        if elements.anomaly != "none":
+        # 7. [异象片段] Once the swarm is closing in it is the event; the
+        # anomaly readouts are mostly its own input, so they stay quiet.
+        if elements.anomaly != "none" and elements.monster not in ("attack", "approach"):
             frag = select_fragment("anomaly", elements.anomaly, intensity, state, content, elements.spikes.get(f"anomaly.{elements.anomaly}", total_spikes))
             txt = resolve_fragment_text(frag, state, lang, target, world, content)
             output.append({"kind": "anomaly", "text": txt})
+            output.extend(neuro_line(f"anomaly.{elements.anomaly}", elements.spikes, lang))
 
         # 8. [线索片段] (fruit fly brain clue discovery)
         if elements.clue_id:
             frag = select_fragment("clue", f"clue_{elements.clue_id}", intensity, state, content, elements.spikes.get("clue.clue", total_spikes))
             txt = resolve_fragment_text(frag, state, lang, target, world, content)
             output.append({"kind": "clue", "text": txt})
+            output.extend(neuro_line("clue.clue", elements.spikes, lang))
             if elements.clue_id not in state.clues_found:
                 state.clues_found = [*state.clues_found, elements.clue_id]
+
+    # 8b. Every turn ends with where you can go, so nobody scrolls back for it.
+    if not moved_scene and not state.ended:
+        output.extend(room_listing(state, world, lang))
 
     # 9. Brain Log (if enabled)
     cat = judge_call.result.category if judge_call.result else "none"
