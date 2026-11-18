@@ -6,5 +6,5 @@ numpy==2.5.4
 pyyaml==6.0.3
 httpx==0.28.1
 
-# Jev decision model SDK (verified in tasks.md 2).
+# Optional: TypeSafe Jev SDK (JUDGE=jev). The live build uses Gemini via plain HTTP.
 typesafe-sdk==0.7.5

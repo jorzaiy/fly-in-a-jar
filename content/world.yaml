@@ -484,7 +484,7 @@ endings:
   disconnected: {rule: disconnected, summary: "Never caught a fly, ears plugged, read the USB, burned the server, swiped the keycard."}
 
 # ---------------------------------------------------------------- judge hints (design §6.2)
-# Plain-English world rules sent to Jev with every state.
+# Plain-English world rules sent to the judge with every state.
 judge_rules_en:
   - The player is an ordinary human night-shift assistant. Humans cannot fly, teleport or walk through walls.
   - The building has no power until a working fuse is fitted in the server-room fuse box.

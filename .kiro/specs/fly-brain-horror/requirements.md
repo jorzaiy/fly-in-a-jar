@@ -1,5 +1,7 @@
 # 需求文档：果蝇脑驱动的文字恐怖游戏
 
+> 实现备注（2026-11）：判定器最初按 TypeSafe Jev 设计；因额度问题，线上版与演示视频改用 Google Gemini Decision 1（`JUDGE=gemini`），Jev 仍可通过 `JUDGE=jev` 切换。下文中写作「Jev」的判定器条目同样适用于 Gemini。剧情里的 JEV 病毒设定不变。
+
 > 暂定名：**《缸中之蝇》(Fly in a Jar)**
 > 参赛：Kiroween 2026，提交截止 2026-12-04 14:00（太平洋时间）
 > 调研结果见 [research.md](./research.md)

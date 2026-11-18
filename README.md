@@ -1,14 +1,15 @@
 # Fly in a Jar 缸中之蝇
 
-> Every scare is decided by the real neurons of a fruit fly's connectome. Jev judges what you can do. The longer you play, the less "you" there is.
+> Every scare is decided by the real neurons of a fruit fly's connectome. A decision model judges what you can do. The longer you play, the less "you" there is.
 
 A browser-playable, bilingual (English / 中文) text horror game. **Entry for [Kiroween 2026](https://kiroween.devpost.com/), category: Frankenstein.**
 
-The core engine is fully implemented: FlyWire v783 connectome preprocessing and numpy LIF simulation, TypeSafe Jev decision layer, narrative fragment composer, turn orchestrator with neuro-hijack, and a retro CRT web terminal.
+The core engine is fully implemented: FlyWire v783 connectome preprocessing and numpy LIF simulation, Gemini Decision 1 judge layer, narrative fragment composer, turn orchestrator with neuro-hijack, and a retro CRT web terminal.
 
 ## Live Demo (Instabox)
 
 - **Live URL**: https://8000-agqzpsr2b42drmmctnzcofxxqi.instabox.tech
+- **Demo video**: https://youtu.be/-nT4enihzSk
 - Hosted on an **Instabox** high-performance cloud sandbox (`kiroween-test`, 4 vCPUs AMD EPYC, 8 GB RAM, 20 GB persistent `/data` disk).
 
 ## Why Frankenstein
@@ -16,10 +17,10 @@ The core engine is fully implemented: FlyWire v783 connectome preprocessing and 
 The Frankenstein category asks for *"a chimera of technologies… seemingly incompatible elements"* stitched into one app. Fly in a Jar stitches together three parts that were never meant to meet:
 
 1. **A real connectome simulation.** A leaky integrate-and-fire model runs on the FlyWire v783 adult fruit fly brain (~139k neurons), with parameters from Shiu et al. 2024. Spikes in real, named neuron groups decide what the swarm does, which anomaly appears, and when a clue surfaces.
-2. **A decision model that never writes.** A System One decision model ([Gemini Decision 1](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/) on the live build; [Jev](https://typesafe.ai) and Jev-compatible endpoints are drop-in via `JUDGE`) judges whether your free-text action is possible: feasibility probability, failure reason, action category, target and danger. It returns typed answers, never prose.
+2. **A decision model that never writes.** [Gemini Decision 1](https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/), a typed decision model, judges whether your free-text action is possible: feasibility probability, failure reason, action category, target and danger. It returns typed answers, never prose. (The project was first designed around TypeSafe's Jev; the live build and the demo video use Gemini Decision 1. Other judges stay selectable via `JUDGE`, see `.env.example`.)
 3. **A pre-written fragment library.** Every word of the story comes from hand-curated bilingual fragments. No language model generates text at runtime.
 
-A neuroscience dataset, a typed AI judge and a hand-written horror script. The fly brain is the storyteller, Jev is the referee, and the fragments are the stitches.
+A neuroscience dataset, a typed AI judge and a hand-written horror script. The fly brain is the storyteller, Gemini is the referee, and the fragments are the stitches.
 
 ## Gameplay
 
@@ -42,19 +43,19 @@ Browser (hand-written HTML terminal)
 FastAPI (single process, Docker)
    ├─ api/        routes, validation, rate limiting
    ├─ engine/     turn flow: command → hijack → judge → state → simulate → narrate
-   ├─ judge/      Jev judge + offline keyword mock judge
+   ├─ judge/      Gemini judge (plus optional Jev / OpenRouter / Command Code) + offline keyword mock judge
    ├─ brain/      numpy LIF simulator (process pool, connectome loaded once per worker)
    ├─ narrator/   spikes → story elements → fragment selection and assembly
    └─ content/    world, fragment library and UI text: loading and validation
 ```
 
-One turn, in order: validate input → system command? → neuro-hijack roll (uses last turn's spikes) → Jev verdict → apply effects and sync → build stimulus (action category, sensory feeding, scene ambience, danger) → LIF simulation → spikes to story elements → monster rule overrides → assemble fragments by sync tier → check endings.
+One turn, in order: validate input → system command? → neuro-hijack roll (uses last turn's spikes) → judge verdict → apply effects and sync → build stimulus (action category, sensory feeding, scene ambience, danger) → LIF simulation → spikes to story elements → monster rule overrides → assemble fragments by sync tier → check endings.
 
 Design constraints:
 
 - **Stateless server.** The game state lives in the browser (`localStorage`, ≤16 KB) and is sent with every turn.
 - **Reproducible.** The Poisson seed is `hash(game seed, turn)`, and fragments are picked by `spike count mod candidates`, not `random`. The same seed and inputs replay the same game.
-- **The judge can fail safely.** If Jev times out, the game says the judge is silent, and state and sync stay unchanged.
+- **The judge can fail safely.** If the judge times out, the game says the judge is silent, and state and sync stay unchanged.
 
 Full design: [`design.md`](.kiro/specs/fly-brain-horror/design.md).
 
@@ -66,7 +67,7 @@ The `.kiro/` directory at the repo root is part of the submission.
 
 | File | Role |
 |------|------|
-| [`requirements.md`](.kiro/specs/fly-brain-horror/requirements.md) | 11 requirements, each with a user story and numbered acceptance criteria (terminal, bilingual, brain engine, spikes → story, fragment format, Jev judge, brain log, game loop, strong interaction, deployment, submission) |
+| [`requirements.md`](.kiro/specs/fly-brain-horror/requirements.md) | 11 requirements, each with a user story and numbered acceptance criteria (terminal, bilingual, brain engine, spikes → story, fragment format, decision judge (written for Jev; the live build uses Gemini), brain log, game loop, strong interaction, deployment, submission) |
 | [`design.md`](.kiro/specs/fly-brain-horror/design.md) | Architecture, key decisions with rejected alternatives, turn flow, stimulus and readout maps, judge questions and thresholds, state schema, API |
 | [`tasks.md`](.kiro/specs/fly-brain-horror/tasks.md) | Phased implementation plan; each task links back to the requirement numbers it satisfies, and checkboxes are only ticked once verified |
 | [`story.md`](.kiro/specs/fly-brain-horror/story.md), [`fragment-guide.md`](.kiro/specs/fly-brain-horror/fragment-guide.md) | The script, and the fragment format and writing prompt; the validator enforces the guide's rules |
@@ -78,7 +79,7 @@ The specs are written in Chinese; code, comments and this README are in English.
 
 | File | Inclusion | What it tells Kiro |
 |------|-----------|--------------------|
-| [`product.md`](.kiro/steering/product.md) | always | What the game is, the fly-brain / Jev split, and the rule that no LLM writes text at runtime |
+| [`product.md`](.kiro/steering/product.md) | always | What the game is, the fly-brain / judge split, and the rule that no LLM writes text at runtime |
 | [`tech.md`](.kiro/steering/tech.md) | always | Pinned stack, hard constraints (stateless, reproducible, key handling, data size), and the commands to run |
 | [`structure.md`](.kiro/steering/structure.md) | always | Repo layout, the shared vocabulary in `app/content/schema.py`, doc languages, and how `tasks.md` is ticked |
 | [`content-fragments.md`](.kiro/steering/content-fragments.md) | fileMatch: `content/**/*.yaml`, content and narrator code | Fragment format rules, coverage targets (MVP and full), and the rule that the placeholder fragments are not to be replaced with invented prose |
