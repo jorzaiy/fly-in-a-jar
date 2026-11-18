@@ -149,7 +149,7 @@ npx instabox@latest exec --background kiroween-test --cwd /data/workspace/fly-in
 
 ## Data & credits
 
-Connectome data: FlyWire (FAFB v783). Licence to be confirmed before redistribution; see `data/DATA_LICENSE.md` once added.
+Connectome data: FlyWire (FAFB v783), [CC BY-NC 4.0](https://flywire.ai/guidelines). The derived files in `data/` keep that licence; see [`data/DATA_LICENSE.md`](data/DATA_LICENSE.md).
 
 - Dorkenwald et al., *Neuronal wiring diagram of an adult brain*, Nature 2024
 - Schlegel et al., *Whole-brain annotation and multi-connectome cell typing of Drosophila*, Nature 2024
@@ -157,4 +157,4 @@ Connectome data: FlyWire (FAFB v783). Licence to be confirmed before redistribut
 
 ## License
 
-Code: MIT (see [LICENSE](LICENSE)). Data keeps its original licence.
+Code: MIT (see [LICENSE](LICENSE)). Connectome data: CC BY-NC 4.0 (FlyWire). The live build calls the Gemini API under Google's terms.
