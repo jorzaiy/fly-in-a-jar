@@ -4,7 +4,7 @@ The connectome data and cell type annotations used in **Fly in a Jar** are deriv
 
 ## Licenses
 
-- **FlyWire Connectome & Annotations**: Released under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+- **FlyWire Connectome & Annotations**: FlyWire's public release (v783) is made available under [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/) per the [FlyWire citing guidelines](https://flywire.ai/guidelines). The derived files in `data/` (`connectome_v783_t5.npz`, `neurons.parquet`) are shared under the same CC BY-NC 4.0 terms, with attribution, for non-commercial use. Fly in a Jar is a non-commercial hackathon entry.
 - **Drosophila Computational Brain Model**: Released under the [MIT License](https://github.com/philshiu/Drosophila_brain_model/blob/main/LICENSE) (Copyright (c) 2023 Philip Shiu and Nico Spiller).
 
 ## Attribution & Citations

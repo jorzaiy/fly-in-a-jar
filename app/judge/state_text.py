@@ -1,4 +1,4 @@
-"""English state description sent to Jev (design §6.2, tasks.md 10.1).
+"""English state description sent to the judge (design §6.2, tasks.md 10.1).
 
 Scene, exits, visible items, inventory, swarm status, sync, world rules, the
 last five actions, and the player's raw input (possibly Chinese) at the end.

@@ -14,7 +14,7 @@ fly-in-a-jar/
 │  ├─ main.py      FastAPI 入口（启动时校验内容，失败拒绝启动）
 │  ├─ api/         路由、请求校验、限流
 │  ├─ engine/      state.py（状态模型）、commands.py（系统指令）、rules.py（规则引擎）、turn.py（回合流程，待写）
-│  ├─ judge/       base.py、jev.py、mock.py、state_text.py（状态 → 英文描述）
+│  ├─ judge/       base.py、mock.py、openrouter.py（含 Gemini / Command Code）、jev.py、state_text.py（状态 → 英文描述）
 │  ├─ brain/       LIF 模拟器、刺激组/读出组（待写）
 │  ├─ narrator/    放电 → 故事要素 → 片段挑选与拼接（待写）
 │  ├─ content/     loader.py（加载与校验）、schema.py（共享词表）

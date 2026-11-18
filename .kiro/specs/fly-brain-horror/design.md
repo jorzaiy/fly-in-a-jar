@@ -1,5 +1,7 @@
 # 设计文档：果蝇脑驱动的文字恐怖游戏（v2）
 
+> 实现备注（2026-11）：判定器最初按 TypeSafe Jev 设计；因额度问题，线上版与演示视频改用 Google Gemini Decision 1（`JUDGE=gemini`），Jev 仍可通过 `JUDGE=jev` 切换。下文中写作「Jev」的判定器条目同样适用于 Gemini。剧情里的 JEV 病毒设定不变。
+
 > 对应需求：[requirements.md](./requirements.md)
 > 片段写作指南（给 Gemini 用）：[fragment-guide.md](./fragment-guide.md)
 > 完整剧本（剧情设定集）：[story.md](./story.md)

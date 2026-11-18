@@ -5,7 +5,7 @@ Connects the full 10-step turn loop:
 2. Handle system commands (cost 0 turns)
 3. Fixed server terminal Q&A (when in server_room with power)
 4. Neuro-hijack check (at sync >= 70% using last_spikes)
-5. Call judge (Jev or mock) with safe timeout
+5. Call judge (Gemini, other configured judge, or mock) with safe timeout
 6. Resolve turn effects & state updates (rules.py)
 7. Update sensory feeding fatigue & build connectome stimulus
 8. Run LIF simulation on connectome & record last_spikes
